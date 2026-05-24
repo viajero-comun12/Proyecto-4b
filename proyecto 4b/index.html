@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio | Mosaiko</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">
+
+            <div class="logo-icono">G</div>
+            <div class="logo-texto">Gridly</div>
+        </a>
+
+        <input type="search" placeholder="Buscar ideas, diseños, arquitectura..." class="buscador">
+
+        <nav>
+            <a href="usuario.html" class="link-texto">Mi Perfil</a>
+            <a href="login.html" class="btn-primario">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <main>
+        <nav class="barra-categorias">
+            <button class="btn-categoria activo">Para ti</button>
+            <button class="btn-categoria">Arquitectura Cloud</button>
+            <button class="btn-categoria">Diseño UI/UX</button>
+            <button class="btn-categoria">Tecnología AWS</button>
+            <button class="btn-categoria">Desarrollo Web</button>
+            <button class="btn-categoria">Innovación</button>
+        </nav>
+
+        <section class="feed-mosaico">
+
+            <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
+                <div class="imagen-wrapper" style="padding-bottom: 120%;">
+
+                    <img src="img/ejemplo1.jpg" alt="Arquitectura en S3"
+                        style="position:absolute; width:100%; height:100%; object-fit:cover;">
+                    <div class="pin-overlay">
+                        <button class="btn-guardar">Guardar</button>
+                        <div class="pin-info-hover">
+                            <strong>Arquitectura en S3</strong>
+                            <span>@leo_dev</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-basica">
+                    <p>Arquitectura en S3</p>
+                </div>
+            </article>
+
+
+            <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
+                <div class="imagen-wrapper" style="padding-bottom: 150%;">
+                    <img src="img/ejemplo2.jpg" alt="Diseño de interfaz móvil"
+                        style="position:absolute; width:100%; height:100%; object-fit:cover;">
+                    <div class="pin-overlay">
+                        <button class="btn-guardar">Guardar</button>
+                        <div class="pin-info-hover">
+                            <strong>UI Móvil Premium</strong>
+                            <span>@sarah_ui</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-basica">
+                    <p>UI Móvil Premium</p>
+                </div>
+            </article>
+
+
+            <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
+                <div class="imagen-wrapper" style="padding-bottom: 80%;">
+                    <img src="img/ejemplo3.jpg" alt="Dashboard corporativo"
+                        style="position:absolute; width:100%; height:100%; object-fit:cover;">
+                    <div class="pin-overlay">
+                        <button class="btn-guardar">Guardar</button>
+                        <div class="pin-info-hover">
+                            <strong>Dashboard AWS</strong>
+                            <span>@cloud_expert</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-basica">
+                    <p>Dashboard AWS</p>
+                </div>
+            </article>
+
+
+            <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
+                <div class="imagen-wrapper" style="padding-bottom: 110%;">
+                    <img src="img/ejemplo4.jpg" alt="Ilustración abstracta"
+                        style="position:absolute; width:100%; height:100%; object-fit:cover;">
+                    <div class="pin-overlay">
+                        <button class="btn-guardar">Guardar</button>
+                        <div class="pin-info-hover">
+                            <strong>Innovación Tecnológica</strong>
+                            <span>@tech_lover</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-basica">
+                    <p>Innovación Tecnológica</p>
+                </div>
+            </article>
+
+
+            <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
+                <div class="imagen-wrapper" style="padding-bottom: 140%;">
+                    <img src="img/ejemplo5.jpg" alt="Setup de programación"
+                        style="position:absolute; width:100%; height:100%; object-fit:cover;">
+                    <div class="pin-overlay">
+                        <button class="btn-guardar">Guardar</button>
+                        <div class="pin-info-hover">
+                            <strong>Setup de Escritorio</strong>
+                            <span>@dev_life</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-basica">
+                    <p>Setup de Escritorio</p>
+                </div>
+            </article>
+        </section>
+    </main>
+</body>
+
+</html>

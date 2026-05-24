@@ -1,0 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+
+    --color-blanco: #F5F4F0;
+    --color-morado: #620096;
+    --color-azul: #002147;
+    --color-amarillo: #F6A700;
+
+
+    --gradiente-primario: linear-gradient(135deg, #620096, #4a0073);
+    --gradiente-fondo: linear-gradient(135deg, #F5F4F0, #EAE8E3);
+
+
+    --fuente-principal: 'Helvetica World', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --fuente-titulos: 'Libre Baskerville', serif;
+
+
+    --sombra-suave: 0 4px 20px rgba(0, 33, 71, 0.08);
+    --sombra-hover: 0 8px 30px rgba(0, 33, 71, 0.15);
+
+
+    --radio-tarjeta: 16px;
+    --radio-boton: 24px;
+
+
+    --transicion-rapida: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--fuente-principal);
+    background: var(--color-blanco);
+    color: var(--color-azul);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--fuente-titulos);
+    color: var(--color-azul);
+    font-weight: 700;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transicion-rapida);
+}
+
+
+header {
+    background: rgba(245, 244, 240, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--sombra-suave);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+
+.buscador {
+    flex-grow: 1;
+    max-width: 600px;
+    margin: 0 30px;
+    padding: 12px 24px;
+    border-radius: 30px;
+    border: 1px solid rgba(0, 33, 71, 0.1);
+    background-color: white;
+    font-family: var(--fuente-principal);
+    font-size: 1rem;
+    transition: var(--transicion-rapida);
+    color: var(--color-azul);
+}
+
+.buscador:focus {
+    outline: none;
+    border-color: var(--color-morado);
+    box-shadow: 0 0 0 4px rgba(98, 0, 150, 0.1);
+}
+
+.buscador::placeholder {
+    color: #8892a0;
+}
+
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+nav a.link-texto {
+    font-weight: bold;
+    color: var(--color-azul);
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+nav a.link-texto:hover {
+    background-color: rgba(0, 33, 71, 0.05);
+}
+
+
+.btn-primario {
+    background: var(--gradiente-primario);
+    color: white;
+    padding: 10px 24px;
+    border: none;
+    border-radius: var(--radio-boton);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: var(--transicion-rapida);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(98, 0, 150, 0.3);
+}
+
+.btn-primario:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(98, 0, 150, 0.4);
+    background: linear-gradient(135deg, #4a0073, #350054);
+}
+
+.btn-secundario {
+    background-color: var(--color-azul);
+    color: white;
+    padding: 10px 24px;
+    border: none;
+    border-radius: var(--radio-boton);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: var(--transicion-rapida);
+}
+
+.btn-secundario:hover {
+    background-color: #001530;
+    transform: translateY(-2px);
+}
+
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icono {
+    width: 32px;
+    height: 32px;
+    background-color: var(--color-morado);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-family: var(--fuente-titulos);
+}
+
+.logo-texto {
+    font-family: var(--fuente-titulos);
+    font-size: 1.5rem;
+    color: var(--color-morado);
+    letter-spacing: -0.5px;
+}
+
+
+@media (max-width: 768px) {
+    header {
+        padding: 12px 20px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .buscador {
+        order: 3;
+        margin: 0;
+        max-width: 100%;
+    }
+}

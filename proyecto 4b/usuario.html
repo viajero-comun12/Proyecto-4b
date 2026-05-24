@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario | Mosaiko</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/index.css"> <!-- Para reutilizar el feed -->
+    <link rel="stylesheet" href="css/usuario.css">
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <div class="logo-icono">G</div>
+            <div class="logo-texto">Gridly</div>
+        </a>
+
+        <input type="search" placeholder="Buscar en mis pines..." class="buscador">
+
+        <nav>
+            <a href="index.html" class="link-texto">Inicio</a>
+            <a href="login.html" class="btn-primario">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <main class="contenedor-perfil">
+        <section class="info-usuario">
+            <!-- Espacio reservado para avatar -->
+            <img src="img/avatar.png" alt="Foto de perfil" class="avatar-grande"
+                onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22 viewBox=%220 0 150 150%22%3E%3Crect width=%22150%22 height=%22150%22 fill=%22%23EAE8E3%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2250%22 fill=%22%23666%22%3EU%3C/text%3E%3C/svg%3E';">
+            <h1>Leonardo Dev</h1>
+            <p class="username">@leo_dev</p>
+
+            <div class="acciones-perfil">
+                <button class="btn-secundario">Compartir</button>
+                <button class="btn-primario">Editar Perfil</button>
+            </div>
+        </section>
+
+        <section class="mis-publicaciones">
+            <h2>Mis Pines Guardados</h2>
+
+
+            <div class="feed-mosaico">
+                <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
+                    <div class="imagen-wrapper" style="padding-bottom: 120%;">
+                        <img src="img/ejemplo1.jpg" alt="Arquitectura en S3"
+                            style="position:absolute; width:100%; height:100%; object-fit:cover;">
+                        <div class="pin-overlay">
+                            <button class="btn-guardar">Guardado</button>
+                            <div class="pin-info-hover">
+                                <strong>Arquitectura en S3</strong>
+                                <span>@leo_dev</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-basica">
+                        <p>Arquitectura en S3</p>
+                    </div>
+                </article>
+
+                <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
+                    <div class="imagen-wrapper" style="padding-bottom: 150%;">
+                        <img src="img/ejemplo2.jpg" alt="Diseño UI"
+                            style="position:absolute; width:100%; height:100%; object-fit:cover;">
+                        <div class="pin-overlay">
+                            <button class="btn-guardar">Guardado</button>
+                            <div class="pin-info-hover">
+                                <strong>UI Móvil Premium</strong>
+                                <span>@sarah_ui</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-basica">
+                        <p>UI Móvil Premium</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
