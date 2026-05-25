@@ -32,6 +32,25 @@
     text-align: center;
     animation: fadeInUp 0.6s ease-out;
 }
+.tarjeta-auth header {
+    background: transparent;
+    backdrop-filter: none;
+    box-shadow: none;
+    position: static;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: none;
+    width: 100%;
+}
+
+.logo-auth {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
 
 @keyframes fadeInUp {
     from {
@@ -52,9 +71,9 @@
 }
 
 .tarjeta-auth p.subtitulo {
-    color: #666;
+    color: #333;
     margin-bottom: 30px;
-    font-size: 0.95rem;
+    font-size: 1rem;
 }
 
 .auth-form {
@@ -78,8 +97,8 @@
 
 .grupo-input input {
     padding: 12px 16px;
-    border: 2px solid #EAE8E3;
-    border-radius: 12px;
+    border: 2px solid #efefef;
+    border-radius: 16px;
     font-size: 1rem;
     font-family: var(--fuente-principal);
     transition: var(--transicion-rapida);
@@ -88,9 +107,9 @@
 
 .grupo-input input:focus {
     outline: none;
-    border-color: var(--color-morado);
-    background-color: white;
-    box-shadow: 0 0 0 3px rgba(98, 0, 150, 0.1);
+    border-color: #620096; 
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(98, 0, 150, 0.1); 
 }
 
 .auth-form .btn-primario {
@@ -124,4 +143,8 @@
     width: 60px;
     height: 60px;
     font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
 }
