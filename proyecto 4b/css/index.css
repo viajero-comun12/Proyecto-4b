@@ -1,9 +1,148 @@
+:root {
+    --color-morado: #620096;
+    --color-blanco: #F5F4F0;
+    --color-amarillo: #F6A700;
+    --sombra-suave: 0 4px 12px rgba(98, 0, 150, 0.08);
+    --sombra-hover: 0 10px 20px rgba(98, 0, 150, 0.2);
+    --transicion-rapida: all 0.3s ease;
+    --radio-tarjeta: 12px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--color-blanco);
+    color: #333333;
+}
+
+header {
+    background-color: var(--color-amarillo);
+    color: var(--color-morado);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+header nav a {
+    color: var(--color-morado);
+    text-decoration: none;
+    margin-left: 15px;
+    font-weight: bold;
+    transition: var(--transicion-rapida);
+}
+
+header nav a:hover {
+    color: white;
+}
+
+header .btn-amarillo {
+    background-color: var(--color-morado);
+    color: var(--color-blanco);
+}
+
+header .btn-amarillo:hover {
+    background-color: #4a0072;
+}
+
+.btn-amarillo {
+    background-color: var(--color-amarillo);
+    color: var(--color-morado);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: var(--transicion-rapida);
+}
+
+.btn-amarillo:hover {
+    background-color: #e59900;
+}
+
+.contenedor-form {
+    width: 100%;
+    max-width: 400px;
+    margin: 60px auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: var(--sombra-suave);
+    box-sizing: border-box;
+}
+
+.contenedor-form h2 {
+    color: var(--color-morado);
+    text-align: center;
+}
+
+.grupo-input {
+    margin-bottom: 15px;
+}
+
+.grupo-input label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.grupo-input input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.contenedor-detalle {
+    display: flex;
+    max-width: 900px;
+    margin: 40px auto;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--sombra-suave);
+}
+
+.detalle-imagen {
+    flex: 1;
+}
+
+.detalle-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.detalle-info {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.perfil-header {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: white;
+    border-bottom: 2px solid var(--color-morado);
+}
+
 .feed-mosaico {
     columns: 4 250px;
     column-gap: 20px;
     padding: 20px 40px;
     max-width: 1600px;
     margin: 0 auto;
+    background-color: var(--color-blanco);
 }
 
 .tarjeta-pin {
@@ -16,17 +155,17 @@
     transition: var(--transicion-rapida);
     position: relative;
     cursor: pointer;
+    border: 1px solid rgba(98, 0, 150, 0.05);
 }
 
 .tarjeta-pin:hover {
-    transform: translateY(-5px);
+    transform: translateY(-6px);
     box-shadow: var(--sombra-hover);
 }
 
 .imagen-wrapper {
     position: relative;
     width: 100%;
-
     background-color: #EAE8E3;
     overflow: hidden;
 }
@@ -39,9 +178,8 @@
 }
 
 .tarjeta-pin:hover img {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
-
 
 .pin-overlay {
     position: absolute;
@@ -49,13 +187,14 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 33, 71, 0.4);
+    background: linear-gradient(to bottom, rgba(98, 0, 150, 0.1), rgba(98, 0, 150, 0.8));
     opacity: 0;
     transition: var(--transicion-rapida);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 15px;
+    box-sizing: border-box;
 }
 
 .tarjeta-pin:hover .pin-overlay {
@@ -65,14 +204,16 @@
 .btn-guardar {
     align-self: flex-end;
     background-color: var(--color-amarillo);
-    color: var(--color-azul);
+    color: var(--color-morado);
     border: none;
     border-radius: 20px;
-    padding: 8px 16px;
+    padding: 10px 20px;
     font-weight: bold;
+    font-size: 0.9rem;
     cursor: pointer;
-    transform: translateY(-10px);
+    transform: translateY(-15px);
     transition: var(--transicion-rapida);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 .tarjeta-pin:hover .btn-guardar {
@@ -80,12 +221,13 @@
 }
 
 .btn-guardar:hover {
-    background-color: #dca00f;
+    background-color: #FFB71A;
+    transform: scale(1.05);
 }
 
 .pin-info-hover {
-    color: white;
-    transform: translateY(10px);
+    color: var(--color-blanco);
+    transform: translateY(15px);
     transition: var(--transicion-rapida);
 }
 
@@ -94,33 +236,34 @@
 }
 
 .pin-info-hover strong {
-    font-family: var(--fuente-titulos);
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     display: block;
     margin-bottom: 5px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 .pin-info-hover span {
-    font-size: 0.85rem;
-    opacity: 0.9;
+    font-size: 0.9rem;
+    opacity: 0.95;
 }
 
 .info-basica {
-    padding: 12px 15px;
+    padding: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: white;
 }
 
 .info-basica p {
+    margin: 0;
     font-weight: bold;
-    font-size: 0.9rem;
-    color: var(--color-azul);
+    font-size: 0.95rem;
+    color: var(--color-morado);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 
 .barra-categorias {
     padding: 20px 40px;
@@ -128,6 +271,7 @@
     gap: 15px;
     overflow-x: auto;
     scrollbar-width: none;
+    background-color: var(--color-blanco);
 }
 
 .barra-categorias::-webkit-scrollbar {
@@ -136,26 +280,28 @@
 
 .btn-categoria {
     background-color: white;
-    color: var(--color-azul);
-    border: 1px solid rgba(0, 33, 71, 0.1);
-    padding: 10px 20px;
+    color: var(--color-morado);
+    border: 2px solid rgba(98, 0, 150, 0.1);
+    padding: 10px 22px;
     border-radius: 30px;
     font-weight: bold;
     cursor: pointer;
     white-space: nowrap;
     transition: var(--transicion-rapida);
-    box-shadow: 0 2px 8px rgba(0, 33, 71, 0.04);
+    box-shadow: 0 2px 5px rgba(98, 0, 150, 0.05);
 }
 
 .btn-categoria:hover {
-    background-color: rgba(0, 33, 71, 0.05);
+    background-color: rgba(98, 0, 150, 0.05);
+    border-color: var(--color-morado);
     transform: translateY(-2px);
 }
 
 .btn-categoria.activo {
-    background-color: var(--color-azul);
-    color: white;
-    border-color: var(--color-azul);
+    background-color: var(--color-morado);
+    color: var(--color-blanco);
+    border-color: var(--color-morado);
+    box-shadow: 0 4px 10px rgba(98, 0, 150, 0.3);
 }
 
 @media (max-width: 768px) {
