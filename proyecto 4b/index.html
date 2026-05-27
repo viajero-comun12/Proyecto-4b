@@ -25,109 +25,354 @@
         </nav>
     </header>
 
-    <main>
-        <nav class="barra-categorias">
-            <button class="btn-categoria activo">Para ti</button>
-            <button class="btn-categoria">Arquitectura Cloud</button>
-            <button class="btn-categoria">Diseño UI/UX</button>
-            <button class="btn-categoria">Tecnología AWS</button>
-            <button class="btn-categoria">Desarrollo Web</button>
-            <button class="btn-categoria">Innovación</button>
-        </nav>
+    <div class="app-container">
+        <!-- Controles de navegación principal (Radio Hack para navegación sin JS) -->
+        <input type="radio" name="nav-principal" id="nav-inicio" checked hidden>
+        <input type="radio" name="nav-principal" id="nav-explorar" hidden>
+        <input type="radio" name="nav-principal" id="nav-pines" hidden>
+        <input type="radio" name="nav-principal" id="nav-crear-pub" hidden>
+        <input type="radio" name="nav-principal" id="nav-crear-tablero" hidden>
+        <input type="radio" name="nav-principal" id="nav-crear-collage" hidden>
+        <input type="radio" name="nav-principal" id="nav-notif" hidden>
+        <input type="radio" name="nav-principal" id="nav-mensajes" hidden>
 
-        <section class="feed-mosaico">
+        <aside class="sidebar-izq">
+            <nav class="menu-lateral">
+                <div class="grupo-menu">
+                    <label for="nav-inicio" class="item-menu"><span class="icono"></span> Inicio</label>
+                    <label for="nav-explorar" class="item-menu"><span class="icono"></span> Explorar</label>
+                </div>
 
-            <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
-                <div class="imagen-wrapper" style="padding-bottom: 120%;">
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Tablero</h3>
+                    <label for="nav-pines" class="item-menu"><span class="icono"></span> Pines</label>
+                </div>
 
-                    <img src="img/ejemplo1.jpg" alt="Arquitectura en S3"
-                        style="position:absolute; width:100%; height:100%; object-fit:cover;">
-                    <div class="pin-overlay">
-                        <button class="btn-guardar">Guardar</button>
-                        <div class="pin-info-hover">
-                            <strong>Arquitectura en S3</strong>
-                            <span>@leo_dev</span>
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Crear</h3>
+                    <label for="nav-crear-pub" class="item-menu"><span class="icono"></span> Publicación</label>
+                    <label for="nav-crear-tablero" class="item-menu"><span class="icono"></span> Tableros</label>
+                    <label for="nav-crear-collage" class="item-menu"><span class="icono"></span> Collage</label>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Social</h3>
+                    <label for="nav-notif" class="item-menu"><span class="icono"></span> Notificaciones</label>
+                    <label for="nav-mensajes" class="item-menu"><span class="icono"></span> Mensajería</label>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="contenido-principal">
+            
+            <!-- 1. INICIO -->
+            <section class="seccion-app sec-inicio">
+                <nav class="barra-categorias">
+                    <button class="btn-categoria activo">Para ti</button>
+                    <button class="btn-categoria">Arquitectura Cloud</button>
+                    <button class="btn-categoria">Diseño UI/UX</button>
+                    <button class="btn-categoria">Tecnología AWS</button>
+                    <button class="btn-categoria">Desarrollo Web</button>
+                    <button class="btn-categoria">Innovación</button>
+                </nav>
+
+                <section class="feed-mosaico">
+                    <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
+                        <div class="imagen-wrapper" style="padding-bottom: 120%;">
+                            <img src="img/ejemplo1.jpg" alt="Arquitectura en S3"
+                                style="position:absolute; width:100%; height:100%; object-fit:cover;">
+                            <div class="pin-overlay">
+                                <button class="btn-guardar">Guardar</button>
+                                <div class="pin-info-hover">
+                                    <strong>Arquitectura en S3</strong>
+                                    <span>@leo_dev</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-basica">
+                            <p>Arquitectura en S3</p>
+                        </div>
+                    </article>
+
+                    <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
+                        <div class="imagen-wrapper" style="padding-bottom: 150%;">
+                            <img src="img/ejemplo2.jpg" alt="Diseño de interfaz móvil"
+                                style="position:absolute; width:100%; height:100%; object-fit:cover;">
+                            <div class="pin-overlay">
+                                <button class="btn-guardar">Guardar</button>
+                                <div class="pin-info-hover">
+                                    <strong>UI Móvil Premium</strong>
+                                    <span>@sarah_ui</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-basica">
+                            <p>UI Móvil Premium</p>
+                        </div>
+                    </article>
+
+                    <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
+                        <div class="imagen-wrapper" style="padding-bottom: 80%;">
+                            <img src="img/ejemplo3.jpg" alt="Dashboard corporativo"
+                                style="position:absolute; width:100%; height:100%; object-fit:cover;">
+                            <div class="pin-overlay">
+                                <button class="btn-guardar">Guardar</button>
+                                <div class="pin-info-hover">
+                                    <strong>Dashboard AWS</strong>
+                                    <span>@cloud_expert</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-basica">
+                            <p>Dashboard AWS</p>
+                        </div>
+                    </article>
+
+                    <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
+                        <div class="imagen-wrapper" style="padding-bottom: 110%;">
+                            <img src="img/ejemplo4.jpg" alt="Ilustración abstracta"
+                                style="position:absolute; width:100%; height:100%; object-fit:cover;">
+                            <div class="pin-overlay">
+                                <button class="btn-guardar">Guardar</button>
+                                <div class="pin-info-hover">
+                                    <strong>Innovación Tecnológica</strong>
+                                    <span>@tech_lover</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-basica">
+                            <p>Innovación Tecnológica</p>
+                        </div>
+                    </article>
+
+                    <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
+                        <div class="imagen-wrapper" style="padding-bottom: 140%;">
+                            <img src="img/ejemplo5.jpg" alt="Setup de programación"
+                                style="position:absolute; width:100%; height:100%; object-fit:cover;">
+                            <div class="pin-overlay">
+                                <button class="btn-guardar">Guardar</button>
+                                <div class="pin-info-hover">
+                                    <strong>Setup de Escritorio</strong>
+                                    <span>@dev_life</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-basica">
+                            <p>Setup de Escritorio</p>
+                        </div>
+                    </article>
+                </section>
+            </section>
+
+            <!-- 2. EXPLORAR -->
+            <section class="seccion-app sec-explorar">
+                <div class="encabezado-seccion">
+                    <h2>Explorar por Categorías</h2>
+                    <p style="color: #8892a0; margin-top: 5px;">Descubre ideas nuevas divididas por temas.</p>
+                </div>
+                <div class="categorias-grid">
+                    <div class="cat-card">Arquitectura</div>
+                    <div class="cat-card">Diseño UI/UX</div>
+                    <div class="cat-card">AWS / Nube</div>
+                    <div class="cat-card">Inteligencia Artificial</div>
+                    <div class="cat-card">Desarrollo Web</div>
+                </div>
+                <div class="encabezado-seccion">
+                    <h3>Mix de Publicaciones</h3>
+                </div>
+                <section class="feed-mosaico">
+                    <article class="tarjeta-pin">
+                        <div class="imagen-wrapper" style="padding-bottom: 100%; background:var(--color-morado);">
+                            <div class="pin-overlay"><button class="btn-guardar">Guardar</button></div>
+                        </div>
+                        <div class="info-basica"><p>Inspiración 1</p></div>
+                    </article>
+                    <article class="tarjeta-pin">
+                        <div class="imagen-wrapper" style="padding-bottom: 130%; background:var(--color-amarillo);">
+                            <div class="pin-overlay"><button class="btn-guardar">Guardar</button></div>
+                        </div>
+                        <div class="info-basica"><p>Inspiración 2</p></div>
+                    </article>
+                </section>
+            </section>
+
+            <!-- 3. PINES (TABLERO) -->
+            <section class="seccion-app sec-pines">
+                <!-- Controles para el Tablero -->
+                <input type="radio" name="filtro-pines" id="filtro-todos" checked hidden>
+                <input type="radio" name="filtro-pines" id="filtro-subidos" hidden>
+                <input type="radio" name="filtro-pines" id="filtro-guardados" hidden>
+                
+                <input type="radio" name="vista-pines" id="vista-normal" checked hidden>
+                <input type="radio" name="vista-pines" id="vista-compacta" hidden>
+
+                <div class="encabezado-seccion flex-between">
+                    <h2>Mis Pines Guardados</h2>
+                    <div class="controles-vista">
+                        <div class="filtros">
+                            <label for="filtro-todos" class="btn-filtro">Todos</label>
+                            <label for="filtro-subidos" class="btn-filtro">Mis Subidas</label>
+                            <label for="filtro-guardados" class="btn-filtro">Guardados</label>
+                        </div>
+                        <div class="vistas">
+                            <label for="vista-normal" class="btn-filtro">🖼 Normal</label>
+                            <label for="vista-compacta" class="btn-filtro">🗂 Compacta</label>
                         </div>
                     </div>
                 </div>
-                <div class="info-basica">
-                    <p>Arquitectura en S3</p>
-                </div>
-            </article>
+                <!-- El contenedor cambia dinámicamente con CSS -->
+                <section class="feed-dinamico feed-mosaico">
+                    <article class="tarjeta-pin pin-subido">
+                        <div class="imagen-wrapper" style="padding-bottom: 100%; background:#4a0073;">
+                            <div class="pin-overlay"><button class="btn-guardar">Guardar</button></div>
+                        </div>
+                        <div class="info-basica"><p>Subida por mí 1</p></div>
+                    </article>
+                    <article class="tarjeta-pin pin-guardado">
+                        <div class="imagen-wrapper" style="padding-bottom: 120%; background:#002147;">
+                            <div class="pin-overlay"><button class="btn-guardar">Guardar</button></div>
+                        </div>
+                        <div class="info-basica"><p>Pin Guardado 1</p></div>
+                    </article>
+                    <article class="tarjeta-pin pin-subido">
+                        <div class="imagen-wrapper" style="padding-bottom: 90%; background:#001530;">
+                            <div class="pin-overlay"><button class="btn-guardar">Guardar</button></div>
+                        </div>
+                        <div class="info-basica"><p>Subida por mí 2</p></div>
+                    </article>
+                    <article class="tarjeta-pin pin-guardado">
+                        <div class="imagen-wrapper" style="padding-bottom: 140%; background:#F6A700;">
+                            <div class="pin-overlay"><button class="btn-guardar">Guardar</button></div>
+                        </div>
+                        <div class="info-basica"><p>Pin Guardado 2</p></div>
+                    </article>
+                </section>
+            </section>
 
-
-            <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
-                <div class="imagen-wrapper" style="padding-bottom: 150%;">
-                    <img src="img/ejemplo2.jpg" alt="Diseño de interfaz móvil"
-                        style="position:absolute; width:100%; height:100%; object-fit:cover;">
-                    <div class="pin-overlay">
-                        <button class="btn-guardar">Guardar</button>
-                        <div class="pin-info-hover">
-                            <strong>UI Móvil Premium</strong>
-                            <span>@sarah_ui</span>
+            <!-- 4. CREAR PUBLICACION -->
+            <section class="seccion-app sec-crear-pub">
+                <div class="contenedor-formulario">
+                    <h2>Crear Nueva Publicación</h2>
+                    <div class="form-crear">
+                        <div class="zona-subida">
+                            <p>Arrastra y suelta tu imagen aquí o haz clic para subir</p>
+                        </div>
+                        <div class="campos-form">
+                            <input type="text" placeholder="Añade un título" class="input-form">
+                            <textarea placeholder="Cuenta a todos de qué trata tu publicación" class="input-form"></textarea>
+                            <input type="text" placeholder="Añade etiquetas (#hashtags)" class="input-form">
+                            <button class="btn-primario">Publicar</button>
                         </div>
                     </div>
                 </div>
-                <div class="info-basica">
-                    <p>UI Móvil Premium</p>
-                </div>
-            </article>
+            </section>
 
-
-            <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
-                <div class="imagen-wrapper" style="padding-bottom: 80%;">
-                    <img src="img/ejemplo3.jpg" alt="Dashboard corporativo"
-                        style="position:absolute; width:100%; height:100%; object-fit:cover;">
-                    <div class="pin-overlay">
-                        <button class="btn-guardar">Guardar</button>
-                        <div class="pin-info-hover">
-                            <strong>Dashboard AWS</strong>
-                            <span>@cloud_expert</span>
+            <!-- 5. CREAR TABLERO -->
+            <section class="seccion-app sec-crear-tablero">
+                <div class="contenedor-formulario">
+                    <h2>Crear Nuevo Tablero</h2>
+                    <p style="color: #8892a0; margin-bottom: 20px;">Agrupa tus publicaciones en colecciones personalizadas.</p>
+                    <div class="form-crear">
+                        <div class="campos-form" style="width: 100%;">
+                            <input type="text" placeholder="Nombre del tablero (Ej. Inspiración AWS)" class="input-form">
+                            <label style="display:flex; align-items:center; gap:10px;">
+                                <input type="checkbox"> Mantener este tablero secreto
+                            </label>
+                            <button class="btn-primario" style="align-self: flex-start; margin-top: 10px;">Crear Tablero</button>
                         </div>
                     </div>
                 </div>
-                <div class="info-basica">
-                    <p>Dashboard AWS</p>
+            </section>
+
+            <!-- 6. CREAR COLLAGE -->
+            <section class="seccion-app sec-crear-collage">
+                <div class="layout-collage">
+                    <div class="lienzo-collage">
+                        <h3 style="color:var(--color-azul); opacity:0.3; position:absolute; top:20px; left:20px;">Lienzo de Collage</h3>
+                        
+                        <!-- Elementos de ejemplo en el lienzo -->
+                        <div class="elemento-collage" style="top: 20%; left: 10%; width: 180px; height: 180px; background:var(--color-morado);"></div>
+                        <div class="elemento-collage" style="top: 40%; left: 40%; width: 250px; height: 150px; background:var(--color-amarillo);"></div>
+                    </div>
+                    <aside class="sidebar-collage">
+                        <h4>Añadir al Collage</h4>
+                        <input type="search" placeholder="Buscar publicaciones o #hashtags..." class="buscador-collage input-form" style="margin-top: 15px;">
+                        <select class="input-form" style="margin-top: 10px;">
+                            <option>Explorar (Por defecto)</option>
+                            <option>Mis Tableros</option>
+                        </select>
+                        <div class="resultados-collage">
+                            <div class="mini-pin" style="background:#002147;"></div>
+                            <div class="mini-pin" style="background:#4a0073;"></div>
+                            <div class="mini-pin" style="background:#dca00f;"></div>
+                            <div class="mini-pin" style="background:#EAE8E3;"></div>
+                        </div>
+                    </aside>
                 </div>
-            </article>
+            </section>
 
+            <!-- 7. NOTIFICACIONES -->
+            <section class="seccion-app sec-notif">
+                <div class="encabezado-seccion">
+                    <h2>Tus Notificaciones</h2>
+                </div>
+                <div class="lista-notificaciones">
+                    <div class="notificacion no-leida">
+                        <div class="notif-avatar">S</div>
+                        <div class="notif-texto"><strong>@sarah_ui</strong> comentó en tu tablero "UI Inspirations".</div>
+                        <span class="notif-tiempo">Hace 2 horas</span>
+                    </div>
+                    <div class="notificacion no-leida">
+                        <div class="notif-avatar" style="background:var(--color-morado);">C</div>
+                        <div class="notif-texto">A <strong>@cloud_expert</strong> le gustó tu publicación "Arquitectura S3".</div>
+                        <span class="notif-tiempo">Hace 5 horas</span>
+                    </div>
+                    <div class="notificacion">
+                        <div class="notif-avatar" style="background:#333;">D</div>
+                        <div class="notif-texto"><strong>@dev_life</strong> añadió tu publicación a su Collage.</div>
+                        <span class="notif-tiempo">Ayer</span>
+                    </div>
+                </div>
+            </section>
 
-            <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
-                <div class="imagen-wrapper" style="padding-bottom: 110%;">
-                    <img src="img/ejemplo4.jpg" alt="Ilustración abstracta"
-                        style="position:absolute; width:100%; height:100%; object-fit:cover;">
-                    <div class="pin-overlay">
-                        <button class="btn-guardar">Guardar</button>
-                        <div class="pin-info-hover">
-                            <strong>Innovación Tecnológica</strong>
-                            <span>@tech_lover</span>
+            <!-- 8. MENSAJERIA -->
+            <section class="seccion-app sec-mensajes">
+                <div class="layout-mensajeria">
+                    <aside class="lista-chats">
+                        <h3>Mensajes</h3>
+                        <div class="chat-item activo">
+                            <div class="chat-avatar">S</div>
+                            <div class="chat-info">
+                                <strong>@sarah_ui</strong>
+                                <p>Me encantó el diseño...</p>
+                            </div>
+                        </div>
+                        <div class="chat-item">
+                            <div class="chat-avatar" style="background:var(--color-azul);">T</div>
+                            <div class="chat-info">
+                                <strong>@tech_lover</strong>
+                                <p>¿Cómo hiciste ese deploy en AWS?</p>
+                            </div>
+                        </div>
+                    </aside>
+                    <div class="chat-actual">
+                        <div class="chat-header">
+                            <strong>@sarah_ui</strong>
+                        </div>
+                        <div class="chat-mensajes">
+                            <div class="mensaje recibido">Hola, me encantó el diseño de tu último tablero, muy inspirador.</div>
+                            <div class="mensaje enviado">¡Muchas gracias! Me inspiré en los colores de AWS y en estilos modernos.</div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" placeholder="Escribe un mensaje..." class="input-form">
+                            <button class="btn-primario">Enviar</button>
                         </div>
                     </div>
                 </div>
-                <div class="info-basica">
-                    <p>Innovación Tecnológica</p>
-                </div>
-            </article>
+            </section>
 
-
-            <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
-                <div class="imagen-wrapper" style="padding-bottom: 140%;">
-                    <img src="img/ejemplo5.jpg" alt="Setup de programación"
-                        style="position:absolute; width:100%; height:100%; object-fit:cover;">
-                    <div class="pin-overlay">
-                        <button class="btn-guardar">Guardar</button>
-                        <div class="pin-info-hover">
-                            <strong>Setup de Escritorio</strong>
-                            <span>@dev_life</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="info-basica">
-                    <p>Setup de Escritorio</p>
-                </div>
-            </article>
-        </section>
-    </main>
+        </main>
+    </div>
 </body>
 
 </html>
