@@ -6,9 +6,10 @@ import uuid
 # ==========================================
 # CONFIGURACIÓN DE AWS S3
 # ==========================================
-# Llena estos campos con tus credenciales reales y el nombre de tu bucket
-AWS_ACCESS_KEY_ID = "TU_ACCESS_KEY_AQUI"
-AWS_SECRET_ACCESS_KEY = "TU_SECRET_KEY_AQUI"
+
+
+AWS_ACCESS_KEY_ID = "la tuya"
+AWS_SECRET_ACCESS_KEY = "la tuya"
 AWS_REGION = "us-east-1" # Cambia por tu región
 S3_BUCKET_NAME = "TU_NOMBRE_DE_BUCKET_AQUI"
 
