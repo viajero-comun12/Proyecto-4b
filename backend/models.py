@@ -7,11 +7,11 @@ class Publicacion(Base):
     __tablename__ = "publicaciones"
 
     id = Column(Integer, primary_key=True, index=True)
-    titulo = Column(String, index=True)
+    titulo = Column(String(255), index=True)
     descripcion = Column(Text)
-    tags = Column(String) # Guardaremos los hashtags separados por comas, ej: "#arte,#fotografia"
+    tags = Column(String(255)) # Guardaremos los hashtags separados por comas, ej: "#arte,#fotografia"
     categoria_id = Column(Integer)
-    url_multimedia = Column(String) # URL del archivo en AWS S3
+    url_multimedia = Column(String(500)) # URL del archivo en AWS S3
     fecha_creacion = Column(DateTime, default=datetime.utcnow)
 
     comentarios = relationship("Comentario", back_populates="publicacion")
