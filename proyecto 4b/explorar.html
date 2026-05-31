@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorar | Mosaiko</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <div class="logo-icono">G</div>
+            <div class="logo-texto">Gridly</div>
+        </a>
+
+        <input type="search" placeholder="Buscar ideas, diseños, arquitectura..." class="buscador">
+
+        <nav>
+            <a href="usuario.html" class="link-texto">Mi Perfil</a>
+            <a href="login.html" class="btn-primario">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <div class="app-container">
+        <aside class="sidebar-izq">
+            <nav class="menu-lateral">
+                <div class="grupo-menu">
+                    <a href="index.html" class="item-menu"><span class="icono"></span> Inicio</a>
+                    <a href="explorar.html" class="item-menu activo" style="font-weight:bold; color:var(--color-morado);"><span class="icono"></span> Explorar</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Tablero</h3>
+                    <a href="pines.html" class="item-menu"><span class="icono"></span> Pines</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Crear</h3>
+                    <a href="publicacion.html" class="item-menu"><span class="icono"></span> Publicación</a>
+                    <a href="tableros.html" class="item-menu"><span class="icono"></span> Tableros</a>
+                    <a href="collages.html" class="item-menu"><span class="icono"></span> Collage</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Social</h3>
+                    <a href="notificaciones.html" class="item-menu"><span class="icono"></span> Notificaciones</a>
+                    <a href="mensajeria.html" class="item-menu"><span class="icono"></span> Mensajería</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="contenido-principal">
+            <!-- 2. EXPLORAR -->
+            <section class="seccion-app sec-explorar" style="display: block;">
+                <div class="encabezado-seccion">
+                    <h2>Explorar por Categorías</h2>
+                    <p style="color: #8892a0; margin-top: 5px;">Descubre ideas nuevas divididas por temas.</p>
+                </div>
+                <div class="categorias-grid">
+                    <div class="cat-card">Arquitectura</div>
+                    <div class="cat-card">Diseño UI/UX</div>
+                    <div class="cat-card">AWS / Nube</div>
+                    <div class="cat-card">Inteligencia Artificial</div>
+                    <div class="cat-card">Desarrollo Web</div>
+                </div>
+                <div class="encabezado-seccion">
+                    <h3>Mix de Publicaciones</h3>
+                </div>
+                <section class="feed-mosaico" id="feed-explorar">
+                    <p style="text-align: center; width: 100%; color: #8892a0;">Cargando publicaciones populares...</p>
+                </section>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Script para Autenticación -->
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simulamos cargar publicaciones en explorar reusando la API
+            const feedExplorar = document.getElementById('feed-explorar');
+            if (feedExplorar) {
+                fetch('http://localhost:8000/publicaciones/')
+                    .then(r => r.json())
+                    .then(pubs => {
+                        feedExplorar.innerHTML = '';
+                        pubs.forEach(pub => {
+                            feedExplorar.innerHTML += `
+                                <article class="tarjeta-pin" onclick="window.location.href='detalle.html?id=${pub.id}'">
+                                    <div class="imagen-wrapper" style="padding-bottom: 100%;">
+                                        <img src="${pub.url_multimedia}" style="position:absolute; width:100%; height:100%; object-fit:cover;">
+                                        <div class="pin-overlay"><button class="btn-guardar">Guardar</button></div>
+                                    </div>
+                                    <div class="info-basica"><p>${pub.titulo}</p></div>
+                                </article>`;
+                        });
+                    }).catch(e => feedExplorar.innerHTML = "Error al cargar");
+            }
+        });
+    </script>
+</body>
+
+</html>

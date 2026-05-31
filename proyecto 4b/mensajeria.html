@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensajes | Mosaiko</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <div class="logo-icono">G</div>
+            <div class="logo-texto">Gridly</div>
+        </a>
+
+        <input type="search" placeholder="Buscar ideas, diseños, arquitectura..." class="buscador">
+
+        <nav>
+            <a href="usuario.html" class="link-texto">Mi Perfil</a>
+            <a href="login.html" class="btn-primario">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <div class="app-container">
+        <aside class="sidebar-izq">
+            <nav class="menu-lateral">
+                <div class="grupo-menu">
+                    <a href="index.html" class="item-menu"><span class="icono"></span> Inicio</a>
+                    <a href="explorar.html" class="item-menu"><span class="icono"></span> Explorar</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Tablero</h3>
+                    <a href="pines.html" class="item-menu"><span class="icono"></span> Pines</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Crear</h3>
+                    <a href="publicacion.html" class="item-menu"><span class="icono"></span> Publicación</a>
+                    <a href="tableros.html" class="item-menu"><span class="icono"></span> Tableros</a>
+                    <a href="collages.html" class="item-menu"><span class="icono"></span> Collage</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Social</h3>
+                    <a href="notificaciones.html" class="item-menu"><span class="icono"></span> Notificaciones</a>
+                    <a href="mensajeria.html" class="item-menu activo" style="font-weight:bold; color:var(--color-morado);"><span class="icono"></span> Mensajería</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="contenido-principal">
+            <!-- 8. MENSAJERIA -->
+            <section class="seccion-app sec-mensajes" style="display: block;">
+                <div class="layout-mensajeria">
+                    <aside class="lista-chats" id="lista-chats">
+                        <h3>Mensajes</h3>
+                        <p style="padding:15px; color:#8892a0;">Cargando mensajes...</p>
+                    </aside>
+                    <div class="chat-actual">
+                        <div class="chat-header">
+                            <strong id="chat-destinatario">Selecciona un chat</strong>
+                        </div>
+                        <div class="chat-mensajes" id="chat-mensajes">
+                            <p style="text-align:center; margin-top:50px; color:#ccc;">No hay mensajes seleccionados</p>
+                        </div>
+                        <form class="chat-input-area" onsubmit="event.preventDefault(); alert('Chat en construcción');">
+                            <input type="text" id="mensaje-texto" placeholder="Escribe un mensaje..." class="input-form" required disabled>
+                            <button type="submit" class="btn-primario" id="btn-enviar-msg" disabled>Enviar</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Script para Autenticación -->
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const contenedor = document.getElementById('lista-chats');
+            const usuarioId = localStorage.getItem('usuario_id');
+            if(!usuarioId) {
+                contenedor.innerHTML = '<h3>Mensajes</h3><p style="padding:15px; color:#8892a0;">Inicia sesión.</p>';
+                return;
+            }
+            
+            fetch(`http://localhost:8000/mensajes/${usuarioId}`)
+                .then(r => r.json())
+                .then(mensajes => {
+                    contenedor.innerHTML = '<h3>Mensajes</h3>';
+                    if(mensajes.length === 0) {
+                        contenedor.innerHTML += '<p style="padding:15px; color:#8892a0;">No tienes mensajes.</p>';
+                        return;
+                    }
+                    
+                    mensajes.forEach(m => {
+                        const elDestinatario = m.remitente_id == usuarioId ? m.destinatario_id : m.remitente_id;
+                        contenedor.innerHTML += `
+                            <div class="chat-item">
+                                <div class="chat-avatar" style="background:var(--color-azul);">U</div>
+                                <div class="chat-info">
+                                    <strong>@usuario_${elDestinatario}</strong>
+                                    <p>${m.texto}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(e => contenedor.innerHTML = '<p style="color:red;">Error al cargar</p>');
+        });
+    </script>
+</body>
+
+</html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio | Mosaiko</title>
+    <title>Subir Publicación | Mosaiko</title>
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/index.css">
 </head>
@@ -12,7 +12,6 @@
 <body>
     <header>
         <a href="index.html" class="logo">
-
             <div class="logo-icono">G</div>
             <div class="logo-texto">Gridly</div>
         </a>
@@ -29,7 +28,7 @@
         <aside class="sidebar-izq">
             <nav class="menu-lateral">
                 <div class="grupo-menu">
-                    <a href="index.html" class="item-menu activo" style="font-weight:bold; color:var(--color-morado);"><span class="icono"></span> Inicio</a>
+                    <a href="index.html" class="item-menu"><span class="icono"></span> Inicio</a>
                     <a href="explorar.html" class="item-menu"><span class="icono"></span> Explorar</a>
                 </div>
 
@@ -40,7 +39,7 @@
 
                 <div class="grupo-menu">
                     <h3 class="titulo-grupo">Crear</h3>
-                    <a href="publicacion.html" class="item-menu"><span class="icono"></span> Publicación</a>
+                    <a href="publicacion.html" class="item-menu activo" style="font-weight:bold; color:var(--color-morado);"><span class="icono"></span> Publicación</a>
                     <a href="tableros.html" class="item-menu"><span class="icono"></span> Tableros</a>
                     <a href="collages.html" class="item-menu"><span class="icono"></span> Collage</a>
                 </div>
@@ -54,30 +53,30 @@
         </aside>
 
         <main class="contenido-principal">
-            
-            <!-- 1. INICIO -->
-            <section class="seccion-app sec-inicio" style="display: block;">
-                <nav class="barra-categorias">
-                    <button class="btn-categoria activo">Para ti</button>
-                    <button class="btn-categoria">Arquitectura Cloud</button>
-                    <button class="btn-categoria">Diseño UI/UX</button>
-                    <button class="btn-categoria">Tecnología AWS</button>
-                    <button class="btn-categoria">Desarrollo Web</button>
-                    <button class="btn-categoria">Innovación</button>
-                </nav>
-
-                <section class="feed-mosaico" id="feed-inicio">
-                    <!-- Aquí se inyectarán las publicaciones desde JavaScript -->
-                    <p style="text-align: center; width: 100%; color: #8892a0;">Cargando publicaciones...</p>
-                </section>
-
+            <!-- 4. CREAR PUBLICACION -->
+            <section class="seccion-app sec-crear-pub" style="display: block;">
+                <div class="contenedor-formulario">
+                    <h2>Crear Nueva Publicación</h2>
+                    <form id="form-crear-pub" class="form-crear" onsubmit="event.preventDefault(); crearPublicacion();">
+                        <div class="zona-subida" style="position: relative; overflow: hidden; min-height: 200px;">
+                            <p>Haz clic aquí para seleccionar tu imagen</p>
+                            <img id="preview-img" style="display:none; width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; z-index:1; pointer-events:none;">
+                            <input type="file" id="pub-file" accept="image/*" required style="position: absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer; z-index:2;" onchange="if(this.files[0]) { document.getElementById('preview-img').src = URL.createObjectURL(this.files[0]); document.getElementById('preview-img').style.display = 'block'; }">
+                        </div>
+                        <div class="campos-form">
+                            <input type="text" id="pub-titulo" placeholder="Añade un título" class="input-form" required>
+                            <textarea id="pub-desc" placeholder="Cuenta a todos de qué trata tu publicación" class="input-form"></textarea>
+                            <input type="text" id="pub-tags" placeholder="Añade etiquetas (#hashtags)" class="input-form">
+                            <button type="submit" class="btn-primario" id="btn-submit-pub">Publicar</button>
+                        </div>
+                    </form>
+                </div>
             </section>
         </main>
     </div>
     
     <!-- Script para Autenticación -->
     <script src="js/auth.js"></script>
-    <!-- Script para conectar con la API -->
     <script src="js/api.js"></script>
 </body>
 
