@@ -8,10 +8,10 @@ import uuid
 # ==========================================
 
 
-AWS_ACCESS_KEY_ID = "la tuya"
-AWS_SECRET_ACCESS_KEY = "la tuya"
-AWS_REGION = "us-east-1" # Cambia por tu región
-S3_BUCKET_NAME = "TU_NOMBRE_DE_BUCKET_AQUI"
+AWS_ACCESS_KEY_ID = "lacredencial"
+AWS_SECRET_ACCESS_KEY = "laotracredencial"
+AWS_REGION = "us-east-1" 
+S3_BUCKET_NAME = "proyecto-multimedia-gridly"
 
 def get_s3_client():
     return boto3.client(
