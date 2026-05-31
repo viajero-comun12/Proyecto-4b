@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Tablero | Mosaiko</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <div class="logo-icono">G</div>
+            <div class="logo-texto">Gridly</div>
+        </a>
+
+        <input type="search" placeholder="Buscar ideas, diseños, arquitectura..." class="buscador">
+
+        <nav>
+            <a href="usuario.html" class="link-texto">Mi Perfil</a>
+            <a href="login.html" class="btn-primario">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <div class="app-container">
+        <aside class="sidebar-izq">
+            <nav class="menu-lateral">
+                <div class="grupo-menu">
+                    <a href="index.html" class="item-menu"><span class="icono"></span> Inicio</a>
+                    <a href="explorar.html" class="item-menu"><span class="icono"></span> Explorar</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Tablero</h3>
+                    <a href="pines.html" class="item-menu"><span class="icono"></span> Pines</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Crear</h3>
+                    <a href="publicacion.html" class="item-menu"><span class="icono"></span> Publicación</a>
+                    <a href="tableros.html" class="item-menu activo" style="font-weight:bold; color:var(--color-morado);"><span class="icono"></span> Tableros</a>
+                    <a href="collages.html" class="item-menu"><span class="icono"></span> Collage</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Social</h3>
+                    <a href="notificaciones.html" class="item-menu"><span class="icono"></span> Notificaciones</a>
+                    <a href="mensajeria.html" class="item-menu"><span class="icono"></span> Mensajería</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="contenido-principal">
+            <!-- 5. CREAR TABLERO -->
+            <section class="seccion-app sec-crear-tablero" style="display: block;">
+                <div class="contenedor-formulario">
+                    <h2>Crear Nuevo Tablero</h2>
+                    <p style="color: #8892a0; margin-bottom: 20px;">Agrupa tus publicaciones en colecciones personalizadas.</p>
+                    <div class="form-crear">
+                        <form id="form-crear-tablero" class="campos-form" style="width: 100%;" onsubmit="event.preventDefault(); crearTablero();">
+                            <input type="text" id="tablero-nombre" placeholder="Nombre del tablero (Ej. Inspiración AWS)" class="input-form" required>
+                            <label style="display:flex; align-items:center; gap:10px;">
+                                <input type="checkbox" id="tablero-secreto"> Mantener este tablero secreto
+                            </label>
+                            <button type="submit" class="btn-primario" style="align-self: flex-start; margin-top: 10px;">Crear Tablero</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Script para Autenticación -->
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        // Modificar el comportamiento de la función en api.js para que redirija a pines.html
+        document.getElementById('form-crear-tablero').onsubmit = async (e) => {
+            e.preventDefault();
+            const nombre = document.getElementById('tablero-nombre').value;
+            const secreto = document.getElementById('tablero-secreto').checked;
+            const usuarioId = localStorage.getItem('usuario_id');
+            if (!usuarioId) return alert("Debes iniciar sesión");
+            
+            try {
+                const res = await fetch('http://localhost:8000/tableros/', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ nombre, secreto, usuario_id: usuarioId })
+                });
+                if (res.ok) {
+                    alert('¡Tablero Creado!');
+                    window.location.href = 'pines.html';
+                } else {
+                    alert('Error al crear tablero');
+                }
+            } catch(error) { console.error(error); }
+        };
+    </script>
+</body>
+
+</html>

@@ -25,7 +25,35 @@
         </nav>
     </header>
 
-    <main class="contenedor-perfil">
+    <div class="app-container">
+        <aside class="sidebar-izq">
+            <nav class="menu-lateral">
+                <div class="grupo-menu">
+                    <a href="index.html" class="item-menu"><span class="icono"></span> Inicio</a>
+                    <a href="explorar.html" class="item-menu"><span class="icono"></span> Explorar</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Tablero</h3>
+                    <a href="pines.html" class="item-menu"><span class="icono"></span> Pines</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Crear</h3>
+                    <a href="publicacion.html" class="item-menu"><span class="icono"></span> Publicación</a>
+                    <a href="tableros.html" class="item-menu"><span class="icono"></span> Tableros</a>
+                    <a href="collages.html" class="item-menu"><span class="icono"></span> Collage</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Social</h3>
+                    <a href="notificaciones.html" class="item-menu"><span class="icono"></span> Notificaciones</a>
+                    <a href="mensajeria.html" class="item-menu"><span class="icono"></span> Mensajería</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="contenido-principal contenedor-perfil">
         <section class="info-usuario">
             <!-- Espacio reservado para avatar -->
             <img src="img/avatar.png" alt="Foto de perfil" class="avatar-grande"
@@ -34,8 +62,9 @@
             <p class="username">@leo_dev</p>
 
             <div class="acciones-perfil">
-                <button class="btn-secundario">Compartir</button>
-                <button class="btn-primario">Editar Perfil</button>
+                <button class="btn-secundario" onclick="alert('Funcionalidad de compartir en construcción')">Compartir</button>
+                <input type="file" id="avatar-upload" style="display:none;" accept="image/*" onchange="subirAvatar(this)">
+                <button class="btn-primario" onclick="document.getElementById('avatar-upload').click()">Cambiar Foto de Perfil</button>
             </div>
         </section>
 
@@ -43,43 +72,15 @@
             <h2>Mis Pines Guardados</h2>
 
 
-            <div class="feed-mosaico">
-                <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
-                    <div class="imagen-wrapper" style="padding-bottom: 120%;">
-                        <img src="img/ejemplo1.jpg" alt="Arquitectura en S3"
-                            style="position:absolute; width:100%; height:100%; object-fit:cover;">
-                        <div class="pin-overlay">
-                            <button class="btn-guardar">Guardado</button>
-                            <div class="pin-info-hover">
-                                <strong>Arquitectura en S3</strong>
-                                <span>@leo_dev</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="info-basica">
-                        <p>Arquitectura en S3</p>
-                    </div>
-                </article>
-
-                <article class="tarjeta-pin" onclick="window.location.href='detalle.html'">
-                    <div class="imagen-wrapper" style="padding-bottom: 150%;">
-                        <img src="img/ejemplo2.jpg" alt="Diseño UI"
-                            style="position:absolute; width:100%; height:100%; object-fit:cover;">
-                        <div class="pin-overlay">
-                            <button class="btn-guardar">Guardado</button>
-                            <div class="pin-info-hover">
-                                <strong>UI Móvil Premium</strong>
-                                <span>@sarah_ui</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="info-basica">
-                        <p>UI Móvil Premium</p>
-                    </div>
-                </article>
+            <div class="feed-mosaico" id="user-publicaciones">
+                <!-- Se inyectarán desde JS -->
             </div>
         </section>
     </main>
+    </div>
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/usuario.js"></script>
 </body>
 
 </html>
