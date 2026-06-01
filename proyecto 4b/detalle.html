@@ -4,9 +4,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arquitectura en S3 | Gridly</title>
+    <title>Detalle | Gridly</title>
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/detalle.css">
+    <style>
+        /* Modal para guardar en tablero */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.activo { display: flex; }
+        .modal-caja {
+            background: var(--color-blanco, #F5F4F0);
+            border-radius: 16px;
+            padding: 28px 32px;
+            width: 380px;
+            max-width: 95vw;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .modal-caja h3 { margin: 0 0 16px; font-size: 1.2rem; color: var(--color-azul, #002147); }
+        .tablero-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 6px;
+        }
+        .tablero-option:hover { background: #eae8e3; }
+        .tablero-option .t-icono {
+            width: 40px; height: 40px; border-radius: 8px;
+            background: var(--color-morado, #620096);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.2rem;
+        }
+        .modal-acciones { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+        .btn-cancelar {
+            padding: 8px 18px; border-radius: 20px; border: none;
+            background: #eae8e3; cursor: pointer; font-weight: 600;
+        }
+        #estado-guardado {
+            font-size: 0.85rem; color: green;
+            margin-top: 10px; text-align: center; min-height: 20px;
+        }
+        .btn-enviar-com {
+            padding: 8px 18px; background: var(--color-morado, #620096);
+            color: white; border: none; border-radius: 20px;
+            cursor: pointer; font-weight: 600; transition: opacity 0.2s;
+        }
+        .btn-enviar-com:hover { opacity: 0.85; }
+        .btn-enviar-com:disabled { opacity: 0.5; cursor: default; }
+    </style>
 </head>
 
 <body>
@@ -25,71 +80,298 @@
     </header>
 
     <main class="contenedor-detalle">
-        <article class="tarjeta-detalle">
+        <article class="tarjeta-detalle" id="tarjeta-detalle">
             <div class="columna-imagen">
                 <button class="btn-back" onclick="window.history.back()">←</button>
-                <!-- Espacio para la imagen real -->
-                <img src="img/ejemplo1.jpg" alt="Arquitectura en S3"
-                    onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%221000%22 viewBox=%220 0 800 1000%22%3E%3Crect width=%22800%22 height=%221000%22 fill=%22%23EAE8E3%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2224%22 fill=%22%23666%22%3EImagen no disponible (Añade img/ejemplo1.jpg)%3C/text%3E%3C/svg%3E';">
+                <img id="img-publicacion" src="" alt="Imagen de la publicación"
+                    onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%221000%22 viewBox=%220 0 800 1000%22%3E%3Crect width=%22800%22 height=%221000%22 fill=%22%23EAE8E3%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2224%22 fill=%22%23999%22%3ESin imagen%3C/text%3E%3C/svg%3E';">
             </div>
 
             <div class="columna-info">
                 <div class="acciones-detalle">
                     <div>
-                        <button class="btn-icon" title="Me gusta">❤️</button>
-                        <button class="btn-icon" title="Compartir">🔗</button>
+                        <button class="btn-icon" title="Me gusta" id="btn-like">❤️</button>
+                        <button class="btn-icon" title="Compartir" id="btn-compartir">🔗</button>
                     </div>
-                    <button class="btn-primario">Guardar</button>
+                    <button class="btn-primario" id="btn-guardar-pin">Guardar</button>
                 </div>
 
-                <h1 class="titulo-detalle">Arquitectura en S3</h1>
-                <p class="descripcion-detalle">Diseño conceptual y arquitectura de despliegue en la nube utilizando
-                    Amazon S3, CloudFront y Route53 para alta disponibilidad. Ideal para proyectos estáticos.</p>
+                <h1 class="titulo-detalle" id="titulo-pub">Cargando...</h1>
+                <p class="descripcion-detalle" id="desc-pub"></p>
+                <p id="tags-pub" style="color: var(--color-morado, #620096); font-size: 0.85rem; margin-top: 8px;"></p>
 
                 <div class="autor">
-                    <img src="img/avatar.png" alt="Autor" class="avatar-pequeno"
-                        onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22 viewBox=%220 0 50 50%22%3E%3Crect width=%2250%22 height=%2250%22 fill=%22%23ccc%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2220%22 fill=%22%23fff%22%3EL%3C/text%3E%3C/svg%3E';">
+                    <img id="avatar-autor" src="" alt="Autor" class="avatar-pequeno"
+                        onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22 viewBox=%220 0 50 50%22%3E%3Crect width=%2250%22 height=%2250%22 fill=%22%23620096%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2220%22 fill=%22white%22%3EU%3C/text%3E%3C/svg%3E';">
                     <div class="autor-info">
-                        <strong>@leo_dev</strong>
-                        <span>Subido el 24 de Mayo, 2026</span>
+                        <strong id="nombre-autor">@usuario</strong>
+                        <span id="fecha-pub">Cargando fecha...</span>
                     </div>
                 </div>
 
                 <section class="comentarios">
-                    <h2>Comentarios (2)</h2>
+                    <h2 id="titulo-comentarios">Comentarios (0)</h2>
 
-                    <div class="lista-comentarios">
-                        <div class="comentario">
-                            <img src="img/avatar2.png" alt="Usuario" class="avatar-comentario"
-                                onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2236%22 height=%2236%22 viewBox=%220 0 36 36%22%3E%3Crect width=%2236%22 height=%2236%22 fill=%22%23ccc%22/%3E%3C/svg%3E';">
-                            <div class="comentario-texto">
-                                <strong>@sarah_ui</strong>
-                                ¡Excelente diagrama! Muy claro y bien estructurado.
-                            </div>
-                        </div>
-
-                        <div class="comentario">
-                            <img src="img/avatar3.png" alt="Usuario" class="avatar-comentario"
-                                onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2236%22 height=%2236%22 viewBox=%220 0 36 36%22%3E%3Crect width=%2236%22 height=%2236%22 fill=%22%23ccc%22/%3E%3C/svg%3E';">
-                            <div class="comentario-texto">
-                                <strong>@cloud_expert</strong>
-                                ¿Consideraste agregar una capa de WAF antes de CloudFront?
-                            </div>
-                        </div>
+                    <div class="lista-comentarios" id="lista-comentarios">
+                        <p style="color:#8892a0; padding: 10px 0;">Cargando comentarios...</p>
                     </div>
 
                     <div class="input-comentario-wrapper">
-                        <img src="img/avatar.png" alt="Tu avatar" class="avatar-comentario"
-                            onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 40 40%22%3E%3Crect width=%2240%22 height=%2240%22 fill=%22%23ccc%22/%3E%3C/svg%3E';">
-                        <input type="text" placeholder="Añadir un comentario..." class="input-comentario">
+                        <img id="avatar-yo" src="" alt="Tu avatar" class="avatar-comentario"
+                            onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 40 40%22%3E%3Crect width=%2240%22 height=%2240%22 fill=%22%23ccc%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2216%22 fill=%22white%22%3EY%3C/text%3E%3C/svg%3E';">
+                        <input type="text" id="input-comentario" placeholder="Añadir un comentario..." class="input-comentario">
+                        <button class="btn-enviar-com" id="btn-comentar" disabled>Enviar</button>
                     </div>
                 </section>
             </div>
         </article>
     </main>
-    <!-- Scripts -->
+
+    <!-- Modal: Guardar en Tablero -->
+    <div class="modal-overlay" id="modal-guardar">
+        <div class="modal-caja">
+            <h3>📌 Guardar en tablero</h3>
+            <div id="lista-tableros-modal">
+                <p style="color:#8892a0;">Cargando tus tableros...</p>
+            </div>
+            <div id="estado-guardado"></div>
+            <div class="modal-acciones">
+                <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script src="js/auth.js"></script>
-    <script src="js/detalle.js"></script>
+    <script>
+        // --- Variables globales ---
+        let pubIdActual = null;
+        const usuarioId = localStorage.getItem('usuario_id');
+
+
+        // --- Inicialización ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            pubIdActual = urlParams.get('id');
+
+            if (!pubIdActual) {
+                alert("No se especificó ninguna publicación.");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            cargarDetalle(pubIdActual);
+
+            // Botón guardar
+            document.getElementById('btn-guardar-pin').onclick = abrirModalGuardar;
+
+            // Botón comentar (Enter o click)
+            const inputCom = document.getElementById('input-comentario');
+            const btnCom = document.getElementById('btn-comentar');
+
+            if (usuarioId) {
+                inputCom.disabled = false;
+                btnCom.disabled = false;
+                inputCom.placeholder = "Añadir un comentario...";
+            } else {
+                inputCom.placeholder = "Inicia sesión para comentar";
+            }
+
+            inputCom.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && inputCom.value.trim()) enviarComentario();
+            });
+            btnCom.onclick = enviarComentario;
+
+            // Botón compartir
+            document.getElementById('btn-compartir').onclick = () => {
+                navigator.clipboard.writeText(window.location.href)
+                    .then(() => alert('¡Enlace copiado al portapapeles!'))
+                    .catch(() => alert('URL: ' + window.location.href));
+            };
+
+            // Botón like (solo visual por ahora)
+            let liked = false;
+            document.getElementById('btn-like').onclick = function() {
+                liked = !liked;
+                this.style.transform = liked ? 'scale(1.3)' : 'scale(1)';
+                this.style.transition = 'transform 0.2s';
+            };
+        });
+
+        // --- Cargar detalle de publicación ---
+        async function cargarDetalle(id) {
+            try {
+                const res = await fetch(`${API_URL}/publicaciones/${id}`);
+                if (!res.ok) throw new Error('No encontrada');
+                const pub = await res.json();
+
+                document.title = `${pub.titulo} | Gridly`;
+                document.getElementById('titulo-pub').textContent = pub.titulo;
+                document.getElementById('desc-pub').textContent = pub.descripcion || '';
+                document.getElementById('tags-pub').textContent = pub.tags ? `🏷️ ${pub.tags}` : '';
+                document.getElementById('img-publicacion').src = pub.url_multimedia;
+                document.getElementById('img-publicacion').alt = pub.titulo;
+                document.getElementById('nombre-autor').textContent = `@usuario_${pub.usuario_id}`;
+
+                const fecha = new Date(pub.fecha_creacion).toLocaleDateString('es-ES', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+                document.getElementById('fecha-pub').textContent = `Subido el ${fecha}`;
+
+                renderizarComentarios(pub.comentarios);
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('titulo-pub').textContent = 'Error al cargar publicación';
+                document.getElementById('tarjeta-detalle').innerHTML += `
+                    <p style="color:red; padding: 20px; text-align:center;">
+                        No se pudo cargar la publicación. <br>
+                        <a href="index.html" style="color:var(--color-morado);">Volver al inicio</a>
+                    </p>`;
+            }
+        }
+
+        // --- Renderizar lista de comentarios ---
+        function renderizarComentarios(comentarios) {
+            const lista = document.getElementById('lista-comentarios');
+            document.getElementById('titulo-comentarios').textContent = `Comentarios (${comentarios.length})`;
+            lista.innerHTML = '';
+
+            if (comentarios.length === 0) {
+                lista.innerHTML = '<p style="color:#8892a0; padding: 10px 0;">Sé el primero en comentar.</p>';
+                return;
+            }
+
+            comentarios.forEach(com => {
+                const div = document.createElement('div');
+                div.className = 'comentario';
+                div.innerHTML = `
+                    <img src="" alt="Avatar" class="avatar-comentario"
+                         onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2236%22 height=%2236%22 viewBox=%220 0 36 36%22%3E%3Crect width=%2236%22 height=%2236%22 fill=%22%23620096%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2214%22 fill=%22white%22%3EU%3C/text%3E%3C/svg%3E';">
+                    <div class="comentario-texto">
+                        <strong>@usuario_${com.usuario_id}</strong>
+                        <span>${com.texto}</span>
+                    </div>
+                `;
+                lista.appendChild(div);
+            });
+        }
+
+        // --- Enviar comentario ---
+        async function enviarComentario() {
+            if (!usuarioId) {
+                alert("Debes iniciar sesión para comentar.");
+                window.location.href = 'login.html';
+                return;
+            }
+            const input = document.getElementById('input-comentario');
+            const texto = input.value.trim();
+            if (!texto) return;
+
+            const btn = document.getElementById('btn-comentar');
+            btn.disabled = true;
+            btn.textContent = '...';
+
+            try {
+                const res = await fetch(`${API_URL}/publicaciones/${pubIdActual}/comentarios/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ texto, usuario_id: parseInt(usuarioId) })
+                });
+                if (res.ok) {
+                    input.value = '';
+                    await cargarDetalle(pubIdActual); // Recargar para ver el nuevo comentario
+                } else {
+                    const err = await res.json();
+                    alert('Error: ' + (err.detail || 'No se pudo enviar'));
+                }
+            } catch (e) {
+                alert('Error de conexión');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Enviar';
+            }
+        }
+
+        // --- Modal guardar en tablero ---
+        async function abrirModalGuardar() {
+            if (!usuarioId) {
+                alert("Inicia sesión para guardar pines.");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            document.getElementById('modal-guardar').classList.add('activo');
+            document.getElementById('estado-guardado').textContent = '';
+
+            const listaDiv = document.getElementById('lista-tableros-modal');
+            listaDiv.innerHTML = '<p style="color:#8892a0;">Cargando tableros...</p>';
+
+            try {
+                const res = await fetch(`${API_URL}/usuarios/${usuarioId}/tableros/`);
+                const tableros = await res.json();
+                listaDiv.innerHTML = '';
+
+                if (tableros.length === 0) {
+                    listaDiv.innerHTML = `
+                        <p style="color:#8892a0; margin-bottom: 12px;">No tienes tableros aún.</p>
+                        <a href="tableros.html" style="color: var(--color-morado); font-weight: 600;">
+                            + Crear mi primer tablero
+                        </a>`;
+                    return;
+                }
+
+                tableros.forEach(t => {
+                    const div = document.createElement('div');
+                    div.className = 'tablero-option';
+                    div.innerHTML = `
+                        <div class="t-icono">📌</div>
+                        <div><strong>${t.nombre}</strong><br>
+                        <small style="color:#8892a0">${t.publicaciones.length} pin${t.publicaciones.length !== 1 ? 'es' : ''}</small></div>
+                    `;
+                    div.onclick = () => guardarEnTablero(t.id, t.nombre);
+                    listaDiv.appendChild(div);
+                });
+
+            } catch (e) {
+                listaDiv.innerHTML = '<p style="color:red;">Error al cargar tableros.</p>';
+            }
+        }
+
+        async function guardarEnTablero(tableroId, nombreTablero) {
+            const estadoDiv = document.getElementById('estado-guardado');
+            estadoDiv.textContent = 'Guardando...';
+            estadoDiv.style.color = '#8892a0';
+
+            try {
+                const res = await fetch(`${API_URL}/tableros/${tableroId}/publicaciones/${pubIdActual}`, {
+                    method: 'POST'
+                });
+                if (res.ok) {
+                    estadoDiv.textContent = `✅ ¡Guardado en "${nombreTablero}"!`;
+                    estadoDiv.style.color = 'green';
+                    setTimeout(cerrarModal, 1500);
+                } else {
+                    const err = await res.json();
+                    estadoDiv.textContent = '⚠️ ' + (err.detail || 'Error al guardar');
+                    estadoDiv.style.color = 'red';
+                }
+            } catch (e) {
+                estadoDiv.textContent = '❌ Error de conexión';
+                estadoDiv.style.color = 'red';
+            }
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal-guardar').classList.remove('activo');
+        }
+
+        // Cerrar modal al hacer clic fuera
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('modal-guardar').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('modal-guardar')) cerrarModal();
+            });
+        });
+    </script>
 </body>
 
 </html>

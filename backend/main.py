@@ -29,6 +29,10 @@ def read_root():
 # ENDPOINTS USUARIOS
 # ==========================================
 
+@app.get("/usuarios/", response_model=List[schemas.Usuario])
+def get_usuarios(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return db.query(models.Usuario).offset(skip).limit(limit).all()
+
 @app.post("/usuarios/", response_model=schemas.Usuario)
 def create_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db)):
     db_user = db.query(models.Usuario).filter(models.Usuario.username == usuario.username).first()
@@ -137,6 +141,31 @@ def create_publicacion(
 def get_publicaciones(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return db.query(models.Publicacion).offset(skip).limit(limit).all()
 
+@app.get("/publicaciones/{publicacion_id}", response_model=schemas.Publicacion)
+def get_publicacion(publicacion_id: int, db: Session = Depends(get_db)):
+    pub = db.query(models.Publicacion).filter(models.Publicacion.id == publicacion_id).first()
+    if not pub:
+        raise HTTPException(status_code=404, detail="Publicación no encontrada")
+    return pub
+
+@app.post("/publicaciones/{publicacion_id}/comentarios/", response_model=schemas.Comentario)
+def add_comentario(publicacion_id: int, comentario: schemas.ComentarioCreate, db: Session = Depends(get_db)):
+    pub = db.query(models.Publicacion).filter(models.Publicacion.id == publicacion_id).first()
+    if not pub:
+        raise HTTPException(status_code=404, detail="Publicación no encontrada")
+    usuario = db.query(models.Usuario).filter(models.Usuario.id == comentario.usuario_id).first()
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    db_comentario = models.Comentario(
+        texto=comentario.texto,
+        publicacion_id=publicacion_id,
+        usuario_id=comentario.usuario_id
+    )
+    db.add(db_comentario)
+    db.commit()
+    db.refresh(db_comentario)
+    return db_comentario
+
 # ==========================================
 # ENDPOINTS TABLEROS
 # ==========================================
@@ -224,5 +253,16 @@ def get_mensajes(usuario_id: int, db: Session = Depends(get_db)):
     from sqlalchemy import or_
     mensajes = db.query(models.Mensaje).filter(
         or_(models.Mensaje.remitente_id == usuario_id, models.Mensaje.destinatario_id == usuario_id)
+    ).order_by(models.Mensaje.fecha_envio.asc()).all()
+    return mensajes
+
+@app.get("/mensajes/{usuario_id}/conversacion/{otro_id}", response_model=List[schemas.Mensaje])
+def get_conversacion(usuario_id: int, otro_id: int, db: Session = Depends(get_db)):
+    from sqlalchemy import or_, and_
+    mensajes = db.query(models.Mensaje).filter(
+        or_(
+            and_(models.Mensaje.remitente_id == usuario_id, models.Mensaje.destinatario_id == otro_id),
+            and_(models.Mensaje.remitente_id == otro_id, models.Mensaje.destinatario_id == usuario_id)
+        )
     ).order_by(models.Mensaje.fecha_envio.asc()).all()
     return mensajes
