@@ -28,8 +28,9 @@ async function cargarDetalle(id) {
         document.querySelector('.descripcion-detalle').innerText = pub.descripcion || '';
         document.querySelector('.columna-imagen img').src = pub.url_multimedia;
         
-        // Autor: por ahora mostramos el ID
-        document.querySelector('.autor-info strong').innerText = `@usuario_${pub.usuario_id}`;
+        // Autor
+        const username = pub.autor ? `@${pub.autor.username}` : `@usuario_${pub.usuario_id}`;
+        document.querySelector('.autor-info strong').innerText = username;
         
         // Fecha
         const fecha = new Date(pub.fecha_creacion).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -48,7 +49,7 @@ async function cargarDetalle(id) {
                 <img src="img/avatar.png" alt="Usuario" class="avatar-comentario"
                      onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2236%22 height=%2236%22 viewBox=%220 0 36 36%22%3E%3Crect width=%2236%22 height=%2236%22 fill=%22%23ccc%22/%3E%3C/svg%3E';">
                 <div class="comentario-texto">
-                    <strong>@usuario_${com.usuario_id}</strong>
+                    <strong>${com.autor ? '@' + com.autor.username : '@usuario_' + com.usuario_id}</strong>
                     ${com.texto}
                 </div>
             `;

@@ -3,6 +3,22 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from db.conexion import Base
 
+# Tabla de asociación para Pines Guardados (Corazón/Likes)
+pines_guardados = Table(
+    'pines_guardados',
+    Base.metadata,
+    Column('usuario_id', Integer, ForeignKey('usuarios.id'), primary_key=True),
+    Column('publicacion_id', Integer, ForeignKey('publicaciones.id'), primary_key=True)
+)
+
+# Tabla de asociación para Seguidores
+seguidores = Table(
+    'seguidores',
+    Base.metadata,
+    Column('seguidor_id', Integer, ForeignKey('usuarios.id'), primary_key=True),
+    Column('seguido_id', Integer, ForeignKey('usuarios.id'), primary_key=True)
+)
+
 # Tabla de asociación para Tableros y Publicaciones (Muchos a Muchos)
 tablero_publicacion = Table(
     'tablero_publicacion',
@@ -21,11 +37,20 @@ class Usuario(Base):
     profile_pic = Column(String(1000), nullable=True)
     biografia = Column(Text, nullable=True)
     fecha_registro = Column(DateTime, default=datetime.utcnow)
+    es_publico = Column(Boolean, default=True)
 
     publicaciones = relationship("Publicacion", back_populates="autor")
     comentarios = relationship("Comentario", back_populates="autor")
     tableros = relationship("Tablero", back_populates="usuario")
-    collages = relationship("Collage", back_populates="usuario")
+    pines_liked = relationship("Publicacion", secondary=pines_guardados, back_populates="likers")
+    
+    seguidos = relationship(
+        "Usuario", 
+        secondary=seguidores, 
+        primaryjoin=(id==seguidores.c.seguidor_id),
+        secondaryjoin=(id==seguidores.c.seguido_id),
+        backref="seguidores"
+    )
 
 class Publicacion(Base):
     __tablename__ = "publicaciones"
@@ -43,6 +68,7 @@ class Publicacion(Base):
 
     comentarios = relationship("Comentario", back_populates="publicacion")
     tableros = relationship("Tablero", secondary=tablero_publicacion, back_populates="publicaciones")
+    likers = relationship("Usuario", secondary=pines_guardados, back_populates="pines_liked")
 
 class Comentario(Base):
     __tablename__ = "comentarios"
@@ -70,16 +96,7 @@ class Tablero(Base):
 
     publicaciones = relationship("Publicacion", secondary=tablero_publicacion, back_populates="tableros")
 
-class Collage(Base):
-    __tablename__ = "collages"
 
-    id = Column(Integer, primary_key=True, index=True)
-    titulo = Column(String(100))
-    layout_data = Column(Text) # Guardaremos un JSON en texto con las posiciones
-    fecha_creacion = Column(DateTime, default=datetime.utcnow)
-
-    usuario_id = Column(Integer, ForeignKey("usuarios.id"))
-    usuario = relationship("Usuario", back_populates="collages")
 
 class Notificacion(Base):
     __tablename__ = "notificaciones"

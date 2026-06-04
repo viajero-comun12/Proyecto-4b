@@ -1,5 +1,28 @@
 // Función que se ejecuta cuando la página termina de cargar
 document.addEventListener('DOMContentLoaded', () => {
+    // Si la URL actual requiere auth, auth.js redirigirá si no hay token.
+    console.log("Mosaiko API conectada a:", API_URL);
+    
+    // Logica global para el buscador
+    const buscador = document.querySelector('.buscador');
+    if (buscador) {
+        // Rellenar buscador con query actual si existe
+        const urlParams = new URLSearchParams(window.location.search);
+        const q = urlParams.get('q');
+        if (q) buscador.value = q;
+        
+        buscador.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') {
+                const term = encodeURIComponent(buscador.value.trim());
+                if(term) {
+                    window.location.href = `explorar.html?q=${term}`;
+                } else {
+                    window.location.href = `explorar.html`;
+                }
+            }
+        });
+    }
+    
     if (document.getElementById('feed-inicio')) {
         cargarPublicaciones();
     }
@@ -8,16 +31,45 @@ document.addEventListener('DOMContentLoaded', () => {
 // Función para obtener y mostrar las publicaciones desde el backend
 async function cargarPublicaciones() {
     const feedInicio = document.getElementById('feed-inicio');
+    const usuarioId = localStorage.getItem('usuario_id');
     
+    // Obtener parametro q de busqueda (por si se llama desde index.html?q=...)
+    const urlParams = new URLSearchParams(window.location.search);
+    const q = urlParams.get('q');
+
     try {
         const respuesta = await fetch(`${API_URL}/publicaciones/`);
-        const publicaciones = await respuesta.json();
+        let publicaciones = await respuesta.json();
+        
+        let seguidos = [];
+        if (usuarioId) {
+            const resS = await fetch(`${API_URL}/usuarios/${usuarioId}/seguidos`);
+            if (resS.ok) seguidos = await resS.json();
+        }
+        
+        // Filtro 1: Privacidad
+        publicaciones = publicaciones.filter(pub => {
+            const esMio = (pub.usuario_id == usuarioId);
+            const esPublico = pub.autor ? pub.autor.es_publico : true;
+            const loSigo = seguidos.some(s => s.id == pub.usuario_id);
+            return esMio || esPublico || loSigo;
+        });
+        
+        // Filtro 2: Busqueda
+        if (q) {
+            const query = q.toLowerCase();
+            publicaciones = publicaciones.filter(pub => {
+                const tituloMatch = pub.titulo.toLowerCase().includes(query);
+                const autorMatch = pub.autor && pub.autor.username.toLowerCase().includes(query);
+                return tituloMatch || autorMatch;
+            });
+        }
         
         // Limpiamos el mensaje de "Cargando..."
         feedInicio.innerHTML = '';
         
         if (publicaciones.length === 0) {
-            feedInicio.innerHTML = '<p style="text-align: center; width: 100%; color: #8892a0;">Aún no hay publicaciones. ¡Sé el primero en subir una!</p>';
+            feedInicio.innerHTML = `<p style="text-align: center; width: 100%; color: #8892a0;">${q ? 'No se encontraron resultados para tu búsqueda.' : 'Aún no hay publicaciones. ¡Sé el primero en subir una!'}</p>`;
             return;
         }
 
@@ -25,20 +77,18 @@ async function cargarPublicaciones() {
         publicaciones.forEach(pub => {
             const article = document.createElement('article');
             article.className = 'tarjeta-pin';
-            // Al hacer clic, vamos a detalle.html
             article.onclick = () => window.location.href = `detalle.html?id=${pub.id}`;
             
-            // Un poco de matemática aleatoria para el estilo masonry (alturas diferentes)
             const randomPadding = [80, 100, 120, 140, 150][Math.floor(Math.random() * 5)];
             
             article.innerHTML = `
                 <div class="imagen-wrapper" style="padding-bottom: ${randomPadding}%;">
                     <img src="${pub.url_multimedia}" alt="${pub.titulo}" style="position:absolute; width:100%; height:100%; object-fit:cover;">
                     <div class="pin-overlay">
-                        <button class="btn-guardar" onclick="event.stopPropagation(); alert('¡Guardado!')">Guardar</button>
+                        <button class="btn-guardar" onclick="event.stopPropagation(); window.location.href='detalle.html?id=${pub.id}'">Ver detalle</button>
                         <div class="pin-info-hover">
                             <strong>${pub.titulo}</strong>
-                            <span>@usuario_${pub.usuario_id}</span>
+                            <span>${pub.autor ? '@' + pub.autor.username : '@usuario_' + pub.usuario_id}</span>
                         </div>
                     </div>
                 </div>

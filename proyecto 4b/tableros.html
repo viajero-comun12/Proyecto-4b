@@ -41,13 +41,13 @@
                     <h3 class="titulo-grupo">Crear</h3>
                     <a href="publicacion.html" class="item-menu"><span class="icono"></span> Publicación</a>
                     <a href="tableros.html" class="item-menu activo" style="font-weight:bold; color:var(--color-morado);"><span class="icono"></span> Tableros</a>
-                    <a href="collages.html" class="item-menu"><span class="icono"></span> Collage</a>
                 </div>
 
                 <div class="grupo-menu">
                     <h3 class="titulo-grupo">Social</h3>
                     <a href="notificaciones.html" class="item-menu"><span class="icono"></span> Notificaciones</a>
                     <a href="mensajeria.html" class="item-menu"><span class="icono"></span> Mensajería</a>
+                    <a href="seguidos.html" class="item-menu"><span class="icono"></span> Seguidos</a>
                 </div>
             </nav>
         </aside>
@@ -68,6 +68,13 @@
                         </form>
                     </div>
                 </div>
+                
+                <div style="margin-top: 40px;">
+                    <h2>Mis Tableros</h2>
+                    <div id="lista-tableros" class="feed-dinamico feed-mosaico" style="margin-top: 20px;">
+                        <p style="color: #8892a0;">Cargando tableros...</p>
+                    </div>
+                </div>
             </section>
         </main>
     </div>
@@ -85,19 +92,60 @@
             if (!usuarioId) return alert("Debes iniciar sesión");
             
             try {
-                const res = await fetch('http://localhost:8000/tableros/', {
+                const res = await fetch(`${API_URL}/tableros/`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ nombre, secreto, usuario_id: usuarioId })
                 });
                 if (res.ok) {
                     alert('¡Tablero Creado!');
-                    window.location.href = 'pines.html';
+                    document.getElementById('form-crear-tablero').reset();
+                    cargarMisTableros();
                 } else {
                     alert('Error al crear tablero');
                 }
             } catch(error) { console.error(error); }
         };
+
+        async function cargarMisTableros() {
+            const listaDiv = document.getElementById('lista-tableros');
+            const usuarioId = localStorage.getItem('usuario_id');
+            if (!usuarioId) {
+                listaDiv.innerHTML = '<p>Inicia sesión para ver tus tableros.</p>';
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${API_URL}/usuarios/${usuarioId}/tableros/`);
+                const tableros = await res.json();
+                listaDiv.innerHTML = '';
+                
+                if (tableros.length === 0) {
+                    listaDiv.innerHTML = '<p style="color:#8892a0;">No tienes tableros aún.</p>';
+                    return;
+                }
+                
+                tableros.forEach(t => {
+                    const portadas = t.publicaciones.length > 0 ? t.publicaciones.map(p => p.url_multimedia) : [''];
+                    const coverStyle = portadas[0] ? `background-image: url('${portadas[0]}'); background-size: cover; background-position: center;` : `background-color: var(--color-morado);`;
+                    
+                    listaDiv.innerHTML += `
+                        <article class="tarjeta-pin" style="cursor: pointer;" onclick="window.location.href='pines.html?tablero=${t.id}'">
+                            <div class="imagen-wrapper" style="padding-bottom: 80%; ${coverStyle} border-radius: 12px;">
+                            </div>
+                            <div class="info-basica">
+                                <strong>${t.nombre}</strong>
+                                <p style="color: #8892a0; font-size: 0.85rem;">${t.publicaciones.length} pines</p>
+                            </div>
+                        </article>
+                    `;
+                });
+            } catch(e) {
+                listaDiv.innerHTML = '<p style="color:red;">Error al cargar tableros.</p>';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', cargarMisTableros);
     </script>
 </body>
 

@@ -41,13 +41,13 @@
                     <h3 class="titulo-grupo">Crear</h3>
                     <a href="publicacion.html" class="item-menu activo" style="font-weight:bold; color:var(--color-morado);"><span class="icono"></span> Publicación</a>
                     <a href="tableros.html" class="item-menu"><span class="icono"></span> Tableros</a>
-                    <a href="collages.html" class="item-menu"><span class="icono"></span> Collage</a>
                 </div>
 
                 <div class="grupo-menu">
                     <h3 class="titulo-grupo">Social</h3>
                     <a href="notificaciones.html" class="item-menu"><span class="icono"></span> Notificaciones</a>
                     <a href="mensajeria.html" class="item-menu"><span class="icono"></span> Mensajería</a>
+                    <a href="seguidos.html" class="item-menu"><span class="icono"></span> Seguidos</a>
                 </div>
             </nav>
         </aside>
@@ -59,9 +59,9 @@
                     <h2>Crear Nueva Publicación</h2>
                     <form id="form-crear-pub" class="form-crear" onsubmit="event.preventDefault(); crearPublicacion();">
                         <div class="zona-subida" style="position: relative; overflow: hidden; min-height: 200px;">
-                            <p>Haz clic aquí para seleccionar tu imagen</p>
+                            <p id="texto-subida">Haz clic aquí para seleccionar tu imagen</p>
                             <img id="preview-img" style="display:none; width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; z-index:1; pointer-events:none;">
-                            <input type="file" id="pub-file" accept="image/*" required style="position: absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer; z-index:2;" onchange="if(this.files[0]) { document.getElementById('preview-img').src = URL.createObjectURL(this.files[0]); document.getElementById('preview-img').style.display = 'block'; }">
+                            <input type="file" id="pub-file" accept="image/*" required style="position: absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer; z-index:2;">
                         </div>
                         <div class="campos-form">
                             <input type="text" id="pub-titulo" placeholder="Añade un título" class="input-form" required>
@@ -78,6 +78,27 @@
     <!-- Script para Autenticación -->
     <script src="js/auth.js"></script>
     <script src="js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('pub-file');
+            const preview = document.getElementById('preview-img');
+            const texto = document.getElementById('texto-subida');
+            
+            if(input) {
+                input.addEventListener('change', function() {
+                    if(this.files && this.files[0]) {
+                        preview.src = URL.createObjectURL(this.files[0]);
+                        preview.style.display = 'block';
+                        texto.style.display = 'none';
+                    } else {
+                        preview.style.display = 'none';
+                        preview.src = '';
+                        texto.style.display = 'block';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

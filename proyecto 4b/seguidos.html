@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguidos | Mosaiko</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <div class="logo-icono">G</div>
+            <div class="logo-texto">Gridly</div>
+        </a>
+
+        <input type="search" placeholder="Buscar ideas, diseños, arquitectura..." class="buscador">
+
+        <nav>
+            <a href="usuario.html" class="link-texto">Mi Perfil</a>
+            <a href="login.html" class="btn-primario">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <div class="app-container">
+        <aside class="sidebar-izq">
+            <nav class="menu-lateral">
+                <div class="grupo-menu">
+                    <a href="index.html" class="item-menu"><span class="icono"></span> Inicio</a>
+                    <a href="explorar.html" class="item-menu"><span class="icono"></span> Explorar</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Tablero</h3>
+                    <a href="pines.html" class="item-menu"><span class="icono"></span> Pines</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Crear</h3>
+                    <a href="publicacion.html" class="item-menu"><span class="icono"></span> Publicación</a>
+                    <a href="tableros.html" class="item-menu"><span class="icono"></span> Tableros</a>
+                </div>
+
+                <div class="grupo-menu">
+                    <h3 class="titulo-grupo">Social</h3>
+                    <a href="notificaciones.html" class="item-menu"><span class="icono"></span> Notificaciones</a>
+                    <a href="mensajeria.html" class="item-menu"><span class="icono"></span> Mensajería</a>
+                    <a href="seguidos.html" class="item-menu activo" style="font-weight:bold; color:var(--color-morado);"><span class="icono"></span> Seguidos</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="contenido-principal">
+            <section class="seccion-app sec-explorar" style="display: block;">
+                <div class="encabezado-seccion flex-between">
+                    <h2>Personas que Sigues</h2>
+                </div>
+                
+                <div id="lista-seguidos" style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+                    <!-- Se inyecta por JS -->
+                    <p style="color: #8892a0; text-align: center;">Cargando...</p>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const usuarioId = localStorage.getItem('usuario_id');
+            const lista = document.getElementById('lista-seguidos');
+            
+            if (!usuarioId) {
+                lista.innerHTML = "<p style='color:red;'>Debes iniciar sesión</p>";
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${API_URL}/usuarios/${usuarioId}/seguidos`);
+                const seguidos = await res.json();
+                lista.innerHTML = '';
+                
+                if (seguidos.length === 0) {
+                    lista.innerHTML = "<p style='text-align:center; color:#8892a0;'>Aún no sigues a nadie. ¡Explora perfiles y empieza a seguir!</p>";
+                    return;
+                }
+                
+                seguidos.forEach(usr => {
+                    const pic = usr.profile_pic || 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22 viewBox=%220 0 150 150%22%3E%3Crect width=%22150%22 height=%22150%22 fill=%22%23EAE8E3%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2250%22 fill=%22%23666%22%3EU%3C/text%3E%3C/svg%3E';
+                    
+                    lista.innerHTML += `
+                        <div style="display:flex; align-items:center; justify-content:space-between; padding: 15px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                            <div style="display:flex; align-items:center; gap:15px;">
+                                <img src="${pic}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                                <div>
+                                    <strong style="font-size: 1.1rem; color: var(--color-azul);">@${usr.username}</strong>
+                                    ${usr.es_publico ? '' : '<span style="font-size:0.8rem; color:gray; margin-left: 5px;">🔒 Privado</span>'}
+                                </div>
+                            </div>
+                            <button class="btn-primario" onclick="window.location.href='usuario.html?id=${usr.id}'" style="padding: 8px 16px;">Ver Perfil</button>
+                        </div>
+                    `;
+                });
+                
+            } catch(e) {
+                lista.innerHTML = "<p style='color:red;'>Error al cargar seguidos.</p>";
+            }
+        });
+    </script>
+</body>
+</html>

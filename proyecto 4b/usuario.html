@@ -42,13 +42,13 @@
                     <h3 class="titulo-grupo">Crear</h3>
                     <a href="publicacion.html" class="item-menu"><span class="icono"></span> Publicación</a>
                     <a href="tableros.html" class="item-menu"><span class="icono"></span> Tableros</a>
-                    <a href="collages.html" class="item-menu"><span class="icono"></span> Collage</a>
                 </div>
 
                 <div class="grupo-menu">
                     <h3 class="titulo-grupo">Social</h3>
                     <a href="notificaciones.html" class="item-menu"><span class="icono"></span> Notificaciones</a>
                     <a href="mensajeria.html" class="item-menu"><span class="icono"></span> Mensajería</a>
+                    <a href="seguidos.html" class="item-menu"><span class="icono"></span> Seguidos</a>
                 </div>
             </nav>
         </aside>
@@ -60,11 +60,20 @@
                 onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22 viewBox=%220 0 150 150%22%3E%3Crect width=%22150%22 height=%22150%22 fill=%22%23EAE8E3%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2250%22 fill=%22%23666%22%3EU%3C/text%3E%3C/svg%3E';">
             <h1>Leonardo Dev</h1>
             <p class="username">@leo_dev</p>
+            <p id="privacidad-badge" style="font-size:0.8rem; color:var(--color-gris); display:none;">🔒 Perfil Privado</p>
 
-            <div class="acciones-perfil">
-                <button class="btn-secundario" onclick="alert('Funcionalidad de compartir en construcción')">Compartir</button>
+            <div class="acciones-perfil" id="acciones-propias" style="display:none; margin-top: 15px;">
+                <label style="display:inline-flex; align-items:center; gap:5px; font-size:0.9rem; margin-right:15px; cursor:pointer;">
+                    <input type="checkbox" id="es-publico-check" onchange="togglePrivacidad()">
+                    Perfil Público
+                </label>
                 <input type="file" id="avatar-upload" style="display:none;" accept="image/*" onchange="subirAvatar(this)">
                 <button class="btn-primario" onclick="document.getElementById('avatar-upload').click()">Cambiar Foto de Perfil</button>
+            </div>
+            
+            <div class="acciones-perfil" id="acciones-ajenas" style="display:none; margin-top: 15px;">
+                <button class="btn-secundario" onclick="alert('Funcionalidad de compartir en construcción')">Compartir</button>
+                <button class="btn-primario" id="btn-seguir" onclick="toggleFollow()">Seguir</button>
             </div>
         </section>
 

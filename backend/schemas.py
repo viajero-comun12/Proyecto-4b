@@ -15,6 +15,7 @@ class UsuarioCreate(BaseModel):
 class UsuarioUpdate(BaseModel):
     profile_pic: Optional[str] = None
     biografia: Optional[str] = None
+    es_publico: Optional[bool] = None
 
 class Usuario(BaseModel):
     id: int
@@ -22,10 +23,20 @@ class Usuario(BaseModel):
     email: str
     profile_pic: Optional[str] = None
     biografia: Optional[str] = None
+    es_publico: bool = True
     fecha_registro: datetime
 
     class Config:
         from_attributes = True
+
+class UsuarioBasico(BaseModel):
+    id: int
+    username: str
+    es_publico: bool = True
+
+    class Config:
+        from_attributes = True
+
 
 # --- COMENTARIOS ---
 class ComentarioBase(BaseModel):
@@ -39,6 +50,7 @@ class Comentario(ComentarioBase):
     id: int
     publicacion_id: int
     fecha_creacion: datetime
+    autor: Optional[UsuarioBasico] = None
 
     class Config:
         from_attributes = True
@@ -59,6 +71,8 @@ class Publicacion(PublicacionBase):
     url_multimedia: str
     fecha_creacion: datetime
     comentarios: List[Comentario] = []
+    likers: List[UsuarioBasico] = []
+    autor: Optional[UsuarioBasico] = None
 
     class Config:
         from_attributes = True
@@ -76,22 +90,6 @@ class Tablero(BaseModel):
     usuario_id: int
     fecha_creacion: datetime
     publicaciones: List[Publicacion] = []
-
-    class Config:
-        from_attributes = True
-
-# --- COLLAGES ---
-class CollageCreate(BaseModel):
-    titulo: str
-    layout_data: str # JSON format as string
-    usuario_id: int
-
-class Collage(BaseModel):
-    id: int
-    titulo: str
-    layout_data: str
-    usuario_id: int
-    fecha_creacion: datetime
 
     class Config:
         from_attributes = True

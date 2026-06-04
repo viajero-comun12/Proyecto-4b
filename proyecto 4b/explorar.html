@@ -41,13 +41,13 @@
                     <h3 class="titulo-grupo">Crear</h3>
                     <a href="publicacion.html" class="item-menu"><span class="icono"></span> Publicación</a>
                     <a href="tableros.html" class="item-menu"><span class="icono"></span> Tableros</a>
-                    <a href="collages.html" class="item-menu"><span class="icono"></span> Collage</a>
                 </div>
 
                 <div class="grupo-menu">
                     <h3 class="titulo-grupo">Social</h3>
                     <a href="notificaciones.html" class="item-menu"><span class="icono"></span> Notificaciones</a>
                     <a href="mensajeria.html" class="item-menu"><span class="icono"></span> Mensajería</a>
+                    <a href="seguidos.html" class="item-menu"><span class="icono"></span> Seguidos</a>
                 </div>
             </nav>
         </aside>
@@ -66,11 +66,18 @@
                     <div class="cat-card">Inteligencia Artificial</div>
                     <div class="cat-card">Desarrollo Web</div>
                 </div>
-                <div class="encabezado-seccion">
-                    <h3>Mix de Publicaciones</h3>
+
+                <!-- Sección de usuarios encontrados (visible solo al buscar) -->
+                <div id="resultados-usuarios" style="display:none; margin-bottom:30px;">
+                    <div class="encabezado-seccion"><h3>Usuarios Encontrados</h3></div>
+                    <div id="lista-usuarios-encontrados" style="display:flex; flex-direction:column; gap:12px; margin-top:10px;"></div>
                 </div>
-                <section class="feed-mosaico" id="feed-explorar">
-                    <p style="text-align: center; width: 100%; color: #8892a0;">Cargando publicaciones populares...</p>
+
+                <div class="encabezado-seccion">
+                    <h3 id="titulo-pubs">Mix de Publicaciones</h3>
+                </div>
+                <section class="feed-mosaico" id="feed-inicio">
+                    <p style="text-align: center; width: 100%; color: #8892a0;">Cargando publicaciones...</p>
                 </section>
             </section>
         </main>
@@ -80,26 +87,44 @@
     <script src="js/auth.js"></script>
     <script src="js/api.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Simulamos cargar publicaciones en explorar reusando la API
-            const feedExplorar = document.getElementById('feed-explorar');
-            if (feedExplorar) {
-                fetch('http://localhost:8000/publicaciones/')
-                    .then(r => r.json())
-                    .then(pubs => {
-                        feedExplorar.innerHTML = '';
-                        pubs.forEach(pub => {
-                            feedExplorar.innerHTML += `
-                                <article class="tarjeta-pin" onclick="window.location.href='detalle.html?id=${pub.id}'">
-                                    <div class="imagen-wrapper" style="padding-bottom: 100%;">
-                                        <img src="${pub.url_multimedia}" style="position:absolute; width:100%; height:100%; object-fit:cover;">
-                                        <div class="pin-overlay"><button class="btn-guardar">Guardar</button></div>
-                                    </div>
-                                    <div class="info-basica"><p>${pub.titulo}</p></div>
-                                </article>`;
-                        });
-                    }).catch(e => feedExplorar.innerHTML = "Error al cargar");
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const q = urlParams.get('q');
+            if (q) {
+                document.querySelector('.encabezado-seccion h2').textContent = `Resultados para: "${q}"`;
+                document.querySelector('.encabezado-seccion p').style.display = 'none';
+                document.querySelector('.categorias-grid').style.display = 'none';
+                document.getElementById('titulo-pubs').textContent = 'Publicaciones Encontradas';
+                
+                // Buscar usuarios también
+                try {
+                    const miId = localStorage.getItem('usuario_id');
+                    const resU = await fetch(`${API_URL}/usuarios/buscar?q=${encodeURIComponent(q)}`);
+                    if (resU.ok) {
+                        const usuarios = await resU.json();
+                        // Solo mostrar perfiles públicos (o el propio)
+                        const pubUsrs = usuarios.filter(u => u.es_publico || u.id == miId);
+                        
+                        if (pubUsrs.length > 0) {
+                            document.getElementById('resultados-usuarios').style.display = 'block';
+                            const listEl = document.getElementById('lista-usuarios-encontrados');
+                            listEl.innerHTML = '';
+                            pubUsrs.forEach(u => {
+                                listEl.innerHTML += `
+                                    <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:white; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+                                        <div style="display:flex; align-items:center; gap:12px;">
+                                            <div style="width:40px;height:40px;border-radius:50%;background:var(--color-morado);display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:1.2rem;">${u.username[0].toUpperCase()}</div>
+                                            <strong style="color:var(--color-azul);">@${u.username}</strong>
+                                            ${u.es_publico ? '' : '<span style="font-size:0.75rem;color:gray;margin-left:5px;">&#128274; Privado</span>'}
+                                        </div>
+                                        <button class="btn-primario" onclick="window.location.href='usuario.html?id=${u.id}'" style="padding:6px 14px;">Ver Perfil</button>
+                                    </div>`;
+                            });
+                        }
+                    }
+                } catch(e) { console.error('Error buscando usuarios:', e); }
             }
+            // La carga de publicaciones ya se dispara en api.js al detectar feed-inicio
         });
     </script>
 </body>

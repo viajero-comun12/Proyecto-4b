@@ -41,13 +41,13 @@
                     <h3 class="titulo-grupo">Crear</h3>
                     <a href="publicacion.html" class="item-menu"><span class="icono"></span> Publicación</a>
                     <a href="tableros.html" class="item-menu"><span class="icono"></span> Tableros</a>
-                    <a href="collages.html" class="item-menu"><span class="icono"></span> Collage</a>
                 </div>
 
                 <div class="grupo-menu">
                     <h3 class="titulo-grupo">Social</h3>
                     <a href="notificaciones.html" class="item-menu"><span class="icono"></span> Notificaciones</a>
                     <a href="mensajeria.html" class="item-menu"><span class="icono"></span> Mensajería</a>
+                    <a href="seguidos.html" class="item-menu"><span class="icono"></span> Seguidos</a>
                 </div>
             </nav>
         </aside>
@@ -96,27 +96,149 @@
                 feedPines.innerHTML = "Inicia sesión para ver tus pines.";
                 return;
             }
-            fetch('http://localhost:8000/publicaciones/')
-                .then(r => r.json())
-                .then(pubs => {
-                    const misPubs = pubs.filter(p => p.usuario_id == usuarioId);
-                    feedPines.innerHTML = '';
-                    if(misPubs.length === 0) feedPines.innerHTML = "No tienes pines aún.";
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlTableroId = urlParams.get('tablero');
+            
+            let misPubs = [];
+            let misPines = [];
+            let misTableros = [];
+            
+            const radioTodos = document.getElementById('filtro-todos');
+            const radioSubidos = document.getElementById('filtro-subidos');
+            const radioGuardados = document.getElementById('filtro-guardados');
+            
+            async function cargarDatos() {
+                feedPines.innerHTML = '<p style="text-align: center; width: 100%; color: #8892a0;">Cargando tus pines...</p>';
+                try {
+                    // Cargar pines subidos
+                    const resP = await fetch(`${API_URL}/publicaciones/`);
+                    const pubs = await resP.json();
+                    misPubs = pubs.filter(p => p.usuario_id == usuarioId);
                     
-                    misPubs.forEach(pub => {
-                        feedPines.innerHTML += `
-                            <article class="tarjeta-pin pin-subido" onclick="window.location.href='detalle.html?id=${pub.id}'">
-                                <div class="imagen-wrapper" style="padding-bottom: 100%;">
-                                    <img src="${pub.url_multimedia}" alt="${pub.titulo}" style="position:absolute; width:100%; height:100%; object-fit:cover;"
-                                         onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22 viewBox=%220 0 400 400%22%3E%3Crect width=%22400%22 height=%22400%22 fill=%22%23EAE8E3%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2216%22 fill=%22%23999%22%3ESin imagen%3C/text%3E%3C/svg%3E';">
-                                    <div class="pin-overlay">
-                                        <button class="btn-guardar" onclick="event.stopPropagation(); window.location.href='detalle.html?id=${pub.id}'">Ver detalle</button>
-                                    </div>
+                    // Cargar pines (likes)
+                    const resL = await fetch(`${API_URL}/usuarios/${usuarioId}/pines`);
+                    misPines = await resL.json();
+                    
+                    // Cargar tableros
+                    const resT = await fetch(`${API_URL}/usuarios/${usuarioId}/tableros/`);
+                    misTableros = await resT.json();
+                    
+                    if (urlTableroId) {
+                        renderTableroEspecifico(urlTableroId);
+                    } else {
+                        renderVistaActual();
+                    }
+                } catch(e) {
+                    feedPines.innerHTML = "<p style='color:red; text-align:center;'>Error al cargar datos</p>";
+                }
+            }
+            
+            function renderVistaActual() {
+                if(radioTodos.checked) renderTodos();
+                else if(radioSubidos.checked) renderSubidos();
+                else if(radioGuardados.checked) renderGuardados();
+            }
+            
+            function renderPinsHTML(pinesArray, mensajeVacio) {
+                feedPines.innerHTML = '';
+                if (pinesArray.length === 0) {
+                    feedPines.innerHTML = `<p style='text-align: center; width: 100%; color: #8892a0;'>${mensajeVacio}</p>`;
+                    return;
+                }
+                
+                pinesArray.forEach(pub => {
+                    feedPines.innerHTML += `
+                        <article class="tarjeta-pin pin-subido" onclick="window.location.href='detalle.html?id=${pub.id}'">
+                            <div class="imagen-wrapper" style="padding-bottom: 100%;">
+                                <img src="${pub.url_multimedia}" alt="${pub.titulo}" style="position:absolute; width:100%; height:100%; object-fit:cover;"
+                                     onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22 viewBox=%220 0 400 400%22%3E%3Crect width=%22400%22 height=%22400%22 fill=%22%23EAE8E3%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2216%22 fill=%22%23999%22%3ESin imagen%3C/text%3E%3C/svg%3E';">
+                                <div class="pin-overlay">
+                                    <button class="btn-guardar" onclick="event.stopPropagation(); window.location.href='detalle.html?id=${pub.id}'">Ver detalle</button>
                                 </div>
-                                <div class="info-basica"><p>${pub.titulo}</p></div>
-                            </article>`;
+                            </div>
+                            <div class="info-basica"><p>${pub.titulo}</p></div>
+                        </article>`;
+                });
+            }
+            
+            function renderTodos() {
+                document.querySelector('.encabezado-seccion h2').textContent = "Todos los Pines";
+                let todos = misPubs.concat(misPines);
+                misTableros.forEach(t => { todos = todos.concat(t.publicaciones); });
+                
+                // Deduplicar
+                const uniqueMap = new Map();
+                todos.forEach(p => uniqueMap.set(p.id, p));
+                renderPinsHTML(Array.from(uniqueMap.values()), "No hay pines para mostrar.");
+            }
+            
+            function renderSubidos() {
+                document.querySelector('.encabezado-seccion h2').textContent = "Mis Subidas";
+                renderPinsHTML(misPubs, "No has subido ningún pin aún.");
+            }
+            
+            function renderGuardados() {
+                document.querySelector('.encabezado-seccion h2').textContent = "Mis Guardados (Tableros y Favoritos)";
+                feedPines.innerHTML = '';
+                
+                // Primero, renderizamos los tableros como carpetas
+                if (misTableros.length > 0) {
+                    misTableros.forEach(t => {
+                        const portadas = t.publicaciones.length > 0 ? t.publicaciones.map(p => p.url_multimedia) : [''];
+                        const coverStyle = portadas[0] ? `background-image: url('${portadas[0]}'); background-size: cover; background-position: center;` : `background-color: var(--color-morado);`;
+                        
+                        feedPines.innerHTML += `
+                            <article class="tarjeta-pin" style="cursor: pointer;" onclick="window.location.href='pines.html?tablero=${t.id}'">
+                                <div class="imagen-wrapper" style="padding-bottom: 80%; ${coverStyle} border-radius: 12px;"></div>
+                                <div class="info-basica">
+                                    <strong>📁 ${t.nombre}</strong>
+                                    <p style="color: #8892a0; font-size: 0.85rem;">${t.publicaciones.length} pines</p>
+                                </div>
+                            </article>
+                        `;
                     });
-                }).catch(e => feedPines.innerHTML = "Error al cargar");
+                }
+                
+                // Renderizamos pines a los que dio like
+                misPines.forEach(pub => {
+                    feedPines.innerHTML += `
+                        <article class="tarjeta-pin pin-subido" onclick="window.location.href='detalle.html?id=${pub.id}'">
+                            <div class="imagen-wrapper" style="padding-bottom: 100%;">
+                                <img src="${pub.url_multimedia}" alt="${pub.titulo}" style="position:absolute; width:100%; height:100%; object-fit:cover;"
+                                     onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22 viewBox=%220 0 400 400%22%3E%3Crect width=%22400%22 height=%22400%22 fill=%22%23EAE8E3%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2216%22 fill=%22%23999%22%3ESin imagen%3C/text%3E%3C/svg%3E';">
+                                <div class="pin-overlay">
+                                    <button class="btn-guardar" onclick="event.stopPropagation(); window.location.href='detalle.html?id=${pub.id}'">❤️ Me gusta</button>
+                                </div>
+                            </div>
+                            <div class="info-basica"><p>${pub.titulo}</p></div>
+                        </article>`;
+                });
+                
+                if(misTableros.length === 0 && misPines.length === 0) {
+                    feedPines.innerHTML = `<p style='text-align: center; width: 100%; color: #8892a0;'>No has guardado nada aún.</p>`;
+                }
+            }
+            
+            function renderTableroEspecifico(tid) {
+                const tab = misTableros.find(t => t.id == tid);
+                if (tab) {
+                    document.querySelector('.encabezado-seccion h2').textContent = `Tablero: ${tab.nombre}`;
+                    renderPinsHTML(tab.publicaciones, "Este tablero está vacío.");
+                    
+                    // Asegurarnos de que el filtro "Guardados" esté seleccionado visualmente
+                    radioGuardados.checked = true;
+                } else {
+                    renderVistaActual();
+                }
+            }
+            
+            // Event Listeners para los radios
+            radioTodos.addEventListener('change', () => { if(radioTodos.checked) { window.history.pushState({}, '', 'pines.html'); renderTodos(); }});
+            radioSubidos.addEventListener('change', () => { if(radioSubidos.checked) { window.history.pushState({}, '', 'pines.html'); renderSubidos(); }});
+            radioGuardados.addEventListener('change', () => { if(radioGuardados.checked) { window.history.pushState({}, '', 'pines.html'); renderGuardados(); }});
+            
+            cargarDatos();
         });
     </script>
 </body>

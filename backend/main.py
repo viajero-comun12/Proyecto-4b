@@ -64,6 +64,14 @@ def login(usuario: schemas.UsuarioLogin, db: Session = Depends(get_db)):
     
     return {"message": "Login exitoso", "usuario_id": db_user.id, "username": db_user.username}
 
+@app.get("/usuarios/buscar", response_model=List[schemas.UsuarioBasico])
+def buscar_usuarios(q: str, db: Session = Depends(get_db)):
+    """Busca usuarios por username. Solo devuelve perfiles públicos (o el propio usuario)."""
+    resultados = db.query(models.Usuario).filter(
+        models.Usuario.username.ilike(f"%{q}%")
+    ).limit(20).all()
+    return resultados
+
 @app.get("/usuarios/{usuario_id}", response_model=schemas.Usuario)
 def get_usuario(usuario_id: int, db: Session = Depends(get_db)):
     db_user = db.query(models.Usuario).filter(models.Usuario.id == usuario_id).first()
@@ -81,6 +89,8 @@ def update_usuario(usuario_id: int, update_data: schemas.UsuarioUpdate, db: Sess
         db_user.profile_pic = update_data.profile_pic
     if update_data.biografia is not None:
         db_user.biografia = update_data.biografia
+    if update_data.es_publico is not None:
+        db_user.es_publico = update_data.es_publico
         
     db.commit()
     db.refresh(db_user)
@@ -198,20 +208,66 @@ def get_tableros_usuario(usuario_id: int, db: Session = Depends(get_db)):
     return db.query(models.Tablero).filter(models.Tablero.usuario_id == usuario_id).all()
 
 # ==========================================
-# ENDPOINTS COLLAGES
+# ENDPOINTS PINES / LIKES
 # ==========================================
 
-@app.post("/collages/", response_model=schemas.Collage)
-def create_collage(collage: schemas.CollageCreate, db: Session = Depends(get_db)):
-    db_collage = models.Collage(
-        titulo=collage.titulo,
-        layout_data=collage.layout_data,
-        usuario_id=collage.usuario_id
-    )
-    db.add(db_collage)
+@app.post("/publicaciones/{publicacion_id}/like")
+def toggle_like_publicacion(publicacion_id: int, usuario_id: int = Form(...), db: Session = Depends(get_db)):
+    pub = db.query(models.Publicacion).filter(models.Publicacion.id == publicacion_id).first()
+    usuario = db.query(models.Usuario).filter(models.Usuario.id == usuario_id).first()
+    if not pub or not usuario:
+        raise HTTPException(status_code=404, detail="Publicación o Usuario no encontrado")
+    
+    # Check if already liked
+    if usuario in pub.likers:
+        pub.likers.remove(usuario)
+        liked = False
+    else:
+        pub.likers.append(usuario)
+        liked = True
+        
     db.commit()
-    db.refresh(db_collage)
-    return db_collage
+    return {"message": "Success", "liked": liked}
+
+@app.get("/usuarios/{usuario_id}/pines", response_model=List[schemas.Publicacion])
+def get_pines_usuario(usuario_id: int, db: Session = Depends(get_db)):
+    usuario = db.query(models.Usuario).filter(models.Usuario.id == usuario_id).first()
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    return usuario.pines_liked
+
+# ==========================================
+# ENDPOINTS SEGUIDORES
+# ==========================================
+
+@app.post("/usuarios/{usuario_id}/follow/{seguido_id}")
+def toggle_follow(usuario_id: int, seguido_id: int, db: Session = Depends(get_db)):
+    if usuario_id == seguido_id:
+        raise HTTPException(status_code=400, detail="No puedes seguirte a ti mismo")
+    
+    usuario = db.query(models.Usuario).filter(models.Usuario.id == usuario_id).first()
+    seguido = db.query(models.Usuario).filter(models.Usuario.id == seguido_id).first()
+    
+    if not usuario or not seguido:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        
+    if seguido in usuario.seguidos:
+        usuario.seguidos.remove(seguido)
+        following = False
+    else:
+        usuario.seguidos.append(seguido)
+        following = True
+        
+    db.commit()
+    return {"following": following}
+
+@app.get("/usuarios/{usuario_id}/seguidos")
+def get_seguidos(usuario_id: int, db: Session = Depends(get_db)):
+    usuario = db.query(models.Usuario).filter(models.Usuario.id == usuario_id).first()
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        
+    return [{"id": s.id, "username": s.username, "profile_pic": s.profile_pic, "es_publico": s.es_publico} for s in usuario.seguidos]
 
 # ==========================================
 # ENDPOINTS NOTIFICACIONES
