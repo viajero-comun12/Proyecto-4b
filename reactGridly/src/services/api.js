@@ -1,4 +1,3 @@
-// src/services/api.js
 
 const API_URL = 'http://localhost:8000'; // Asegúrate de que este es el puerto de tu FastAPI
 
@@ -44,11 +43,11 @@ export const sendComentario = async (pubId, texto, usuarioId) => {
 // TABLEROS, NOTIFICACIONES Y MENSAJES
 // ==========================================
 
-export const createTablero = async (nombre, secreto, usuarioId) => {
+export const createTablero = async (tableroData) => {
     const response = await fetch(`${API_URL}/tableros/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre, secreto, usuario_id: usuarioId })
+        body: JSON.stringify(tableroData) // Ahora enviamos el objeto directamente
     });
     if (!response.ok) throw new Error('Error al crear tablero');
     return await response.json();
@@ -162,6 +161,82 @@ export const toggleFollowUser = async (miUsuarioId, perfilId) => {
 
 export const getMisTableros = async (usuarioId) => {
     const response = await fetch(`${API_URL}/usuarios/${usuarioId}/tableros/`); 
+    if (!response.ok) throw new Error('Error al obtener tableros');
+    return await response.json();
+};
+
+
+export const toggleLike = async (pubId, usuarioId) => {
+    const formData = new FormData();
+    formData.append('usuario_id', usuarioId);
+    
+    const response = await fetch(`${API_URL}/publicaciones/${pubId}/like`, {
+        method: 'POST',
+        body: formData
+    });
+    if (!response.ok) throw new Error('Error al procesar el like');
+    return await response.json();
+};
+
+export const savePinToTablero = async (tableroId, pubId) => {
+    const response = await fetch(`${API_URL}/tableros/${tableroId}/publicaciones/${pubId}`, {
+        method: 'POST'
+    });
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || 'Error al guardar en el tablero');
+    }
+    return await response.json();
+};
+
+export const enviarNotificacion = async (usuarioDestinoId, texto) => {
+    const response = await fetch(`${API_URL}/notificaciones/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            texto: texto,
+            usuario_id: usuarioDestinoId
+        })
+    });
+    if (!response.ok) throw new Error('Error enviando notificación');
+    return await response.json();
+};
+
+// ==========================================
+// MENSAJERÍA DIRECTA
+// ==========================================
+
+export const getTodosUsuarios = async () => {
+    const response = await fetch(`${API_URL}/usuarios/`);
+    if (!response.ok) throw new Error('Error al obtener usuarios');
+    return await response.json();
+};
+
+export const getConversacion = async (miId, otroId) => {
+    const response = await fetch(`${API_URL}/mensajes/${miId}/conversacion/${otroId}`);
+    if (!response.ok) throw new Error('Error al obtener la conversación');
+    return await response.json();
+};
+
+export const enviarMensajeChat = async (mensajeData) => {
+    const response = await fetch(`${API_URL}/mensajes/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(mensajeData)
+    });
+    if (!response.ok) throw new Error('Error al enviar mensaje');
+    return await response.json();
+};
+// ==========================================
+// PINES Y LIKES
+// ==========================================
+export const getUsuarioPines = async (usuarioId) => {
+    const response = await fetch(`${API_URL}/usuarios/${usuarioId}/pines`);
+    if (!response.ok) throw new Error('Error al obtener los pines guardados');
+    return await response.json();
+};
+export const getTablerosUsuario = async (usuarioId) => {
+    const response = await fetch(`${API_URL}/usuarios/${usuarioId}/tableros/`);
     if (!response.ok) throw new Error('Error al obtener tableros');
     return await response.json();
 };

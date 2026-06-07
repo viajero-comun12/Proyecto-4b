@@ -12,6 +12,8 @@ const Sidebar = () => {
                     <Link to="/publicacion" className="item-menu"><span className="icono"></span> Publicar</Link>
                     <Link to="/tableros" className="item-menu"><span className="icono"></span>Tableros</Link>
                     <Link to="/seguidos" className="item-menu"><span className="icono"></span> Seguidos</Link>
+                    <Link to="/mensajes" className="item-menu"><span className="icono"></span> Mensajes</Link>
+                    <Link to="/pines" className="item-menu"><span className="icono"></span>Pines</Link>
                 </div>
             </nav>
         </aside>

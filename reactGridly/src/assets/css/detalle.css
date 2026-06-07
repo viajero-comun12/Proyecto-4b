@@ -1,0 +1,230 @@
+.contenedor-detalle {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.tarjeta-detalle {
+    background-color: white;
+    border-radius: var(--radio-tarjeta);
+    box-shadow: var(--sombra-hover);
+    display: flex;
+    overflow: hidden;
+    min-height: 600px;
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.columna-imagen {
+    flex: 1;
+    background-color: #EAE8E3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.columna-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--color-azul);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: var(--transicion-rapida);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-back:hover {
+    transform: scale(1.1);
+    background: white;
+}
+
+.columna-info {
+    width: 450px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.acciones-detalle {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.btn-icon {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--color-azul);
+    padding: 10px;
+    border-radius: 50%;
+    transition: var(--transicion-rapida);
+}
+
+.btn-icon:hover {
+    background-color: rgba(0, 33, 71, 0.05);
+}
+
+.titulo-detalle {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.descripcion-detalle {
+    color: #555;
+    margin-bottom: 25px;
+    font-size: 1.05rem;
+}
+
+.autor {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgba(0, 33, 71, 0.1);
+}
+
+.avatar-pequeno {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #EAE8E3;
+}
+
+.autor-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.autor-info strong {
+    color: var(--color-azul);
+    font-size: 1.1rem;
+}
+
+.autor-info span {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+
+.comentarios {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.comentarios h2 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.lista-comentarios {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    max-height: 250px;
+}
+
+.comentario {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.comentario .avatar-comentario {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #EAE8E3;
+}
+
+.comentario-texto {
+    background-color: rgba(0, 33, 71, 0.03);
+    padding: 10px 15px;
+    border-radius: 0 16px 16px 16px;
+    font-size: 0.95rem;
+}
+
+.comentario-texto strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 0.9rem;
+}
+
+.input-comentario-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: auto;
+}
+
+.input-comentario-wrapper .avatar-comentario {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #EAE8E3;
+}
+
+.input-comentario {
+    flex: 1;
+    padding: 14px 20px;
+    border: 1px solid rgba(0, 33, 71, 0.1);
+    border-radius: 30px;
+    font-family: var(--fuente-principal);
+    font-size: 0.95rem;
+    transition: var(--transicion-rapida);
+}
+
+.input-comentario:focus {
+    outline: none;
+    border-color: var(--color-morado);
+    box-shadow: 0 0 0 3px rgba(98, 0, 150, 0.1);
+}
+
+@media (max-width: 900px) {
+    .tarjeta-detalle {
+        flex-direction: column;
+        min-height: auto;
+    }
+
+    .columna-imagen {
+        height: 400px;
+    }
+
+    .columna-info {
+        width: 100%;
+        padding: 25px;
+    }
+}

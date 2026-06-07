@@ -1,4 +1,4 @@
-// src/App.jsx
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import RegisterPage from './pages/RegisterPage';
@@ -10,6 +10,9 @@ import UsuarioPage from './pages/UsuarioPage';
 import CrearPublicacionPage from './pages/CrearPublicacionPage';
 import SeguidosPage from './pages/SeguidosPage';
 import TablerosPage from './pages/TablerosPage';
+import DetallePage from './pages/DetallePage';
+import MensajeriaPage from './pages/MensajeriaPage';
+import PinesPage from './pages/PinesPage';
 
 function App() {
   return (
@@ -24,6 +27,9 @@ function App() {
         <Route path="/publicacion" element={<CrearPublicacionPage />} />
         <Route path="/seguidos" element={<SeguidosPage />} />
         <Route path="/tableros" element={<TablerosPage />} />
+        <Route path="/detalle/:id" element={<DetallePage />} />
+        <Route path="/mensajes" element={<MensajeriaPage />} />
+        <Route path="/pines" element={<PinesPage />} />
         <Route path="/" element={<HomePage />} />
       </Routes>
     </Router>
