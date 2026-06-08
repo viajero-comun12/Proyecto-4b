@@ -7,7 +7,6 @@ const MainLayout = ({ children }) => {
         <>
             <Header />
             <div className="app-container">
-                <Sidebar />
                 <main className="contenido-principal">
                     {children}
                 </main>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import MainLayout from '../components/templates/MainLayout';
+import PinCard from '../components/moleculas/PinCard';
 import { getPublicaciones, getUsuarioPines, getTablerosUsuario } from '../services/api';
 
 const PinesPage = () => {
@@ -90,16 +91,8 @@ const PinesPage = () => {
             if (pinesTablero.length === 0) return <p style={{ textAlign: 'center', width: '100%', color: '#8892a0' }}>Este tablero está vacío.</p>;
 
             return pinesTablero.map(pub => (
-                <article key={pub.id} className="tarjeta-pin" onClick={() => navigate(`/detalle/${pub.id}`)}>
-                    <div className="imagen-wrapper" style={{ paddingBottom: '100%' }}>
-                        <img src={pub.url_multimedia} alt={pub.titulo} style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }} onError={handleImageError} />
-                        <div className="pin-overlay">
-                            <button className="btn-guardar" onClick={(e) => { e.stopPropagation(); navigate(`/detalle/${pub.id}`); }}>Ver detalle</button>
-                        </div>
-                    </div>
-                    <div className="info-basica"><p>{pub.titulo}</p></div>
-                </article>
-            ));
+    <PinCard key={pub.id} pub={pub} />
+));
         }
 
         // 2. MODO "TODOS"
@@ -165,16 +158,8 @@ const PinesPage = () => {
 
                     {/* Renderizar Pines sueltos guardados (Likes) */}
                     {misPines.map(pub => (
-                        <article key={`pin-${pub.id}`} className="tarjeta-pin" onClick={() => navigate(`/detalle/${pub.id}`)}>
-                            <div className="imagen-wrapper" style={{ paddingBottom: '100%' }}>
-                                <img src={pub.url_multimedia} alt={pub.titulo} style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }} onError={handleImageError} />
-                                <div className="pin-overlay">
-                                    <button className="btn-guardar">❤️ Me gusta</button>
-                                </div>
-                            </div>
-                            <div className="info-basica"><p>{pub.titulo}</p></div>
-                        </article>
-                    ))}
+    <PinCard key={`pin-${pub.id}`} pub={pub} label="❤️ Me gusta" />
+))}
                 </>
             );
         }

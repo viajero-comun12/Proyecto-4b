@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {FaHome} from 'react-icons/fa';
 
 const Sidebar = () => {
     return (
         <aside className="sidebar-izq">
             <nav className="menu-lateral">
                 <div className="grupo-menu">
-                    <Link to="/" className="item-menu activo"><span className="icono"></span> Inicio</Link>
+                    <Link to="/" className="item-menu activo"><FaHome style={{ color: '#c400c4ff' }} /></Link>
+                    
                     <Link to="/explorar" className="item-menu"><span className="icono"></span> Explorar</Link>
                     <Link to="/notificaciones" className="item-menu"><span className="icono"></span> Notificaciones</Link>
                     <Link to="/publicacion" className="item-menu"><span className="icono"></span> Publicar</Link>

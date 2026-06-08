@@ -25,7 +25,7 @@ const Header = () => {
             />
             <nav>
                 <Link to="/usuario" className="link-texto">Mi Perfil</Link>
-                <button onClick={logoutUser} className="btn-primario">Cerrar Sesión</button>
+                <Link to="/login" className="btn-primario">Cerrar Sesión </Link>
             </nav>
         </header>
     );
