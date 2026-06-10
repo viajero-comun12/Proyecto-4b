@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getMisTableros, savePinToTablero } from '../../services/api';
+import Button from '../atomos/Button';
 
 const ModalGuardarPin = ({ isOpen, onClose, pubId }) => {
     const [tableros, setTableros] = useState([]);
@@ -72,7 +73,7 @@ const ModalGuardarPin = ({ isOpen, onClose, pubId }) => {
                 </div>
 
                 <div className="modal-acciones">
-                    <button className="btn-cancelar" onClick={onClose}>Cancelar</button>
+                    <Botton className="btn-cancelar" onClick={onClose}>Cancelar</Botton>
                 </div>
             </div>
         </div>

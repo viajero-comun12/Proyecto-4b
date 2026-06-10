@@ -28,11 +28,11 @@ const TableroForm = ({ onCreated }) => {
             <form className="form-crear" onSubmit={handleSubmit}>
                 <div className="campos-form" style={{ width: '100%' }}>
                     <input className="input-form" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Nombre del tablero" required />
-                    <label>
+                    <label className="checkbox-secreto">
                         <input type="checkbox" checked={secreto} onChange={(e) => setSecreto(e.target.checked)} /> 
                         Mantener secreto
                     </label>
-                    <Button type="submit">Crear Tablero</Button>
+                    <Button className="btn-primario">Crear Tablero</Button>
                 </div>
             </form>
         </div>

@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useRef } from 'react'; // 1. Importamos useRef
 import { togglePrivacidad, uploadAvatar, toggleFollowUser } from '../../services/api';
+import Button from '../atomos/Button'; 
 
 const UserProfile = ({ usuario, isOwnProfile, onUpdate }) => {
+    
+    const fileInputRef = useRef(null);
     
     const handleAvatarChange = async (e) => {
         const file = e.target.files[0];
@@ -9,7 +12,7 @@ const UserProfile = ({ usuario, isOwnProfile, onUpdate }) => {
         const formData = new FormData();
         formData.append('file', file);
         await uploadAvatar(usuario.id, formData);
-        onUpdate(); // Recarga los datos del padre
+        onUpdate(); 
     };
 
     return (
@@ -23,20 +26,29 @@ const UserProfile = ({ usuario, isOwnProfile, onUpdate }) => {
             {isOwnProfile ? (
                 <div className="acciones-perfil">
                     <label>
-                        <input type="checkbox" checked={usuario.es_publico} onChange={(e) => togglePrivacidad(usuario.id, e.target.checked).then(onUpdate)} />
+                        <input 
+                            type="checkbox" 
+                            checked={usuario.es_publico} 
+                            onChange={(e) => togglePrivacidad(usuario.id, e.target.checked).then(onUpdate)} 
+                        />
                         Perfil Público
                     </label>
-                    <input type="file" id="avatar-upload" hidden onChange={handleAvatarChange} />
-                    <button className="btn-primario" onClick={() => document.getElementById('avatar-upload').click()}>Cambiar Foto</button>
+                    
+                    <input type="file" ref={fileInputRef} hidden onChange={handleAvatarChange} />
+                    
+                    <Button className="btn-primario" onClick={() => fileInputRef.current.click()}>
+                        Cambiar Foto
+                    </Button>
                 </div>
             ) : (
                 <div className="acciones-perfil">
-                    <button className="btn-primario" onClick={() => toggleFollowUser(localStorage.getItem('usuario_id'), usuario.id).then(onUpdate)}>
+                    <Button className="btn-primario" onClick={() => toggleFollowUser(localStorage.getItem('usuario_id'), usuario.id).then(onUpdate)}>
                         Seguir/Dejar de seguir
-                    </button>
+                    </Button>
                 </div>
             )}
         </section>
     );
 };
+
 export default UserProfile;

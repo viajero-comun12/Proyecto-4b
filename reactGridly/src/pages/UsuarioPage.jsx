@@ -5,6 +5,7 @@ import UserProfile from '../components/organismos/UserProfile';
 import PinCard from '../components/moleculas/PinCard';
 import { getUsuario, getPublicaciones } from '../services/api';
 
+
 const UsuarioPage = () => {
     const { id } = useParams(); // Obtiene el ID de la URL
     const [usuario, setUsuario] = useState(null);
@@ -37,6 +38,7 @@ const UsuarioPage = () => {
     if (!usuario) return <MainLayout>Cargando perfil...</MainLayout>;
 
     return (
+        
         <MainLayout>
             <main className="contenido-principal contenedor-perfil">
                 <UserProfile 

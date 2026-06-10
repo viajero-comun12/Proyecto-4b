@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react'; 
 import { Link } from 'react-router-dom';
-import {FaHome} from 'react-icons/fa';
+import { SiHomebridge } from "react-icons/si";
+import { MdOutlineTravelExplore, MdPublish } from "react-icons/md";
+import { FaTableCellsLarge } from "react-icons/fa6";
+import { GoPin } from "react-icons/go";
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen }) => { 
+    const [activeTab, setActiveTab] = useState('/');
+
+    
+    if (!isOpen) return null;
+
     return (
         <aside className="sidebar-izq">
             <nav className="menu-lateral">
                 <div className="grupo-menu">
-                    <Link to="/" className="item-menu activo"><FaHome style={{ color: '#c400c4ff' }} /></Link>
-                    
-                    <Link to="/explorar" className="item-menu"><span className="icono"></span> Explorar</Link>
-                    <Link to="/notificaciones" className="item-menu"><span className="icono"></span> Notificaciones</Link>
-                    <Link to="/publicacion" className="item-menu"><span className="icono"></span> Publicar</Link>
-                    <Link to="/tableros" className="item-menu"><span className="icono"></span>Tableros</Link>
-                    <Link to="/seguidos" className="item-menu"><span className="icono"></span> Seguidos</Link>
-                    <Link to="/mensajes" className="item-menu"><span className="icono"></span> Mensajes</Link>
-                    <Link to="/pines" className="item-menu"><span className="icono"></span>Pines</Link>
+                    <Link to="/" className="item-menu activo"><SiHomebridge style={{ color: '#660066ff', scale: '4.5', marginBottom: '30px', marginTop: '30px' }} /></Link>
+                    <Link to="/explorar" className="item-menu"><MdOutlineTravelExplore style={{ color: '#660066ff', scale: '4.5', marginBottom: '30px', marginTop: '30px' }} /></Link>
+                    <Link to="/tableros" className="item-menu"><FaTableCellsLarge style={{ color: '#660066ff', scale: '4.5', marginBottom: '30px', marginTop: '30px' }} /></Link>
+                    <Link to="/publicacion" className="item-menu"><MdPublish style={{ color: '#660066ff', scale: '4.5', marginBottom: '30px', marginTop: '30px' }} /></Link>
+                    <Link to="/pines" className="item-menu"><GoPin style={{ color: '#660066ff', scale: '4.5', marginBottom: '30px', marginTop: '30px' }} /></Link>
                 </div>
             </nav>
         </aside>

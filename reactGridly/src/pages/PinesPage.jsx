@@ -175,7 +175,6 @@ const PinesPage = () => {
     } else if (filtro === 'subidos') tituloEncabezado = "Mis Subidas";
     else if (filtro === 'guardados') tituloEncabezado = "Mis Guardados (Tableros y Favoritos)";
 
-    // Estilo para simular el "radio button" activo del CSS original
     const getEstiloFiltro = (nombreFiltro) => {
         return filtro === nombreFiltro && !tableroId 
             ? { backgroundColor: 'var(--color-morado)', color: 'white', padding: '6px 16px', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold' } 

@@ -4,8 +4,10 @@ import MainLayout from '../components/templates/MainLayout';
 import ModalGuardarPin from '../components/organismos/ModalGuardarPin';
 import { getPublicacionDetalle, sendComentario, toggleLike, enviarNotificacion } from '../services/api';
 
+import Button from '../components/atomos/Button'; 
+
 const DetallePage = () => {
-    const { id } = useParams(); // Obtenemos el ID de la URL
+    const { id } = useParams(); 
     const navigate = useNavigate();
     const usuarioId = localStorage.getItem('usuario_id');
     const myUsername = localStorage.getItem('username') || `Usuario ${usuarioId}`;
@@ -14,7 +16,7 @@ const DetallePage = () => {
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState(null);
     
-    // Estados de interacción
+    
     const [liked, setLiked] = useState(false);
     const [comentarioTexto, setComentarioTexto] = useState('');
     const [enviandoComentario, setEnviandoComentario] = useState(false);
@@ -26,7 +28,7 @@ const DetallePage = () => {
             const data = await getPublicacionDetalle(id);
             setPub(data);
             
-            // Verificar si el usuario actual ya le dio like
+            
             if (usuarioId && data.likers && data.likers.some(l => l.id == usuarioId)) {
                 setLiked(true);
             }
@@ -47,7 +49,7 @@ const DetallePage = () => {
             const data = await toggleLike(id, usuarioId);
             setLiked(data.liked);
             
-            // Si dio like y no es su propia publicación, notificar
+            
             if (data.liked && pub.usuario_id != usuarioId) {
                 await enviarNotificacion(pub.usuario_id, `A ${myUsername} le gustó tu publicación "${pub.titulo}".`);
             }
@@ -95,7 +97,9 @@ const DetallePage = () => {
             <main className="contenedor-detalle" style={{ display: 'block', margin: '20px auto' }}>
                 <article className="tarjeta-detalle" id="tarjeta-detalle">
                     <div className="columna-imagen">
-                        <button className="btn-back" onClick={() => navigate(-1)}>←</button>
+                        
+                        <Button className="btn-back" onClick={() => navigate(-1)}>←</Button>
+                        
                         <img 
                             id="img-publicacion" 
                             src={pub.url_multimedia} 
@@ -107,18 +111,22 @@ const DetallePage = () => {
                     <div className="columna-info">
                         <div className="acciones-detalle">
                             <div>
-                                <button 
+                                
+                                <Button 
+                                    
                                     className="btn-icon" 
                                     title={liked ? 'Quitar Pin' : 'Guardar como Pin'} 
                                     onClick={handleLike}
                                     style={{ transform: liked ? 'scale(1.3)' : 'scale(1)', color: liked ? 'red' : 'inherit' }}
-                                >❤️</button>
-                                <button className="btn-icon" title="Compartir" onClick={handleCompartir}>🔗</button>
+                                >❤️</Button>
+                                <Button className="btn-icon" title="Compartir" onClick={handleCompartir}>🔗</Button>
                             </div>
-                            <button className="btn-primario" onClick={() => {
+                            
+                            
+                            <Button className="btn-primario" onClick={() => {
                                 if(!usuarioId) { alert("Inicia sesión para guardar pines"); return;}
                                 setModalOpen(true);
-                            }}>Guardar</button>
+                            }}>Guardar</Button>
                         </div>
 
                         <h1 className="titulo-detalle">{pub.titulo}</h1>
@@ -167,20 +175,20 @@ const DetallePage = () => {
                                     disabled={!usuarioId || enviandoComentario}
                                     style={{ flex: 1, padding: '10px', borderRadius: '20px', border: '1px solid #ccc' }}
                                 />
-                                <button 
-                                    className="btn-enviar-com" 
+                                
+                                <Button 
+                                    className="btn-primario" 
                                     onClick={handleComentar} 
                                     disabled={!usuarioId || enviandoComentario || !comentarioTexto.trim()}
                                 >
                                     {enviandoComentario ? '...' : 'Enviar'}
-                                </button>
+                                </Button>
                             </div>
                         </section>
                     </div>
                 </article>
             </main>
 
-            {/* Invocación del modal */}
             <ModalGuardarPin isOpen={modalOpen} onClose={() => setModalOpen(false)} pubId={id} />
         </MainLayout>
     );

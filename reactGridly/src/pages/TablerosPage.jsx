@@ -8,7 +8,6 @@ const TablerosPage = () => {
     const [tableros, setTableros] = useState([]);
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState(null);
-
     const cargar = async () => {
         const usuarioId = localStorage.getItem('usuario_id');
         if (!usuarioId) {
@@ -35,8 +34,9 @@ const TablerosPage = () => {
     }, []);
 
     return (
+        
         <MainLayout>
-            {/* AQUÍ ESTABA EL ERROR: Faltaba el style={{ display: 'block' }} */}
+            
             <section className="seccion-app sec-crear-tablero" style={{ display: 'block' }}>
                 <TableroForm onCreated={cargar} />
                 
