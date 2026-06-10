@@ -17,14 +17,13 @@ const Header = ({toggleSidebar}) => {
         }
     };
     return (
-        <header>
+        <header style={{ backgroundColor: '#620096'}}>
             <Button onClick={toggleSidebar} style={{ background: 'transparent', border: 'none'} }>
-                <IoMdMenu style={{ color: '#000', fontSize: '24px' }} />
+                <IoMdMenu style={{ marginRight: '30px', color: '#F6A700', fontSize: '24px' }} />
             </Button>
 
             <Link to="/" className="logo">
-                <div className="logo-icono">G</div>
-                <div className="logo-texto">Gridly</div>
+                <div className="logo-texto" style={{color: '#F6A700'}}>Gridly</div>
             </Link>
 
             <input 
@@ -34,20 +33,20 @@ const Header = ({toggleSidebar}) => {
             onKeyPress={handleSearch}
             />
             <nav>
-                <Button style={{ backgroundColor: '#c328d8ff', padding: '10px', borderRadius: '50%', display: 'flex' }} 
+                <Button style={{ backgroundColor: '#F6A700', padding: '10px', borderRadius: '50%', display: 'flex' }} 
                     onClick={() => navigate('/notificaciones')}>
-                    <IoMdNotifications style={{ color: '#e1fa00ff', scale: '2' }} />
+                    <IoMdNotifications style={{ color: '#620096', scale: '2' }} />
                 </Button>
-                <Button style={{ backgroundColor: '#c328d8ff', padding: '10px', borderRadius: '50%', display: 'flex' }} 
+                <Button style={{ backgroundColor: '#F6A700', padding: '10px', borderRadius: '50%', display: 'flex' }} 
                     onClick={() => navigate('/mensajes')}>
-                    <LuMessageSquareHeart style={{ color: '#e1fa00ff', scale: '2' }} />
+                    <LuMessageSquareHeart style={{ color: '#620096', scale: '2' }} />
                 </Button>
-                <Button style={{ backgroundColor: '#c328d8ff', padding: '10px', borderRadius: '50%', display: 'flex' }} 
+                <Button style={{ backgroundColor: '#F6A700', padding: '10px', borderRadius: '50%', display: 'flex' }} 
                     onClick={() => navigate('/seguidos')}>
-                    <RiUserFollowFill style={{ color: '#e1fa00ff', scale: '2' }} />
+                    <RiUserFollowFill style={{ color: '#620096', scale: '2' }} />
                 </Button>
-                <Link to="/usuario" className="link-texto">Mi Perfil</Link>
-                <Link to="/login" className="btn-primario">Cerrar Sesión </Link>
+                <Link to="/usuario" className="logo-texto" style={{color: '#F6A700', fontSize: '90%'}}>Mi Perfil</Link>
+                <Link to="/login" className="logo-texto" style={{color: '#F6A700', fontSize: '90%'}}>Cerrar Sesión </Link>
             </nav>
         </header>
     );
