@@ -41,22 +41,23 @@ const ModalGuardarPin = ({ isOpen, onClose, pubId }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay activo" onClick={(e) => { if (e.target.classList.contains('modal-overlay')) onClose(); }}>
-            <div className="modal-caja">
-                <h3> Guardar en tablero</h3>
+        <>
+            <div style={{ position: 'fixed', inset: 0, zIndex: 999 }} onClick={(e) => { e.stopPropagation(); onClose(); }}></div>
+            <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: '10px', backgroundColor: 'white', borderRadius: '10px', boxShadow: '0 4px 15px rgba(0,0,0,0.2)', width: '250px', zIndex: 1000, padding: '15px', textAlign: 'left' }}>
+                <h3 style={{ fontSize: '1rem', marginBottom: '10px', color: 'var(--color-azul)' }}>Guardar en tablero</h3>
                 
                 <div id="lista-tableros-modal" style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                    {cargando && <p style={{ color: '#8892a0' }}>Cargando tableros...</p>}
+                    {cargando && <p style={{ color: '#8892a0', fontSize: '0.9rem' }}>Cargando tableros...</p>}
                     
                     {!cargando && tableros.length === 0 && (
-                        <p style={{ color: '#8892a0' }}>No tienes tableros aún.</p>
+                        <p style={{ color: '#8892a0', fontSize: '0.9rem' }}>No tienes tableros aún.</p>
                     )}
 
                     {!cargando && tableros.map(t => (
-                        <div key={t.id} className="tablero-option" onClick={() => handleGuardar(t.id, t.nombre)}>
+                        <div key={t.id} className="tablero-option" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px', borderRadius: '8px', cursor: 'pointer', transition: 'background-color 0.2s ease' }} onClick={() => handleGuardar(t.id, t.nombre)} onMouseOver={e => e.currentTarget.style.backgroundColor = '#f4f3ec'} onMouseOut={e => e.currentTarget.style.backgroundColor = 'transparent'}>
                             <div className="t-icono">📌</div>
                             <div>
-                                <strong>{t.nombre}</strong><br/>
+                                <strong style={{ color: 'var(--color-azul)' }}>{t.nombre}</strong><br/>
                                 <small style={{ color: '#8892a0' }}>
                                     {t.publicaciones ? t.publicaciones.length : 0} pines
                                 </small>
@@ -71,12 +72,8 @@ const ModalGuardarPin = ({ isOpen, onClose, pubId }) => {
                 }}>
                     {mensaje.texto}
                 </div>
-
-                <div className="modal-acciones">
-                    <Botton className="btn-cancelar" onClick={onClose}>Cancelar</Botton>
-                </div>
             </div>
-        </div>
+        </>
     );
 };
 

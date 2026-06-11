@@ -51,18 +51,16 @@ const TablerosPage = () => {
                 )}
                 
                 {!cargando && !error && tableros.length > 0 && (
-                    <div className="feed-mosaico" style={{ marginTop: '20px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px', marginTop: '20px' }}>
                         {tableros.map(t => {
                             // Verificamos si tiene portada, si no, usamos el color morado
                             const tienePortada = t.publicaciones && t.publicaciones.length > 0;
                             const fondo = tienePortada ? `url(${t.publicaciones[0].url_multimedia})` : 'var(--color-morado)';
                             
                             return (
-                                <Link to={`/pines?tablero=${t.id}`} key={t.id} className="tarjeta-pin">
+                                <Link to={`/pines?tablero=${t.id}`} key={t.id} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column' }}>
                                     <div 
-                                        className="imagen-wrapper" 
                                         style={{ 
-                                            display: 'block',
                                             width: '100%',
                                             height: '200px', 
                                             background: fondo,
@@ -71,8 +69,8 @@ const TablerosPage = () => {
                                             borderRadius: '12px'
                                         }}
                                     ></div>
-                                    <div className="info-basica">
-                                        <strong>{t.nombre}</strong>
+                                    <div className="info-basica" style={{ padding: '10px 0' }}>
+                                        <strong style={{ fontSize: '1.1rem' }}>{t.nombre}</strong>
                                         <p style={{ color: '#8892a0', fontSize: '0.85rem' }}>
                                             {t.publicaciones ? t.publicaciones.length : 0} pines
                                         </p>

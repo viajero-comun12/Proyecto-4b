@@ -7,9 +7,11 @@ import { LuMessageSquareHeart } from "react-icons/lu";
 import { RiUserFollowFill } from "react-icons/ri";
 import { IoMdMenu } from "react-icons/io"; // 2. Agrega el ícono del menú
 import Button from '../atomos/Button';
+import SidebarDerecha from './SidebarDerecha';
 
 const Header = ({toggleSidebar}) => {
     const navigate = useNavigate();
+    const [isProfileHovered, setIsProfileHovered] = React.useState(false);
 
     const handleSearch = (e) => {
         if (e.key === 'Enter') {
@@ -33,19 +35,14 @@ const Header = ({toggleSidebar}) => {
             onKeyPress={handleSearch}
             />
             <nav>
-                <Button style={{ backgroundColor: '#F6A700', padding: '10px', borderRadius: '50%', display: 'flex' }} 
-                    onClick={() => navigate('/notificaciones')}>
-                    <IoMdNotifications style={{ color: '#620096', scale: '2' }} />
-                </Button>
-                <Button style={{ backgroundColor: '#F6A700', padding: '10px', borderRadius: '50%', display: 'flex' }} 
-                    onClick={() => navigate('/mensajes')}>
-                    <LuMessageSquareHeart style={{ color: '#620096', scale: '2' }} />
-                </Button>
-                <Button style={{ backgroundColor: '#F6A700', padding: '10px', borderRadius: '50%', display: 'flex' }} 
-                    onClick={() => navigate('/seguidos')}>
-                    <RiUserFollowFill style={{ color: '#620096', scale: '2' }} />
-                </Button>
-                <Link to="/usuario" className="logo-texto" style={{color: '#F6A700', fontSize: '90%'}}>Mi Perfil</Link>
+                <div 
+                    onMouseEnter={() => setIsProfileHovered(true)} 
+                    onMouseLeave={() => setIsProfileHovered(false)}
+                    style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
+                >
+                    <Link to="/usuario" className="logo-texto" style={{color: '#F6A700', fontSize: '90%', padding: '10px 0'}}>Mi Perfil</Link>
+                    <SidebarDerecha isOpen={isProfileHovered} />
+                </div>
                 <Link to="/login" className="logo-texto" style={{color: '#F6A700', fontSize: '90%'}}>Cerrar Sesión </Link>
             </nav>
         </header>

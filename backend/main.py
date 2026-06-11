@@ -43,11 +43,11 @@ def create_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db)
     if db_email:
         raise HTTPException(status_code=400, detail="El email ya está registrado")
     
-    # Nota: En producción esto debería estar encriptado (ej. usando bcrypt/passlib)
     nuevo_usuario = models.Usuario(
         username=usuario.username,
         email=usuario.email,
-        hashed_password=usuario.password # Hash simulado/texto plano para el prototipo
+        hashed_password=usuario.password, # Hash simulado/texto plano para el prototipo
+        fecha_nacimiento=usuario.fecha_nacimiento
     )
     db.add(nuevo_usuario)
     db.commit()
@@ -63,7 +63,7 @@ def login(usuario: schemas.UsuarioLogin, db: Session = Depends(get_db)):
     if not db_user:
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
     
-    return {"message": "Login exitoso", "usuario_id": db_user.id, "username": db_user.username}
+    return {"message": "Login exitoso", "usuario_id": db_user.id, "username": db_user.username, "fecha_nacimiento": db_user.fecha_nacimiento.isoformat() if db_user.fecha_nacimiento else None}
 
 @app.get("/usuarios/buscar", response_model=List[schemas.UsuarioBasico])
 def buscar_usuarios(q: str, db: Session = Depends(get_db)):
@@ -123,6 +123,7 @@ def create_publicacion(
     tags: str = Form(None),
     categoria_id: int = Form(None),
     usuario_id: int = Form(...), # Obligatorio para asociar
+    is_nsfw: bool = Form(False),
     file: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
@@ -141,12 +142,43 @@ def create_publicacion(
         tags=tags,
         categoria_id=categoria_id,
         url_multimedia=s3_url,
-        usuario_id=usuario_id
+        usuario_id=usuario_id,
+        is_nsfw=is_nsfw
     )
     db.add(db_publicacion)
     db.commit()
     db.refresh(db_publicacion)
     return db_publicacion
+
+@app.delete("/publicaciones/{publicacion_id}")
+def delete_publicacion(publicacion_id: int, usuario_id: int, db: Session = Depends(get_db)):
+    pub = db.query(models.Publicacion).filter(models.Publicacion.id == publicacion_id).first()
+    if not pub:
+        raise HTTPException(status_code=404, detail="Publicación no encontrada")
+    if pub.usuario_id != usuario_id:
+        raise HTTPException(status_code=403, detail="No tienes permiso para eliminar esta publicación")
+    
+    db.delete(pub)
+    db.commit()
+    return {"message": "Publicación eliminada correctamente"}
+
+@app.get("/categorias/")
+def get_categorias(db: Session = Depends(get_db)):
+    pubs = db.query(models.Publicacion).order_by(models.Publicacion.fecha_creacion.desc()).all()
+    categorias = {}
+    import re
+    for pub in pubs:
+        if pub.tags:
+            # Extract hashtags like #art #design
+            hashtags = re.findall(r'#\w+', pub.tags)
+            for tag in hashtags:
+                tag = tag.lower()
+                if tag not in categorias:
+                    categorias[tag] = {
+                        "nombre": tag,
+                        "imagen": pub.url_multimedia
+                    }
+    return list(categorias.values())
 
 @app.get("/publicaciones/", response_model=List[schemas.Publicacion])
 def get_publicaciones(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -203,6 +235,18 @@ def add_publicacion_to_tablero(tablero_id: int, publicacion_id: int, db: Session
     tablero.publicaciones.append(publicacion)
     db.commit()
     return {"message": "Publicación añadida al tablero correctamente"}
+
+@app.delete("/tableros/{tablero_id}/publicaciones/{publicacion_id}")
+def remove_publicacion_from_tablero(tablero_id: int, publicacion_id: int, db: Session = Depends(get_db)):
+    tablero = db.query(models.Tablero).filter(models.Tablero.id == tablero_id).first()
+    publicacion = db.query(models.Publicacion).filter(models.Publicacion.id == publicacion_id).first()
+    if not tablero or not publicacion:
+        raise HTTPException(status_code=404, detail="Tablero o Publicación no encontrados")
+    
+    if publicacion in tablero.publicaciones:
+        tablero.publicaciones.remove(publicacion)
+        db.commit()
+    return {"message": "Publicación eliminada del tablero correctamente"}
 
 @app.get("/usuarios/{usuario_id}/tableros/", response_model=List[schemas.Tablero])
 def get_tableros_usuario(usuario_id: int, db: Session = Depends(get_db)):

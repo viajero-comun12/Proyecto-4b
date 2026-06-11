@@ -252,6 +252,7 @@ nav a.link-texto:hover {
   overflow-y: auto;
   background: var(--gradiente-fondo);
   min-width: 0;
+  padding: 30px;
 }
 
 /* Radio Hack Navigation Logic */
@@ -298,31 +299,5 @@ nav a.link-texto:hover {
 }
 
 @media (max-width: 900px) {
-  .app-container {
-    flex-direction: column;
-  }
-  .sidebar-izq {
-    width: 100%;
-    height: auto;
-    position: static;
-    flex-direction: row;
-    overflow-x: auto;
-    padding: 10px;
-  }
-  .menu-lateral {
-    flex-direction: row;
-    gap: 10px;
-  }
-  .grupo-menu {
-    flex-direction: row;
-  }
-  .titulo-grupo {
-    display: none;
-  }
-  .item-menu .icono {
-    margin-right: 0;
-  }
-  .item-menu {
-    padding: 10px;
-  }
+  /* Removed layout stacking overrides */
 }

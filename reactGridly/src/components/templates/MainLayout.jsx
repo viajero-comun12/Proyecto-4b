@@ -3,7 +3,7 @@ import Header from '../organismos/Header';
 import Sidebar from '../organismos/Sidebar';
 
 const MainLayout = ({ children }) => {
-    const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const [isSidebarOpen, setSidebarOpen] = useState(true);
     
     return (
         <>

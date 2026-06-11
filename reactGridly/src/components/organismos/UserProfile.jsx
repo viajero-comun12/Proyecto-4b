@@ -1,10 +1,26 @@
-import React, { useRef } from 'react'; // 1. Importamos useRef
-import { togglePrivacidad, uploadAvatar, toggleFollowUser } from '../../services/api';
+import React, { useRef, useState, useEffect } from 'react'; // 1. Importamos useRef
+import { togglePrivacidad, uploadAvatar, toggleFollowUser, getSeguidos } from '../../services/api';
 import Button from '../atomos/Button'; 
 
 const UserProfile = ({ usuario, isOwnProfile, onUpdate }) => {
     
     const fileInputRef = useRef(null);
+    const [isFollowing, setIsFollowing] = useState(false);
+
+    useEffect(() => {
+        const miId = localStorage.getItem('usuario_id');
+        if (!isOwnProfile && miId && usuario) {
+            getSeguidos(miId).then(seguidos => {
+                setIsFollowing(seguidos.some(s => s.id === usuario.id));
+            });
+        }
+    }, [usuario, isOwnProfile]);
+
+    const handleFollow = async () => {
+        await toggleFollowUser(localStorage.getItem('usuario_id'), usuario.id);
+        setIsFollowing(!isFollowing);
+        onUpdate();
+    };
     
     const handleAvatarChange = async (e) => {
         const file = e.target.files[0];
@@ -42,8 +58,8 @@ const UserProfile = ({ usuario, isOwnProfile, onUpdate }) => {
                 </div>
             ) : (
                 <div className="acciones-perfil">
-                    <Button className="btn-primario" onClick={() => toggleFollowUser(localStorage.getItem('usuario_id'), usuario.id).then(onUpdate)}>
-                        Seguir/Dejar de seguir
+                    <Button className="btn-primario" onClick={handleFollow}>
+                        {isFollowing ? 'Dejar de seguir' : 'Seguir'}
                     </Button>
                 </div>
             )}

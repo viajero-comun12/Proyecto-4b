@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import MainLayout from '../components/templates/MainLayout';
-import { getPublicaciones, buscarUsuarios } from '../services/api';
+import { getPublicaciones, buscarUsuarios, getCategorias } from '../services/api';
 import PinCard from '../components/moleculas/PinCard';
+import UserCard from '../components/moleculas/UserCard';
+import { useNavigate } from 'react-router-dom';
 
 const ExplorarPage = () => {
     const [searchParams] = useSearchParams();
     const q = searchParams.get('q');
     const [publicaciones, setPublicaciones] = useState([]);
     const [usuarios, setUsuarios] = useState([]);
+    const [categorias, setCategorias] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -26,6 +30,8 @@ const ExplorarPage = () => {
                 setUsuarios(users);
             } else {
                 setPublicaciones(pubs);
+                const cats = await getCategorias();
+                setCategorias(cats);
             }
         };
         fetchData();
@@ -40,10 +46,15 @@ const ExplorarPage = () => {
                 </div>
 
                 {!q && (
-                    <div className="categorias-grid">
-                        <div className="cat-card">Categoria 1</div>
-                        <div className="cat-card">Categoria 2</div>
-                        {/*categorias dinamicas implementar a futuro*/}
+                    <div className="categorias-grid" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', padding: '20px 0' }}>
+                        {categorias.map(cat => (
+                            <div key={cat.nombre} onClick={() => navigate(`/?categoria=${cat.nombre}`)} style={{ cursor: 'pointer', position: 'relative', width: '200px', height: '120px', borderRadius: '15px', overflow: 'hidden' }}>
+                                <img src={cat.imagen} alt={cat.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <h3 style={{ color: 'white', textTransform: 'capitalize' }}>{cat.nombre}</h3>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 )}
 
@@ -52,10 +63,7 @@ const ExplorarPage = () => {
                         <div className="encabezado-seccion"><h3>Usuarios Encontrados</h3></div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
                             {usuarios.map(u => (
-                                <div key={u.id} className="usuario-resultado">
-                                    <strong>@{u.username}</strong>
-                                    <button onClick={() => window.location.href = `/usuario/${u.id}`}>Ver Perfil</button>
-                                </div>
+                                <UserCard key={u.id} user={u} />
                             ))}
                         </div>
                     </div>

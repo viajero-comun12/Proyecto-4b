@@ -90,6 +90,16 @@ const DetallePage = () => {
     if (error) return <MainLayout><p style={{ padding: '20px', color: 'red' }}>{error}</p></MainLayout>;
     if (!pub) return null;
 
+    const isAdult = () => {
+        const fn = localStorage.getItem('fecha_nacimiento');
+        if (!fn || fn === 'null') return false;
+        const dob = new Date(fn);
+        const ageDifMs = Date.now() - dob.getTime();
+        const ageDate = new Date(ageDifMs);
+        return Math.abs(ageDate.getUTCFullYear() - 1970) >= 18;
+    };
+    const isBlur = pub.is_nsfw && !isAdult();
+
     const fechaFormat = new Date(pub.fecha_creacion).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
 
     return (
@@ -98,14 +108,27 @@ const DetallePage = () => {
                 <article className="tarjeta-detalle" id="tarjeta-detalle">
                     <div className="columna-imagen">
                         
-                        <Button className="btn-back" onClick={() => navigate(-1)}>←</Button>
+                        <Button className="btn-back" onClick={() => navigate(-1)} style={{ position: 'absolute', top: '15px', left: '15px', zIndex: 100, fontSize: '24px', backgroundColor: 'rgba(0,0,0,0.6)', color: 'white', borderRadius: '50%', width: '45px', height: '45px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>←</Button>
                         
-                        <img 
-                            id="img-publicacion" 
-                            src={pub.url_multimedia} 
-                            alt={pub.titulo}
-                            onError={(e) => { e.target.src = 'https://via.placeholder.com/800x1000?text=Sin+Imagen'; }}
-                        />
+                        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                            <img 
+                                id="img-publicacion" 
+                                src={pub.url_multimedia} 
+                                alt={pub.titulo}
+                                style={{ filter: isBlur ? 'blur(20px)' : 'none', width: '100%', height: '100%', objectFit: 'cover' }}
+                                onError={(e) => { e.target.src = 'https://via.placeholder.com/800x1000?text=Sin+Imagen'; }}
+                            />
+                            {isBlur && (
+                                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', backgroundColor: 'rgba(0,0,0,0.5)', color: 'white', padding: '20px', textAlign: 'center' }}>
+                                    <h3>Contenido NSFW</h3>
+                                    {!usuarioId ? (
+                                        <p>Inicia sesión para ver este contenido.</p>
+                                    ) : (
+                                        <p>Debes ser mayor de 18 años para ver este contenido.</p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     <div className="columna-info">
@@ -123,10 +146,13 @@ const DetallePage = () => {
                             </div>
                             
                             
-                            <Button className="btn-primario" onClick={() => {
-                                if(!usuarioId) { alert("Inicia sesión para guardar pines"); return;}
-                                setModalOpen(true);
-                            }}>Guardar</Button>
+                            <div style={{ position: 'relative', display: 'inline-block' }}>
+                                <Button className="btn-primario" onClick={() => {
+                                    if(!usuarioId) { alert("Inicia sesión para guardar pines"); return;}
+                                    setModalOpen(true);
+                                }}>Guardar</Button>
+                                <ModalGuardarPin isOpen={modalOpen} onClose={() => setModalOpen(false)} pubId={id} />
+                            </div>
                         </div>
 
                         <h1 className="titulo-detalle">{pub.titulo}</h1>
@@ -188,8 +214,6 @@ const DetallePage = () => {
                     </div>
                 </article>
             </main>
-
-            <ModalGuardarPin isOpen={modalOpen} onClose={() => setModalOpen(false)} pubId={id} />
         </MainLayout>
     );
 };

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import MainLayout from '../components/templates/MainLayout';
 import PinCard from '../components/moleculas/PinCard';
-import { getPublicaciones, getUsuarioPines, getTablerosUsuario } from '../services/api';
-
+import { getPublicaciones, getUsuarioPines, getTablerosUsuario, removePinFromTablero } from '../services/api';
+import Button from '../components/atomos/Button';
 const PinesPage = () => {
     const miId = parseInt(localStorage.getItem('usuario_id'));
     const navigate = useNavigate();
@@ -60,6 +60,17 @@ const PinesPage = () => {
     // ==========================================
     // LÓGICA DE RENDERIZADO (Filtros)
     // ==========================================
+
+    const handleRemoveFromTablero = async (pubId) => {
+        if (!window.confirm("¿Seguro que quieres quitar este pin del tablero?")) return;
+        try {
+            await removePinFromTablero(tableroId, pubId);
+            const tableros = await getTablerosUsuario(miId);
+            setMisTableros(tableros);
+        } catch (err) {
+            alert("Error al quitar el pin");
+        }
+    };
     
     // Obtener pines deduplicados para "Todos"
     const getPinesTodos = () => {
@@ -91,8 +102,18 @@ const PinesPage = () => {
             if (pinesTablero.length === 0) return <p style={{ textAlign: 'center', width: '100%', color: '#8892a0' }}>Este tablero está vacío.</p>;
 
             return pinesTablero.map(pub => (
-    <PinCard key={pub.id} pub={pub} />
-));
+                <div key={pub.id} style={{ position: 'relative' }}>
+                    <PinCard pub={pub} />
+                    {tableroActual.usuario_id === miId && (
+                        <Button 
+                            onClick={() => handleRemoveFromTablero(pub.id)}
+                            style={{ position: 'absolute', bottom: '10px', right: '10px', padding: '5px 10px', fontSize: '0.8rem', zIndex: 10, background: 'rgba(255,0,0,0.8)', border: 'none', borderRadius: '8px', color: 'white', cursor: 'pointer' }}
+                        >
+                            Remover
+                        </Button>
+                    )}
+                </div>
+            ));
         }
 
         // 2. MODO "TODOS"
@@ -105,7 +126,7 @@ const PinesPage = () => {
                     <div className="imagen-wrapper" style={{ paddingBottom: '100%' }}>
                         <img src={pub.url_multimedia} alt={pub.titulo} style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }} onError={handleImageError} />
                         <div className="pin-overlay">
-                            <button className="btn-guardar" onClick={(e) => { e.stopPropagation(); navigate(`/detalle/${pub.id}`); }}>Ver detalle</button>
+                            
                         </div>
                     </div>
                     <div className="info-basica"><p>{pub.titulo}</p></div>

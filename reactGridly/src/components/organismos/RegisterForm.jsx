@@ -9,13 +9,14 @@ const RegisterForm= ()=>{
     const [nombre, setNombre]= useState('');
     const [email, setEmail]= useState('');
     const [password, setPassword]= useState('');
+    const [fechaNacimiento, setFechaNacimiento]= useState('');
     const [cargando, setCargando]= useState(false);
     //funcion para que se ejcute con el boton de registrarser
     const handleSubmit = async (e) =>{
         e.preventDefault(); //no se recarga la pagina al presionar enviar
         setCargando(true) //mientras se ejecuta la funcion se pone true
         try{
-            await registerUser(nombre,email,password);
+            await registerUser(nombre,email,password,fechaNacimiento);
             alert('Resgistrado exitosamente');
             window.location.href='/'; //redirigir al inicio de forma temporal
         } catch (error){
@@ -54,7 +55,15 @@ const RegisterForm= ()=>{
             onChange={(e)=> setPassword(e.target.value)}
             required
             />
-            <Button type="submit" disabled={cargando}>
+            <FormInput
+            label="Fecha de Nacimiento"
+            id="fecha_nacimiento"
+            type="date"
+            value={fechaNacimiento}
+            onChange={(e)=> setFechaNacimiento(e.target.value)}
+            required
+            />
+            <Button type="submit" disabled={cargando} style={{ backgroundColor: '#620096', color: 'white', padding: '12px 20px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '1rem', width: '100%', marginTop: '10px' }}>
                 {cargando ? 'Creando la cuenta....' : 'Registrarse'}
             </Button>
         </form>

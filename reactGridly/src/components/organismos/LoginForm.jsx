@@ -48,7 +48,7 @@ const LoginForm = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required 
             />
-            <Button type="submit" disabled={cargando}>
+            <Button type="submit" disabled={cargando} style={{ backgroundColor: '#620096', color: 'white', padding: '12px 20px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '1rem', width: '100%', marginTop: '10px' }}>
                 {cargando ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </Button>
         </form>

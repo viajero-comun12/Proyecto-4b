@@ -11,6 +11,7 @@ class UsuarioCreate(BaseModel):
     username: str
     email: str
     password: str
+    fecha_nacimiento: Optional[datetime] = None
 
 class UsuarioUpdate(BaseModel):
     profile_pic: Optional[str] = None
@@ -25,6 +26,7 @@ class Usuario(BaseModel):
     biografia: Optional[str] = None
     es_publico: bool = True
     fecha_registro: datetime
+    fecha_nacimiento: Optional[datetime] = None
 
     class Config:
         from_attributes = True
@@ -62,6 +64,7 @@ class PublicacionBase(BaseModel):
     tags: Optional[str] = None
     categoria_id: Optional[int] = None
     usuario_id: int
+    is_nsfw: bool = False
 
 class PublicacionCreate(PublicacionBase):
     pass
