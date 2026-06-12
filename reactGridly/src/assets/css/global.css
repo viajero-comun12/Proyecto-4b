@@ -193,7 +193,6 @@ nav a.link-texto:hover {
 }
 
 .sidebar-izq {
-  width: 250px;
   background: var(--color-blanco);
   border-right: 1px solid rgba(0, 33, 71, 0.1);
   padding: 20px 10px;
@@ -203,6 +202,7 @@ nav a.link-texto:hover {
   top: 73px;
   height: calc(100vh - 73px);
   overflow-y: auto;
+  align-self: stretch;
 }
 
 .menu-lateral {

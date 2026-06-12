@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { IoMdNotifications } from "react-icons/io";
 import { LuMessageSquareHeart } from "react-icons/lu";
@@ -10,6 +11,8 @@ const SidebarDerecha = ({ isOpen }) => {
     const navigate = useNavigate();
     const [isSeguidosHovered, setIsSeguidosHovered] = useState(false);
     const [seguidos, setSeguidos] = useState([]);
+    const seguidosRef = useRef(null);
+    const [panelPos, setPanelPos] = useState({ top: 0, right: 0 });
 
     useEffect(() => {
         const miId = localStorage.getItem('usuario_id');
@@ -17,6 +20,16 @@ const SidebarDerecha = ({ isOpen }) => {
             getSeguidos(miId).then(setSeguidos);
         }
     }, [isOpen]); // Recargar seguidos cuando se abre el perfil
+
+    useEffect(() => {
+        if (isSeguidosHovered && seguidosRef.current) {
+            const rect = seguidosRef.current.getBoundingClientRect();
+            setPanelPos({
+                top: rect.top,
+                right: window.innerWidth - rect.left + 10
+            });
+        }
+    }, [isSeguidosHovered]);
 
     return (
         <aside style={{ 
@@ -36,7 +49,7 @@ const SidebarDerecha = ({ isOpen }) => {
             pointerEvents: isOpen ? 'auto' : 'none',
             borderRadius: '0 0 10px 10px',
             zIndex: 1000,
-            overflow: 'hidden',
+            overflow: 'visible',
             height: isOpen ? '250px' : '0'
         }}>
             <Button onClick={() => navigate('/notificaciones')} className="tooltip-container tooltip-right" data-tooltip="Notificaciones" style={{ backgroundColor: 'transparent', padding: '10px', borderRadius: '50%', display: 'flex', border: 'none', cursor: 'pointer', transition: 'transform 0.2s', width: 'fit-content' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.2)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
@@ -46,6 +59,7 @@ const SidebarDerecha = ({ isOpen }) => {
                 <LuMessageSquareHeart style={{ color: '#620096', scale: '2' }} />
             </Button>
             <div 
+                ref={seguidosRef}
                 style={{ position: 'relative' }} 
                 onMouseEnter={() => setIsSeguidosHovered(true)} 
                 onMouseLeave={() => setIsSeguidosHovered(false)}
@@ -54,14 +68,24 @@ const SidebarDerecha = ({ isOpen }) => {
                     <RiUserFollowFill style={{ color: '#620096', scale: '2' }} />
                 </Button>
                 
-                {isSeguidosHovered && (
-                    <div style={{ position: 'absolute', top: 0, right: '100%', paddingRight: '10px', zIndex: 1000 }}>
+                {isSeguidosHovered && createPortal(
+                    <div 
+                        style={{ 
+                            position: 'fixed', 
+                            top: panelPos.top, 
+                            right: panelPos.right, 
+                            zIndex: 99999,
+                            pointerEvents: 'auto'
+                        }}
+                        onMouseEnter={() => setIsSeguidosHovered(true)}
+                        onMouseLeave={() => setIsSeguidosHovered(false)}
+                    >
                         <div style={{
                             backgroundColor: 'white',
                             borderRadius: '10px',
                             boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
                             width: '220px',
-                            maxHeight: '250px',
+                            maxHeight: '300px',
                             overflowY: 'auto',
                             padding: '10px',
                             display: 'flex',
@@ -90,10 +114,12 @@ const SidebarDerecha = ({ isOpen }) => {
                                 ))
                             )}
                         </div>
-                    </div>
+                    </div>,
+                    document.body
                 )}
             </div>
         </aside>
     );
 };
 export default SidebarDerecha;
+
