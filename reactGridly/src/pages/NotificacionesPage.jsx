@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import MainLayout from '../components/templates/MainLayout';
+import { useEffect, useState } from 'react';
 import NotificationItem from '../components/moleculas/NotificationItem';
 import { getNotificaciones } from '../services/api';
 
@@ -20,12 +19,13 @@ const NotificacionesPage = () => {
                     setCargando(false);
                 });
         } else {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setCargando(false);
         }
     }, []);
 
     return (
-        <MainLayout>
+        <>
             <section className="seccion-app sec-notif" style={{ display: 'block' }}>
                 <div className="encabezado-seccion">
                     <h2>Tus Notificaciones</h2>
@@ -42,7 +42,7 @@ const NotificacionesPage = () => {
                     )}
                 </div>
             </section>
-        </MainLayout>
+        </>
     );
 };
 export default NotificacionesPage;

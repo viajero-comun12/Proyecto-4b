@@ -1,6 +1,10 @@
-import React, { useState, useRef } from 'react';
+import { useState } from 'react';
 import { createPublicacion } from '../../services/api';
 import Button from '../atomos/Button';
+import FormInput from '../moleculas/FormInput';
+import FormTextarea from '../moleculas/FormTextarea';
+import FormCheckbox from '../moleculas/FormCheckbox';
+import FormFileDropzone from '../moleculas/FormFileDropzone';
 
 const PublicacionForm = () => {
     const [file, setFile] = useState(null);
@@ -10,7 +14,6 @@ const PublicacionForm = () => {
     const [tags, setTags] = useState('');
     const [isNsfw, setIsNsfw] = useState(false);
     const [cargando, setCargando] = useState(false);
-    const fileInputRef = useRef(null);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -27,9 +30,9 @@ const PublicacionForm = () => {
 
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('titulo', titulo);
-        formData.append('descripcion', descripcion);
-        formData.append('tags', tags);
+        formData.append('titulo', titulo.trim());
+        formData.append('descripcion', descripcion.trim());
+        formData.append('tags', tags.trim());
         formData.append('is_nsfw', isNsfw);
         formData.append('usuario_id', localStorage.getItem('usuario_id'));
 
@@ -46,22 +49,47 @@ const PublicacionForm = () => {
 
     return (
         <form className="form-crear" onSubmit={handleSubmit}>
-            <div 
-                className="zona-subida" 
-                onClick={() => fileInputRef.current && fileInputRef.current.click()} 
-                style={{ border: '2px dashed #620096', padding: '20px', textAlign: 'center', cursor: 'pointer', borderRadius: '10px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px', backgroundColor: 'var(--social-bg)' }}
-            >
-                <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" required style={{ display: 'none' }} />
-                {preview ? <img src={preview} style={{maxHeight: '100%', maxWidth: '100%', objectFit: 'contain'}} alt="Preview" /> : <p style={{ color: '#8892a0', margin: 0, fontWeight: 'bold' }}>Haz clic en toda esta área para seleccionar tu imagen</p>}
-            </div>
+            <FormFileDropzone 
+                preview={preview} 
+                onFileChange={handleFileChange} 
+                required={true} 
+            />
             <div className="campos-form">
-                <input type="text" placeholder="Añade un título" className="input-form" value={titulo} onChange={(e) => setTitulo(e.target.value)} required />
-                <textarea placeholder="Cuenta de qué trata" className="input-form" value={descripcion} onChange={(e) => setDescripcion(e.target.value)}></textarea>
-                <input type="text" placeholder="#etiquetas" className="input-form" value={tags} onChange={(e) => setTags(e.target.value)} />
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '10px', marginBottom: '10px' }}>
-                    <input type="checkbox" id="nsfw" checked={isNsfw} onChange={(e) => setIsNsfw(e.target.checked)} />
-                    <label htmlFor="nsfw">Marcar como contenido NSFW (+18)</label>
-                </div>
+                <FormInput 
+                    type="text" 
+                    id="titulo"
+                    placeholder="Añade un título" 
+                    value={titulo} 
+                    onChange={(e) => setTitulo(e.target.value)} 
+                    required={true}
+                    maxLength={100}
+                />
+                <FormTextarea 
+                    id="descripcion"
+                    placeholder="Cuenta de qué trata" 
+                    value={descripcion} 
+                    onChange={(e) => setDescripcion(e.target.value)}
+                    maxLength={500}
+                />
+                <FormInput 
+                    type="text" 
+                    id="tags"
+                    placeholder="etiquetas (separadas por coma)" 
+                    value={tags} 
+                    onChange={(e) => {
+                        let val = e.target.value;
+                        if (val && !val.startsWith('#')) val = '#' + val;
+                        val = val.replace(/,\s*/g, ', #').replace(/#{2,}/g, '#');
+                        setTags(val);
+                    }}
+                    maxLength={150}
+                />
+                <FormCheckbox 
+                    id="nsfw"
+                    label="Marcar como contenido NSFW (+18)"
+                    checked={isNsfw}
+                    onChange={(e) => setIsNsfw(e.target.checked)}
+                />
                 <Button type="submit" disabled={cargando} style={{ backgroundColor: '#620096', color: 'white', padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '1rem', width: '100%' }}>{cargando ? 'Publicando...' : 'Publicar'}</Button>
             </div>
         </form>

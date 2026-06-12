@@ -1,4 +1,4 @@
-import React from "react";
+
 import RegisterForm from "../components/organismos/RegisterForm";
 import {Link} from 'react-router-dom';
 

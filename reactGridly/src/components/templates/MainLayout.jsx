@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import Header from '../organismos/Header';
 import Sidebar from '../organismos/Sidebar';
 
@@ -13,7 +14,7 @@ const MainLayout = ({ children }) => {
                 <Sidebar isOpen={isSidebarOpen} />
                 
                 <main className="contenido-principal">
-                    {children}
+                    {children ? children : <Outlet />}
                 </main>
             </div>
         </>

@@ -179,7 +179,33 @@ nav a.link-texto:hover {
   header {
     padding: 12px 20px;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 10px;
+    justify-content: space-between;
+  }
+  
+  .logo {
+    flex-grow: 1;
+    margin-left: 10px;
+  }
+
+  .buscador {
+    order: 3;
+    width: 100%;
+    margin: 5px 0 0 0;
+    max-width: 100%;
+  }
+  
+  header nav {
+    order: 2;
+  }
+
+  .sidebar-izq {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100vh !important;
+    padding-top: 120px !important; /* approx header height when wrapped */
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
   }
 }
 
@@ -203,6 +229,7 @@ nav a.link-texto:hover {
   height: calc(100vh - 73px);
   overflow-y: auto;
   align-self: stretch;
+  z-index: 998;
 }
 
 .menu-lateral {

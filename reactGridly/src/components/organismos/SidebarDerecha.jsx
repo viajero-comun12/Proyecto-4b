@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { IoMdNotifications } from "react-icons/io";
 import { LuMessageSquareHeart } from "react-icons/lu";
 import { RiUserFollowFill } from "react-icons/ri";
 import Button from '../atomos/Button';
+import SidebarMenuItem from '../moleculas/SidebarMenuItem';
 import { getSeguidos } from '../../services/api';
 
 const SidebarDerecha = ({ isOpen }) => {
@@ -19,7 +20,7 @@ const SidebarDerecha = ({ isOpen }) => {
         if (miId) {
             getSeguidos(miId).then(setSeguidos);
         }
-    }, [isOpen]); // Recargar seguidos cuando se abre el perfil
+    }, [isOpen]); 
 
     useEffect(() => {
         if (isSeguidosHovered && seguidosRef.current) {
@@ -52,12 +53,8 @@ const SidebarDerecha = ({ isOpen }) => {
             overflow: 'visible',
             height: isOpen ? '250px' : '0'
         }}>
-            <Button onClick={() => navigate('/notificaciones')} className="tooltip-container tooltip-right" data-tooltip="Notificaciones" style={{ backgroundColor: 'transparent', padding: '10px', borderRadius: '50%', display: 'flex', border: 'none', cursor: 'pointer', transition: 'transform 0.2s', width: 'fit-content' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.2)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
-                <IoMdNotifications style={{ color: '#620096', scale: '2' }} />
-            </Button>
-            <Button onClick={() => navigate('/mensajes')} className="tooltip-container tooltip-right" data-tooltip="Mensajes" style={{ backgroundColor: 'transparent', padding: '10px', borderRadius: '50%', display: 'flex', border: 'none', cursor: 'pointer', transition: 'transform 0.2s', width: 'fit-content' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.2)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
-                <LuMessageSquareHeart style={{ color: '#620096', scale: '2' }} />
-            </Button>
+            <SidebarMenuItem icon={IoMdNotifications} label="Notificaciones" to="/notificaciones" tooltipDir="right" />
+            <SidebarMenuItem icon={LuMessageSquareHeart} label="Mensajes" to="/mensajes" tooltipDir="right" />
             <div 
                 ref={seguidosRef}
                 style={{ position: 'relative' }} 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { createTablero } from '../../services/api';
 import Button from '../atomos/Button';
 
@@ -18,6 +18,7 @@ const TableroForm = ({ onCreated }) => {
             setNombre('');
             onCreated();
         } catch (error) {
+            console.error(error);
             alert('Error al crear tablero');
         }
     };
@@ -27,7 +28,7 @@ const TableroForm = ({ onCreated }) => {
             <h2>Crear Nuevo Tablero</h2>
             <form className="form-crear" onSubmit={handleSubmit}>
                 <div className="campos-form" style={{ width: '100%' }}>
-                    <input className="input-form" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Nombre del tablero" required />
+                    <input className="input-form" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Nombre del tablero" required maxLength={50} />
                     <label className="checkbox-secreto" style={{ margin: '10px 0' }}>
                         <input type="checkbox" checked={secreto} onChange={(e) => setSecreto(e.target.checked)} /> 
                         Mantener secreto

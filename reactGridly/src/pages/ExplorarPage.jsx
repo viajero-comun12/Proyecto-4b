@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import MainLayout from '../components/templates/MainLayout';
 import { getPublicaciones, buscarUsuarios, getCategorias } from '../services/api';
 import PinCard from '../components/moleculas/PinCard';
-import UserCard from '../components/moleculas/UserCard';
-import { useNavigate } from 'react-router-dom';
+import SeguidoCard from '../components/moleculas/SeguidoCard';
+import CategoriaCard from '../components/moleculas/CategoriaCard';
 
 const ExplorarPage = () => {
     const [searchParams] = useSearchParams();
@@ -12,14 +11,11 @@ const ExplorarPage = () => {
     const [publicaciones, setPublicaciones] = useState([]);
     const [usuarios, setUsuarios] = useState([]);
     const [categorias, setCategorias] = useState([]);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
             const pubs = await getPublicaciones();
-            
             if (q) {
-                // Filtrar publicaciones por título o autor (lógica que tenías en js)
                 const filtradas = pubs.filter(p => 
                     p.titulo.toLowerCase().includes(q.toLowerCase()) || 
                     (p.autor && p.autor.username.toLowerCase().includes(q.toLowerCase()))
@@ -35,10 +31,10 @@ const ExplorarPage = () => {
             }
         };
         fetchData();
-    }, [q]); // Se vuelve a ejecutar si la 'q' cambia
+    }, [q]); 
 
     return (
-        <MainLayout>
+        <>
             <section className="seccion-app sec-explorar" style={{ display: 'block' }}>
                 <div className="encabezado-seccion">
                     <h2>{q ? `Resultados para: "${q}"` : "Explorar por Categorías"}</h2>
@@ -48,12 +44,7 @@ const ExplorarPage = () => {
                 {!q && (
                     <div className="categorias-grid" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', padding: '20px 0' }}>
                         {categorias.map(cat => (
-                            <div key={cat.nombre} onClick={() => navigate(`/?categoria=${cat.nombre}`)} style={{ cursor: 'pointer', position: 'relative', width: '200px', height: '120px', borderRadius: '15px', overflow: 'hidden' }}>
-                                <img src={cat.imagen} alt={cat.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <h3 style={{ color: 'white', textTransform: 'capitalize' }}>{cat.nombre}</h3>
-                                </div>
-                            </div>
+                            <CategoriaCard key={cat.nombre} cat={cat} />
                         ))}
                     </div>
                 )}
@@ -61,9 +52,9 @@ const ExplorarPage = () => {
                 {q && usuarios.length > 0 && (
                     <div id="resultados-usuarios" style={{ marginBottom: '30px' }}>
                         <div className="encabezado-seccion"><h3>Usuarios Encontrados</h3></div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px', marginTop: '10px' }}>
                             {usuarios.map(u => (
-                                <UserCard key={u.id} user={u} />
+                                <SeguidoCard key={u.id} user={u} />
                             ))}
                         </div>
                     </div>
@@ -77,7 +68,7 @@ const ExplorarPage = () => {
                     {publicaciones.map(pub => <PinCard key={pub.id} pub={pub} />)}
                 </section>
             </section>
-        </MainLayout>
+        </>
     );
 };
 

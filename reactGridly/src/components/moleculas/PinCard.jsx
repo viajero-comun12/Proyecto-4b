@@ -6,19 +6,32 @@ const PinCard = ({ pub, label = "Ver detalle" }) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/detalle/${pub.id}`);
+        if (document.startViewTransition) {
+            document.startViewTransition(() => {
+                navigate(`/detalle/${pub.id}`, { state: { pub } });
+            });
+        } else {
+            navigate(`/detalle/${pub.id}`, { state: { pub } });
+        }
     };
 
-    const isAdult = () => {
+    const [isAdultUser, setIsAdultUser] = React.useState(false);
+
+    React.useEffect(() => {
         const fn = localStorage.getItem('fecha_nacimiento');
-        if (!fn || fn === 'null') return false;
+        if (!fn || fn === 'null') {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setIsAdultUser(false);
+            return;
+        }
         const dob = new Date(fn);
         const ageDifMs = Date.now() - dob.getTime();
         const ageDate = new Date(ageDifMs);
-        return Math.abs(ageDate.getUTCFullYear() - 1970) >= 18;
-    };
+         
+        setIsAdultUser(Math.abs(ageDate.getUTCFullYear() - 1970) >= 18);
+    }, []);
     
-    const isBlur = pub.is_nsfw && !isAdult();
+    const isBlur = pub.is_nsfw && !isAdultUser;
 
     return (
         <article className="tarjeta-pin" onClick={handleClick} style={{ cursor: 'pointer' }}>
@@ -26,7 +39,14 @@ const PinCard = ({ pub, label = "Ver detalle" }) => {
                 <img 
                     src={pub.url_multimedia} 
                     alt={pub.titulo} 
-                    style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', filter: isBlur ? 'blur(15px)' : 'none' }}
+                    style={{ 
+                        position: 'absolute', 
+                        width: '100%', 
+                        height: '100%', 
+                        objectFit: 'cover', 
+                        filter: isBlur ? 'blur(15px)' : 'none',
+                        viewTransitionName: `pub-image-${pub.id}`
+                    }}
                 />
                 <div className="pin-overlay">
                     <Button className="btn-guardar" onClick={(e) => { e.stopPropagation(); handleClick(); }}>

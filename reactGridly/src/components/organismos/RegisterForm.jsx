@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import FormInput from "../moleculas/FormInput";
 import Button from "../atomos/Button";
 import { registerUser  } from "../../services/authService";
@@ -36,6 +36,8 @@ const RegisterForm= ()=>{
             value={nombre}
             onChange={(e)=> setNombre(e.target.value)}
             required
+            maxLength={30}
+            minLength={3}
             />
             <FormInput 
             label="correo Electrónico" 
@@ -44,7 +46,8 @@ const RegisterForm= ()=>{
             placeholder="usuario@ejemplo.com" 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required 
+            required
+            maxLength={100}
             />
             <FormInput
             label="Contraseña"
@@ -54,6 +57,8 @@ const RegisterForm= ()=>{
             value={password}
             onChange={(e)=> setPassword(e.target.value)}
             required
+            maxLength={60}
+            minLength={6}
             />
             <FormInput
             label="Fecha de Nacimiento"

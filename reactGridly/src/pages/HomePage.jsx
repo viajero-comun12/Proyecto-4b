@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import MainLayout from '../components/templates/MainLayout';
 import { getPublicaciones, getCategorias } from '../services/api';
 import PinCard from '../components/moleculas/PinCard';
 import Button from '../components/atomos/Button';
@@ -19,6 +18,7 @@ const HomePage = () => {
 
     useEffect(() => {
         if (categoriaQuery) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setFiltroCat(categoriaQuery);
         }
     }, [categoriaQuery]);
@@ -26,7 +26,7 @@ const HomePage = () => {
     const pubsFiltradas = filtroCat ? publicaciones.filter(p => p.tags && p.tags.toLowerCase().includes(filtroCat)) : publicaciones;
 
     return (
-        <MainLayout>
+        <>
             <section className="seccion-app sec-inicio" style={{ display: 'block' }}>
                 <nav className="barra-categorias" style={{ display: 'flex', gap: '10px', overflowX: 'auto', padding: '10px 0' }}>
                     <Button className={`btn-categoria ${!filtroCat ? 'activo' : ''}`} onClick={() => setFiltroCat(null)}>Para ti</Button>
@@ -44,11 +44,12 @@ const HomePage = () => {
                     ))}
                 </section>
             </section>
-        </MainLayout>
+        </>
     );
 
     
 
 };
 export default HomePage;
+
 

@@ -1,4 +1,3 @@
-import React from 'react';
 
 const Button = ({ type = "button", children, disabled, onClick, style, className = "" }) => {
     return (

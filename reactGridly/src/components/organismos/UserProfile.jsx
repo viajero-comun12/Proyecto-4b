@@ -1,6 +1,7 @@
-import React, { useRef, useState, useEffect } from 'react'; // 1. Importamos useRef
+import {useRef, useState, useEffect } from 'react'; // 1. Importamos useRef
 import { togglePrivacidad, uploadAvatar, toggleFollowUser, getSeguidos } from '../../services/api';
 import Button from '../atomos/Button'; 
+import UserInfoCard from '../moleculas/UserInfoCard';
 
 const UserProfile = ({ usuario, isOwnProfile, onUpdate }) => {
     
@@ -33,11 +34,12 @@ const UserProfile = ({ usuario, isOwnProfile, onUpdate }) => {
 
     return (
         <section className="info-usuario">
-            <img src={usuario.profile_pic || 'img/avatar.png'} alt="Avatar" className="avatar-grande" />
-            <h1>{usuario.username}</h1>
-            <p className="username">@{usuario.username}</p>
-            
-            {!usuario.es_publico && !isOwnProfile && <p>🔒 Perfil Privado</p>}
+            <UserInfoCard 
+                profilePic={usuario.profile_pic} 
+                username={usuario.username} 
+                esPublico={usuario.es_publico} 
+                isOwnProfile={isOwnProfile} 
+            />
 
             {isOwnProfile ? (
                 <div className="acciones-perfil">

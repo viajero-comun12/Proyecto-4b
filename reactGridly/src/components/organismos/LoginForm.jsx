@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import FormInput from '../moleculas/FormInput';
 import Button from '../atomos/Button';
 import { loginUser } from '../../services/authService';
@@ -28,7 +28,7 @@ const LoginForm = () => {
 
     return (
         <form className="auth-form" onSubmit={handleSubmit}>
-            {/* Reutilizamos nuestra molécula FormInput */}
+            
             <FormInput 
                 label="Nombre de Usuario" 
                 id="username" 
@@ -36,7 +36,8 @@ const LoginForm = () => {
                 placeholder="Tu usuario" 
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                required 
+                required
+                maxLength={30}
             />
             
             <FormInput 
@@ -46,7 +47,8 @@ const LoginForm = () => {
                 placeholder="Tu contraseña segura" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required 
+                required
+                maxLength={60}
             />
             <Button type="submit" disabled={cargando} style={{ backgroundColor: '#620096', color: 'white', padding: '12px 20px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '1rem', width: '100%', marginTop: '10px' }}>
                 {cargando ? 'Iniciando sesión...' : 'Iniciar Sesión'}
