@@ -48,34 +48,17 @@ const PublicacionForm = () => {
     };
 
     return (
-        <form className="form-crear" onSubmit={handleSubmit}>
+        <form className="flex gap-8 mt-5 flex-wrap" onSubmit={handleSubmit}>
             <FormFileDropzone 
                 preview={preview} 
                 onFileChange={handleFileChange} 
                 required={true} 
             />
-            <div className="campos-form">
+            <div className="flex-1 min-w-[300px] flex flex-col gap-5">
+                <FormInput type="text" id="titulo" placeholder="Añade un título" value={titulo} onChange={(e) => setTitulo(e.target.value)} required={true} maxLength={100} />
+                <FormTextarea id="descripcion" placeholder="Cuenta de qué trata" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} maxLength={500} />
                 <FormInput 
-                    type="text" 
-                    id="titulo"
-                    placeholder="Añade un título" 
-                    value={titulo} 
-                    onChange={(e) => setTitulo(e.target.value)} 
-                    required={true}
-                    maxLength={100}
-                />
-                <FormTextarea 
-                    id="descripcion"
-                    placeholder="Cuenta de qué trata" 
-                    value={descripcion} 
-                    onChange={(e) => setDescripcion(e.target.value)}
-                    maxLength={500}
-                />
-                <FormInput 
-                    type="text" 
-                    id="tags"
-                    placeholder="etiquetas (separadas por coma)" 
-                    value={tags} 
+                    type="text" id="tags" placeholder="etiquetas (separadas por coma)" value={tags} 
                     onChange={(e) => {
                         let val = e.target.value;
                         if (val && !val.startsWith('#')) val = '#' + val;
@@ -84,13 +67,10 @@ const PublicacionForm = () => {
                     }}
                     maxLength={150}
                 />
-                <FormCheckbox 
-                    id="nsfw"
-                    label="Marcar como contenido NSFW (+18)"
-                    checked={isNsfw}
-                    onChange={(e) => setIsNsfw(e.target.checked)}
-                />
-                <Button type="submit" disabled={cargando} style={{ backgroundColor: '#620096', color: 'white', padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '1rem', width: '100%' }}>{cargando ? 'Publicando...' : 'Publicar'}</Button>
+                <FormCheckbox id="nsfw" label="Marcar como contenido NSFW (+18)" checked={isNsfw} onChange={(e) => setIsNsfw(e.target.checked)} />
+                <Button type="submit" disabled={cargando} className="w-full bg-gray-dark text-beige py-3 px-6 rounded-2xl border-none cursor-pointer text-base font-semibold transition-all duration-300 hover:bg-gray-mid hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                    {cargando ? 'Publicando...' : 'Publicar'}
+                </Button>
             </div>
         </form>
     );

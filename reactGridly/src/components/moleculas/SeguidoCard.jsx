@@ -1,90 +1,38 @@
 import { Link } from 'react-router-dom';
 
 const SeguidoCard = ({ user }) => {
-    const avatar = user.profile_pic || 'https://via.placeholder.com/120';
+    const avatar = user.profile_pic || null;
     const inicial = (user.username || 'U')[0].toUpperCase();
 
     return (
         <Link
             to={`/usuario/${user.id}`}
-            className="seguido-card"
-            style={{
-                textDecoration: 'none',
-                color: 'inherit',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                background: 'white',
-                borderRadius: '16px',
-                padding: '24px 16px',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                cursor: 'pointer',
-                position: 'relative',
-                overflow: 'hidden',
-            }}
-            onMouseOver={(e) => {
-                e.currentTarget.style.transform = 'translateY(-6px) scale(1.02)';
-                e.currentTarget.style.boxShadow = '0 12px 32px rgba(98,0,150,0.18)';
-            }}
-            onMouseOut={(e) => {
-                e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.08)';
-            }}
+            className="no-underline text-inherit flex flex-col items-center bg-white rounded-2xl p-6 shadow-md transition-all duration-300 cursor-pointer relative overflow-hidden group hover:-translate-y-1.5 hover:shadow-xl"
         >
-            {/* Decorative gradient top bar */}
-            <div style={{
-                position: 'absolute', top: 0, left: 0, right: 0, height: '5px',
-                background: 'linear-gradient(90deg, #620096, #F6A700)',
-            }} />
+            {/* Top accent bar */}
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-accent to-beige-dark" />
 
             {/* Avatar */}
-            <div style={{
-                width: '90px', height: '90px', borderRadius: '50%',
-                border: '3px solid #620096',
-                padding: '3px',
-                marginBottom: '14px',
-                transition: 'transform 0.3s ease',
-            }}>
-                {user.profile_pic ? (
-                    <img
-                        src={avatar}
-                        alt={user.username}
-                        style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
-                        onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
-                    />
+            <div className="w-22 h-22 rounded-full border-3 border-accent p-0.5 mb-3.5 transition-transform duration-300 group-hover:scale-105">
+                {avatar ? (
+                    <img src={avatar} alt={user.username} className="w-full h-full rounded-full object-cover" />
                 ) : (
-                    <div style={{
-                        width: '100%', height: '100%', borderRadius: '50%',
-                        backgroundColor: '#620096', display: 'flex',
-                        alignItems: 'center', justifyContent: 'center',
-                        color: 'white', fontSize: '2rem', fontWeight: 'bold'
-                    }}>
+                    <div className="w-full h-full rounded-full bg-accent flex items-center justify-center text-white text-2xl font-bold">
                         {inicial}
                     </div>
                 )}
             </div>
 
             {/* Username */}
-            <strong style={{ fontSize: '1.05rem', color: 'var(--color-azul)', marginBottom: '4px' }}>
-                @{user.username}
-            </strong>
+            <strong className="text-base text-gray-dark mb-1">@{user.username}</strong>
 
             {/* Privacy badge */}
             {!user.es_publico && (
-                <span style={{ fontSize: '0.75rem', color: '#8892a0', marginBottom: '6px' }}>🔒 Privado</span>
+                <span className="text-xs text-gray-muted mb-1.5">🔒 Privado</span>
             )}
 
-            {/* Publication count */}
-            <span style={{
-                marginTop: '10px',
-                padding: '5px 14px',
-                borderRadius: '20px',
-                background: 'linear-gradient(135deg, #620096, #8a2be2)',
-                color: 'white',
-                fontSize: '0.8rem',
-                fontWeight: '600',
-            }}>
+            {/* Publication count badge */}
+            <span className="mt-2.5 px-3.5 py-1 rounded-full bg-gradient-to-br from-accent to-accent-light text-white text-xs font-semibold">
                 {user.publicaciones_count !== undefined ? `${user.publicaciones_count} pines` : 'Ver perfil'}
             </span>
         </Link>

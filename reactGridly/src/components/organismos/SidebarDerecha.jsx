@@ -33,79 +33,42 @@ const SidebarDerecha = ({ isOpen }) => {
     }, [isSeguidosHovered]);
 
     return (
-        <aside style={{ 
-            position: 'absolute', 
-            top: '100%', 
-            right: 0, 
-            backgroundColor: '#F6A700', 
-            width: '80px', 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center', 
-            padding: isOpen ? '20px 0' : '0', 
-            gap: '30px', 
-            transition: 'opacity 0.3s ease, transform 0.3s ease, height 0.3s ease', 
-            opacity: isOpen ? 1 : 0, 
-            transform: isOpen ? 'translateY(0)' : 'translateY(-10px)',
-            pointerEvents: isOpen ? 'auto' : 'none',
-            borderRadius: '0 0 10px 10px',
-            zIndex: 1000,
-            overflow: 'visible',
-            height: isOpen ? '250px' : '0'
-        }}>
+        <aside className={`absolute top-full right-0 bg-beige w-20 flex flex-col items-center gap-7 rounded-b-xl z-[1000] overflow-visible transition-all duration-300 ease-in-out ${isOpen ? 'opacity-100 translate-y-0 h-[250px] py-5 pointer-events-auto' : 'opacity-0 -translate-y-2.5 h-0 py-0 pointer-events-none'}`}>
             <SidebarMenuItem icon={IoMdNotifications} label="Notificaciones" to="/notificaciones" tooltipDir="right" />
             <SidebarMenuItem icon={LuMessageSquareHeart} label="Mensajes" to="/mensajes" tooltipDir="right" />
             <div 
                 ref={seguidosRef}
-                style={{ position: 'relative' }} 
+                className="relative"
                 onMouseEnter={() => setIsSeguidosHovered(true)} 
                 onMouseLeave={() => setIsSeguidosHovered(false)}
             >
-                <Button onClick={() => navigate('/seguidos')} className="tooltip-container tooltip-right" data-tooltip="Seguidos" style={{ backgroundColor: 'transparent', padding: '10px', borderRadius: '50%', display: 'flex', border: 'none', cursor: 'pointer', transition: 'transform 0.2s', width: 'fit-content' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.2)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
-                    <RiUserFollowFill style={{ color: '#620096', scale: '2' }} />
+                <Button onClick={() => navigate('/seguidos')} className="bg-transparent p-2.5 rounded-full flex border-none cursor-pointer transition-transform duration-200 hover:scale-125 w-fit">
+                    <RiUserFollowFill className="text-gray-dark scale-[2]" />
                 </Button>
                 
                 {isSeguidosHovered && createPortal(
                     <div 
-                        style={{ 
-                            position: 'fixed', 
-                            top: panelPos.top, 
-                            right: panelPos.right, 
-                            zIndex: 99999,
-                            pointerEvents: 'auto'
-                        }}
+                        className="fixed z-[99999] pointer-events-auto"
+                        style={{ top: panelPos.top, right: panelPos.right }}
                         onMouseEnter={() => setIsSeguidosHovered(true)}
                         onMouseLeave={() => setIsSeguidosHovered(false)}
                     >
-                        <div style={{
-                            backgroundColor: 'white',
-                            borderRadius: '10px',
-                            boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
-                            width: '220px',
-                            maxHeight: '300px',
-                            overflowY: 'auto',
-                            padding: '10px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '10px'
-                        }}>
-                            <h4 style={{ margin: '5px 0', fontSize: '0.9rem', color: 'var(--color-azul)', textAlign: 'center' }}>Mis Seguidos</h4>
-                            <hr style={{ border: 'none', borderTop: '1px solid #eae8e3', margin: '0 0 5px 0' }} />
+                        <div className="bg-white rounded-xl shadow-xl w-[220px] max-h-[300px] overflow-y-auto p-2.5 flex flex-col gap-2.5 border border-beige">
+                            <h4 className="mx-0 my-1 text-sm text-gray-dark text-center font-bold">Mis Seguidos</h4>
+                            <hr className="border-none border-t border-beige m-0 mb-1" />
                             
                             {seguidos.length === 0 ? (
-                                <p style={{ fontSize: '0.8rem', color: '#8892a0', textAlign: 'center', margin: '10px 0' }}>No sigues a nadie aún.</p>
+                                <p className="text-xs text-gray-muted text-center my-2.5">No sigues a nadie aún.</p>
                             ) : (
                                 seguidos.map(s => (
                                     <div 
                                         key={s.id} 
                                         onClick={() => navigate(`/usuario/${s.id}`)}
-                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', padding: '8px', borderRadius: '8px', transition: 'background 0.2s ease', backgroundColor: 'transparent' }}
-                                        onMouseOver={e => e.currentTarget.style.backgroundColor = '#f4f3ec'}
-                                        onMouseOut={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                                        className="flex items-center gap-2.5 cursor-pointer p-2 rounded-lg transition-colors duration-200 hover:bg-beige-light"
                                     >
-                                        <img src={s.profile_pic || 'https://via.placeholder.com/35'} style={{ width: '35px', height: '35px', borderRadius: '50%', objectFit: 'cover' }} alt={s.username} />
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <span style={{ fontSize: '0.9rem', color: 'var(--color-azul)', fontWeight: 'bold', lineHeight: '1.2' }}>@{s.username}</span>
+                                        <img src={s.profile_pic || 'https://via.placeholder.com/35'} className="w-9 h-9 rounded-full object-cover" alt={s.username} />
+                                        <div className="flex flex-col">
+                                            <span className="text-sm text-gray-dark font-bold leading-tight">@{s.username}</span>
                                         </div>
                                     </div>
                                 ))
@@ -119,4 +82,3 @@ const SidebarDerecha = ({ isOpen }) => {
     );
 };
 export default SidebarDerecha;
-

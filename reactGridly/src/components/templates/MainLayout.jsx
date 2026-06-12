@@ -10,10 +10,10 @@ const MainLayout = ({ children }) => {
         <>
             <Header toggleSidebar={() => setSidebarOpen(!isSidebarOpen)} />
             
-            <div className="app-container">
+            <div className="flex flex-1 overflow-hidden w-full min-h-[calc(100vh-60px)]">
                 <Sidebar isOpen={isSidebarOpen} />
                 
-                <main className="contenido-principal">
+                <main className="flex-1 overflow-y-auto p-5 md:p-8 bg-gradient-to-br from-surface to-beige-light/30 min-w-0">
                     {children ? children : <Outlet />}
                 </main>
             </div>

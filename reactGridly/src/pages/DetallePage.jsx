@@ -93,25 +93,23 @@ const DetallePage = () => {
         }
     };
 
-    if (cargando) return <><p style={{ padding: '20px' }}>Cargando publicación...</p></>;
-    if (error) return <><p style={{ padding: '20px', color: 'red' }}>{error}</p></>;
+    if (cargando) return <p className="p-10 text-center text-gray-muted">Cargando publicación...</p>;
+    if (error) return <p className="p-10 text-center text-danger font-bold">{error}</p>;
     if (!pub) return null;
 
     return (
-        <>
-            <DetalleCard
-                pub={pub}
-                liked={liked}
-                isAdultUser={isAdultUser}
-                comentarioTexto={comentarioTexto}
-                enviandoComentario={enviandoComentario}
-                onLike={handleLike}
-                onCompartir={handleCompartir}
-                onComentar={handleComentar}
-                onComentarioChange={(e) => setComentarioTexto(e.target.value)}
-                usuarioId={usuarioId}
-            />
-        </>
+        <DetalleCard
+            pub={pub}
+            liked={liked}
+            isAdultUser={isAdultUser}
+            comentarioTexto={comentarioTexto}
+            enviandoComentario={enviandoComentario}
+            onLike={handleLike}
+            onCompartir={handleCompartir}
+            onComentar={handleComentar}
+            onComentarioChange={(e) => setComentarioTexto(e.target.value)}
+            usuarioId={usuarioId}
+        />
     );
 };
 

@@ -6,9 +6,9 @@ import SidebarMenuItem from '../moleculas/SidebarMenuItem';
 
 const Sidebar = ({ isOpen }) => {
   return (
-    <aside className="sidebar-izq" style={{ backgroundColor: '#F6A700', width: isOpen ? '80px' : '0', overflow: 'hidden', transition: 'width 0.3s ease', height: 'auto', minHeight: '100%', position: 'sticky', top: '73px', alignSelf: 'stretch' }}>
-      <nav className="menu-lateral" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: isOpen ? '20px 0' : '0' }}>
-        <div className="grupo-menu" style={{ display: 'flex', flexDirection: 'column', gap: '30px', opacity: isOpen ? 1 : 0, transition: 'opacity 0.3s ease' }}>
+    <aside className={`bg-beige border-r border-beige-dark/20 sticky top-[60px] self-stretch z-[998] transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? 'w-20 min-h-full' : 'w-0'}`}>
+      <nav className={`flex flex-col items-center ${isOpen ? 'py-5' : 'p-0'}`}>
+        <div className={`flex flex-col gap-7 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
           <SidebarMenuItem icon={SiHomebridge} label="Inicio" to="/" />
           <SidebarMenuItem icon={MdOutlineTravelExplore} label="Explorar" to="/explorar" />
           <SidebarMenuItem icon={FaTableCellsLarge} label="Tableros" to="/tableros" />

@@ -34,41 +34,39 @@ const ExplorarPage = () => {
     }, [q]); 
 
     return (
-        <>
-            <section className="seccion-app sec-explorar" style={{ display: 'block' }}>
-                <div className="encabezado-seccion">
-                    <h2>{q ? `Resultados para: "${q}"` : "Explorar por Categorías"}</h2>
-                    {!q && <p style={{ color: '#8892a0', marginTop: '5px' }}>Descubre ideas nuevas divididas por temas.</p>}
-                </div>
+        <section className="block animate-fade-in">
+            <div className="px-10 pt-8 pb-3">
+                <h2 className="text-3xl text-gray-dark">{q ? `Resultados para: "${q}"` : "Explorar por Categorías"}</h2>
+                {!q && <p className="text-gray-muted mt-2 text-base">Descubre ideas nuevas divididas por temas.</p>}
+            </div>
 
-                {!q && (
-                    <div className="categorias-grid" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', padding: '20px 0' }}>
-                        {categorias.map(cat => (
-                            <CategoriaCard key={cat.nombre} cat={cat} />
+            {!q && (
+                <div className="flex flex-wrap gap-5 px-10 py-5">
+                    {categorias.map(cat => (
+                        <CategoriaCard key={cat.nombre} cat={cat} />
+                    ))}
+                </div>
+            )}
+
+            {q && usuarios.length > 0 && (
+                <div className="mb-8 px-10">
+                    <div className="pt-5 pb-3"><h3 className="text-2xl text-gray-dark">Usuarios Encontrados</h3></div>
+                    <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-5 mt-3">
+                        {usuarios.map(u => (
+                            <SeguidoCard key={u.id} user={u} />
                         ))}
                     </div>
-                )}
-
-                {q && usuarios.length > 0 && (
-                    <div id="resultados-usuarios" style={{ marginBottom: '30px' }}>
-                        <div className="encabezado-seccion"><h3>Usuarios Encontrados</h3></div>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px', marginTop: '10px' }}>
-                            {usuarios.map(u => (
-                                <SeguidoCard key={u.id} user={u} />
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                <div className="encabezado-seccion">
-                    <h3>{q ? 'Publicaciones Encontradas' : 'Mix de Publicaciones'}</h3>
                 </div>
-                
-                <section className="feed-mosaico">
-                    {publicaciones.map(pub => <PinCard key={pub.id} pub={pub} />)}
-                </section>
+            )}
+
+            <div className="px-10 pt-8 pb-3">
+                <h3 className="text-2xl text-gray-dark">{q ? 'Publicaciones Encontradas' : 'Mix de Publicaciones'}</h3>
+            </div>
+            
+            <section className="feed-mosaico">
+                {publicaciones.map(pub => <PinCard key={pub.id} pub={pub} />)}
             </section>
-        </>
+        </section>
     );
 };
 

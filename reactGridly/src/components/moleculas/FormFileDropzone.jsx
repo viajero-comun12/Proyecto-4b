@@ -5,9 +5,8 @@ const FormFileDropzone = ({ preview, onFileChange, required = true }) => {
 
     return (
         <div 
-            className="zona-subida" 
+            className="flex flex-col items-center justify-center min-h-[300px] border-2 border-dashed border-accent rounded-2xl bg-beige-light/30 text-center cursor-pointer transition-all duration-300 p-5 hover:border-accent-light hover:bg-beige/20"
             onClick={() => fileInputRef.current && fileInputRef.current.click()} 
-            style={{ border: '2px dashed #620096', padding: '20px', textAlign: 'center', cursor: 'pointer', borderRadius: '10px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px', backgroundColor: 'var(--social-bg)' }}
         >
             <input 
                 type="file" 
@@ -15,12 +14,12 @@ const FormFileDropzone = ({ preview, onFileChange, required = true }) => {
                 onChange={onFileChange} 
                 accept="image/*" 
                 required={required} 
-                style={{ display: 'none' }} 
+                className="hidden" 
             />
             {preview ? (
-                <img src={preview} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} alt="Preview" />
+                <img src={preview} className="max-h-full max-w-full object-contain rounded-xl" alt="Preview" />
             ) : (
-                <p style={{ color: '#8892a0', margin: 0, fontWeight: 'bold' }}>
+                <p className="text-gray-muted m-0 font-semibold">
                     Haz clic en toda esta área para seleccionar tu imagen
                 </p>
             )}

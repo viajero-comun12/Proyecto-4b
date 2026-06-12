@@ -19,27 +19,20 @@ const SeguidosPage = () => {
     }, []);
 
     return (
-        <>
-            <section className="seccion-app sec-explorar" style={{ display: 'block' }}>
-                <div className="encabezado-seccion flex-between">
-                    <h2>Personas que Sigues</h2>
-                </div>
+        <section className="block animate-fade-in py-8 px-5 max-w-[1200px] mx-auto">
+            <div className="mb-8 border-b border-beige pb-4">
+                <h2 className="text-3xl text-gray-dark">Personas que Sigues</h2>
+            </div>
 
-                <div id="lista-seguidos" style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-                    gap: '20px',
-                    marginTop: '20px'
-                }}>
-                    {cargando ? <p style={{ textAlign: 'center', gridColumn: '1 / -1' }}>Cargando...</p> :
-                     seguidos.length > 0 ? (
-                        seguidos.map(usr => <SeguidoCard key={usr.id} user={usr} />)
-                     ) : (
-                        <p style={{ textAlign: 'center', color: '#8892a0', gridColumn: '1 / -1' }}>Aún no sigues a nadie.</p>
-                     )}
-                </div>
-            </section>
-        </>
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-5 mt-5">
+                {cargando ? <p className="text-center col-span-full text-gray-muted py-5">Cargando...</p> :
+                 seguidos.length > 0 ? (
+                    seguidos.map(usr => <SeguidoCard key={usr.id} user={usr} />)
+                 ) : (
+                    <p className="text-center text-gray-muted col-span-full py-5">Aún no sigues a nadie.</p>
+                 )}
+            </div>
+        </section>
     );
 };
 export default SeguidosPage;

@@ -1,4 +1,4 @@
-import {useRef, useState, useEffect } from 'react'; // 1. Importamos useRef
+import {useRef, useState, useEffect } from 'react';
 import { togglePrivacidad, uploadAvatar, toggleFollowUser, getSeguidos } from '../../services/api';
 import Button from '../atomos/Button'; 
 import UserInfoCard from '../moleculas/UserInfoCard';
@@ -33,7 +33,7 @@ const UserProfile = ({ usuario, isOwnProfile, onUpdate }) => {
     };
 
     return (
-        <section className="info-usuario">
+        <section className="text-center mb-12 animate-fade-in">
             <UserInfoCard 
                 profilePic={usuario.profile_pic} 
                 username={usuario.username} 
@@ -42,25 +42,26 @@ const UserProfile = ({ usuario, isOwnProfile, onUpdate }) => {
             />
 
             {isOwnProfile ? (
-                <div className="acciones-perfil">
-                    <label>
+                <div className="flex justify-center gap-4 mt-4">
+                    <label className="flex items-center gap-2 text-gray-dark cursor-pointer">
                         <input 
                             type="checkbox" 
                             checked={usuario.es_publico} 
-                            onChange={(e) => togglePrivacidad(usuario.id, e.target.checked).then(onUpdate)} 
+                            onChange={(e) => togglePrivacidad(usuario.id, e.target.checked).then(onUpdate)}
+                            className="w-4 h-4 accent-accent"
                         />
                         Perfil Público
                     </label>
                     
                     <input type="file" ref={fileInputRef} hidden onChange={handleAvatarChange} />
                     
-                    <Button className="btn-primario" onClick={() => fileInputRef.current.click()}>
+                    <Button className="bg-gradient-to-br from-accent to-accent-light text-white px-6 py-2.5 rounded-full border-none cursor-pointer font-bold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg" onClick={() => fileInputRef.current.click()}>
                         Cambiar Foto
                     </Button>
                 </div>
             ) : (
-                <div className="acciones-perfil">
-                    <Button className="btn-primario" onClick={handleFollow}>
+                <div className="flex justify-center gap-4 mt-4">
+                    <Button className="bg-gradient-to-br from-accent to-accent-light text-white px-6 py-2.5 rounded-full border-none cursor-pointer font-bold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg" onClick={handleFollow}>
                         {isFollowing ? 'Dejar de seguir' : 'Seguir'}
                     </Button>
                 </div>

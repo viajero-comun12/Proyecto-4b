@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { getMensajes, getTodosUsuarios, getConversacion, enviarMensajeChat } from '../services/api';
-import '../assets/css/Mensajeria.css';
 import PanelContactos from '../components/organismos/PanelContactos';
 import PanelChat from '../components/organismos/PanelChat';
 
@@ -90,32 +89,30 @@ const MensajeriaPage = () => {
         ? listaMostrada.filter(item => (item.username || '').toLowerCase().includes(busqueda.toLowerCase()))
         : [];
 
-    if (!miId || isNaN(miId)) return <><div style={{ display: 'block' }}><p style={{ padding: '20px', textAlign: 'center' }}>Inicia sesión para ver tus mensajes.</p></div></>;
+    if (!miId || isNaN(miId)) return <div className="block"><p className="p-5 text-center mt-10 text-gray-dark">Inicia sesión para ver tus mensajes.</p></div>;
 
     return (
-        <>
-            <div className="layout-mensajeria" style={{ margin: '20px 0', display: 'flex' }}>
-                <PanelContactos
-                    tabActual={tabActual}
-                    setTabActual={setTabActual}
-                    busqueda={busqueda}
-                    setBusqueda={setBusqueda}
-                    listaFiltrada={listaFiltrada}
-                    destinatarioActual={destinatarioActual}
-                    miId={miId}
-                    onSelectContacto={setDestinatarioActual}
-                />
-                <PanelChat
-                    destinatario={destinatarioActual}
-                    mensajes={mensajesChat}
-                    miId={miId}
-                    nuevoMensaje={nuevoMensaje}
-                    onNuevoMensajeChange={(e) => setNuevoMensaje(e.target.value)}
-                    onEnviar={handleEnviarMensaje}
-                    enviando={enviando}
-                />
-            </div>
-        </>
+        <div className="flex h-[calc(100vh-100px)] my-5 mx-0 rounded-2xl border border-beige bg-white overflow-hidden shadow-sm">
+            <PanelContactos
+                tabActual={tabActual}
+                setTabActual={setTabActual}
+                busqueda={busqueda}
+                setBusqueda={setBusqueda}
+                listaFiltrada={listaFiltrada}
+                destinatarioActual={destinatarioActual}
+                miId={miId}
+                onSelectContacto={setDestinatarioActual}
+            />
+            <PanelChat
+                destinatario={destinatarioActual}
+                mensajes={mensajesChat}
+                miId={miId}
+                nuevoMensaje={nuevoMensaje}
+                onNuevoMensajeChange={(e) => setNuevoMensaje(e.target.value)}
+                onEnviar={handleEnviarMensaje}
+                enviando={enviando}
+            />
+        </div>
     );
 };
 

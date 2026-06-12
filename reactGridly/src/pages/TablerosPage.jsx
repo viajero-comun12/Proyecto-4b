@@ -36,32 +36,30 @@ const TablerosPage = () => {
     }, []);
 
     return (
-        <>
-            <section className="seccion-app sec-crear-tablero" style={{ display: 'block' }}>
-                <TableroForm onCreated={cargar} />
+        <section className="block animate-fade-in p-5 max-w-[1200px] mx-auto">
+            <TableroForm onCreated={cargar} />
 
-                <h2 style={{ marginTop: '30px' }}>Mis Tableros</h2>
+            <h2 className="mt-12 mb-6 text-3xl text-gray-dark border-b border-beige pb-4">Mis Tableros</h2>
 
-                {cargando && <p style={{ color: '#8892a0' }}>Cargando tableros...</p>}
-                {error && <p style={{ color: 'red', fontWeight: 'bold' }}>⚠️ {error}</p>}
+            {cargando && <p className="text-gray-muted py-5">Cargando tableros...</p>}
+            {error && <p className="text-danger font-bold py-5">⚠️ {error}</p>}
 
-                {!cargando && !error && tableros.length === 0 && (
-                    <p style={{ color: '#8892a0' }}>No tienes tableros aún. ¡Crea el primero arriba!</p>
-                )}
+            {!cargando && !error && tableros.length === 0 && (
+                <p className="text-gray-muted py-5">No tienes tableros aún. ¡Crea el primero arriba!</p>
+            )}
 
-                {!cargando && !error && tableros.length > 0 && (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px', marginTop: '20px' }}>
-                        {tableros.map(t => (
-                            <TableroCard
-                                key={t.id}
-                                tablero={t}
-                                onClick={() => navigate(`/pines?tablero=${t.id}`)}
-                            />
-                        ))}
-                    </div>
-                )}
-            </section>
-        </>
+            {!cargando && !error && tableros.length > 0 && (
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-5 mt-5">
+                    {tableros.map(t => (
+                        <TableroCard
+                            key={t.id}
+                            tablero={t}
+                            onClick={() => navigate(`/pines?tablero=${t.id}`)}
+                        />
+                    ))}
+                </div>
+            )}
+        </section>
     );
 };
 

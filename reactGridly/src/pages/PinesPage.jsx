@@ -4,6 +4,7 @@ import PinCard from '../components/moleculas/PinCard';
 import TableroCard from '../components/moleculas/TableroCard';
 import { getPublicaciones, getUsuarioPines, getTablerosUsuario, removePinFromTablero } from '../services/api';
 import Button from '../components/atomos/Button';
+
 const PinesPage = () => {
     const miId = parseInt(localStorage.getItem('usuario_id'));
     
@@ -50,10 +51,6 @@ const PinesPage = () => {
         }
     };
 
-    // ==========================================
-    // LÓGICA DE RENDERIZADO (Filtros)
-    // ==========================================
-
     const handleRemoveFromTablero = async (pubId) => {
         if (!window.confirm("¿Seguro que quieres quitar este pin del tablero?")) return;
         try {
@@ -66,38 +63,34 @@ const PinesPage = () => {
         }
     };
     
-    // Obtener pines deduplicados para "Todos"
     const getPinesTodos = () => {
         let todos = [...misPubs, ...misPines];
         misTableros.forEach(t => { 
             if (t.publicaciones) todos = todos.concat(t.publicaciones); 
         });
         
-        // Eliminar duplicados por ID
         const uniqueMap = new Map();
         todos.forEach(p => uniqueMap.set(p.id, p));
         return Array.from(uniqueMap.values());
     };
 
-    // ==========================================
     const renderContenido = () => {
-        if (cargando) return <p style={{ textAlign: 'center', width: '100%', color: '#8892a0' }}>Cargando tus pines...</p>;
+        if (cargando) return <p className="text-center w-full text-gray-muted mt-10">Cargando tus pines...</p>;
 
-        // 1. MODO TABLERO ESPECÍFICO (Se activó en la URL)
         if (tableroId) {
             const tableroActual = misTableros.find(t => t.id === parseInt(tableroId));
-            if (!tableroActual) return <p style={{ textAlign: 'center', width: '100%', color: '#8892a0' }}>Tablero no encontrado.</p>;
+            if (!tableroActual) return <p className="text-center w-full text-gray-muted mt-10">Tablero no encontrado.</p>;
             
             const pinesTablero = tableroActual.publicaciones || [];
-            if (pinesTablero.length === 0) return <p style={{ textAlign: 'center', width: '100%', color: '#8892a0' }}>Este tablero está vacío.</p>;
+            if (pinesTablero.length === 0) return <p className="text-center w-full text-gray-muted mt-10">Este tablero está vacío.</p>;
 
             return pinesTablero.map(pub => (
-                <div key={pub.id} style={{ position: 'relative' }}>
+                <div key={pub.id} className="relative group">
                     <PinCard pub={pub} />
                     {tableroActual.usuario_id === miId && (
                         <Button 
                             onClick={() => handleRemoveFromTablero(pub.id)}
-                            style={{ position: 'absolute', bottom: '10px', right: '10px', padding: '5px 10px', fontSize: '0.8rem', zIndex: 10, background: 'rgba(255,0,0,0.8)', border: 'none', borderRadius: '8px', color: 'white', cursor: 'pointer' }}
+                            className="absolute bottom-5 right-4 px-3 py-1.5 text-xs z-10 bg-danger/90 border-none rounded-lg text-white cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-danger"
                         >
                             Remover
                         </Button>
@@ -106,54 +99,37 @@ const PinesPage = () => {
             ));
         }
 
-        // 2. MODO "TODOS"
         if (filtro === 'todos') {
             const pinesTodos = getPinesTodos();
-            if (pinesTodos.length === 0) return <p style={{ textAlign: 'center', width: '100%', color: '#8892a0' }}>No hay pines para mostrar.</p>;
-            
-            return pinesTodos.map(pub => (
-                <PinCard key={pub.id} pub={pub} />
-            ));
+            if (pinesTodos.length === 0) return <p className="text-center w-full text-gray-muted mt-10">No hay pines para mostrar.</p>;
+            return pinesTodos.map(pub => <PinCard key={pub.id} pub={pub} />);
         }
 
-        // 3. MODO "SUBIDOS"
         if (filtro === 'subidos') {
-            if (misPubs.length === 0) return <p style={{ textAlign: 'center', width: '100%', color: '#8892a0' }}>No has subido ningún pin aún.</p>;
-            
-            return misPubs.map(pub => (
-                <PinCard key={pub.id} pub={pub} />
-            ));
+            if (misPubs.length === 0) return <p className="text-center w-full text-gray-muted mt-10">No has subido ningún pin aún.</p>;
+            return misPubs.map(pub => <PinCard key={pub.id} pub={pub} />);
         }
 
-        // 4. MODO "GUARDADOS" (Tableros + Likes)
         if (filtro === 'guardados') {
             if (misTableros.length === 0 && misPines.length === 0) {
-                return <p style={{ textAlign: 'center', width: '100%', color: '#8892a0' }}>No has guardado nada aún.</p>;
+                return <p className="text-center w-full text-gray-muted mt-10">No has guardado nada aún.</p>;
             }
 
             return (
                 <>
-                    {/* Renderizar Tableros como Carpetas */}
                     {misTableros.map(t => (
-                        <TableroCard 
-                            key={`tab-${t.id}`} 
-                            tablero={t} 
-                            onClick={() => setSearchParams({ tablero: t.id })} 
-                        />
+                        <TableroCard key={`tab-${t.id}`} tablero={t} onClick={() => setSearchParams({ tablero: t.id })} />
                     ))}
-
-                    {/* Renderizar Pines sueltos guardados (Likes) */}
                     {misPines.map(pub => (
-    <PinCard key={`pin-${pub.id}`} pub={pub}/>
-))}
+                        <PinCard key={`pin-${pub.id}`} pub={pub}/>
+                    ))}
                 </>
             );
         }
     };
 
-    if (!miId) return <><p style={{ padding: '20px', textAlign: 'center' }}>Inicia sesión para ver tus pines.</p></>;
+    if (!miId) return <p className="p-5 text-center mt-10 text-gray-dark">Inicia sesión para ver tus pines.</p>;
 
-    // Determinar el título dinámicamente
     let tituloEncabezado = "Todos los Pines";
     if (tableroId) {
         const t = misTableros.find(tab => tab.id === parseInt(tableroId));
@@ -163,32 +139,28 @@ const PinesPage = () => {
 
     const getEstiloFiltro = (nombreFiltro) => {
         return filtro === nombreFiltro && !tableroId 
-            ? { backgroundColor: 'var(--color-morado)', color: 'white', padding: '6px 16px', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold' } 
-            : { padding: '6px 16px', cursor: 'pointer', color: '#8892a0' };
+            ? "bg-gray-dark text-white px-5 py-2 rounded-full cursor-pointer font-bold shadow-sm transition-all duration-300" 
+            : "px-5 py-2 cursor-pointer text-gray-muted font-medium hover:bg-beige/50 rounded-full transition-all duration-300";
     };
 
     return (
-        <>
-            <section className="seccion-app sec-pines" style={{ display: 'block' }}>
+        <section className="block animate-fade-in">
+            <div className="px-10 pt-8 pb-4 flex justify-between items-center flex-wrap gap-4">
+                <h2 className="text-3xl text-gray-dark">{tituloEncabezado}</h2>
                 
-                <div className="encabezado-seccion flex-between" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                    <h2>{tituloEncabezado}</h2>
-                    
-                    <div className="controles-vista" style={{ display: 'flex', gap: '20px' }}>
-                        <div className="filtros" style={{ display: 'flex', gap: '10px', background: '#f5f4f0', padding: '4px', borderRadius: '24px' }}>
-                            <span style={getEstiloFiltro('todos')} onClick={() => cambiarFiltro('todos')}>Todos</span>
-                            <span style={getEstiloFiltro('subidos')} onClick={() => cambiarFiltro('subidos')}>Mis Subidas</span>
-                            <span style={getEstiloFiltro('guardados')} onClick={() => cambiarFiltro('guardados')}>Guardados</span>
-                        </div>
+                <div className="flex gap-5">
+                    <div className="flex gap-1.5 bg-white p-1.5 rounded-full shadow-sm border border-beige">
+                        <span className={getEstiloFiltro('todos')} onClick={() => cambiarFiltro('todos')}>Todos</span>
+                        <span className={getEstiloFiltro('subidos')} onClick={() => cambiarFiltro('subidos')}>Mis Subidas</span>
+                        <span className={getEstiloFiltro('guardados')} onClick={() => cambiarFiltro('guardados')}>Guardados</span>
                     </div>
                 </div>
+            </div>
 
-                <section className="feed-dinamico feed-mosaico">
-                    {renderContenido()}
-                </section>
-                
+            <section className="feed-mosaico">
+                {renderContenido()}
             </section>
-        </>
+        </section>
     );
 };
 

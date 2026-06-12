@@ -1,13 +1,14 @@
 const FormCheckbox = ({ label, id, checked, onChange }) => {
     return (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '10px', marginBottom: '10px' }}>
+        <div className="flex items-center gap-3 my-2">
             <input 
                 type="checkbox" 
                 id={id} 
                 checked={checked} 
-                onChange={onChange} 
+                onChange={onChange}
+                className="w-4 h-4 accent-accent rounded"
             />
-            <label htmlFor={id}>{label}</label>
+            <label htmlFor={id} className="text-sm text-gray-dark cursor-pointer select-none">{label}</label>
         </div>
     );
 };

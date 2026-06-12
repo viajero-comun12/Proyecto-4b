@@ -9,27 +9,27 @@ const Header = ({toggleSidebar}) => {
     const [isProfileHovered, setIsProfileHovered] = React.useState(false);
 
     return (
-        <header style={{ backgroundColor: '#620096'}}>
-            <Button onClick={toggleSidebar} style={{ background: 'transparent', border: 'none'} }>
-                <IoMdMenu style={{ marginRight: '30px', color: '#F6A700', fontSize: '24px' }} />
+        <header className="bg-gray-dark backdrop-blur-xl px-5 md:px-10 py-3.5 flex justify-between items-center shadow-md sticky top-0 z-[1000] border-b border-beige-dark/20 flex-wrap gap-2.5">
+            <Button onClick={toggleSidebar} className="bg-transparent border-none cursor-pointer">
+                <IoMdMenu className="mr-4 md:mr-8 text-beige text-2xl" />
             </Button>
 
-            <Link to="/" className="logo">
-                <div className="logo-texto" style={{color: '#F6A700'}}>Gridly</div>
+            <Link to="/" className="flex items-center gap-2.5 grow-0">
+                <div className="font-sans text-2xl text-beige font-bold tracking-tight">Gridly</div>
             </Link>
 
             <SearchBar />
 
-            <nav>
+            <nav className="flex items-center gap-3 md:gap-5 order-2">
                 <div 
                     onMouseEnter={() => setIsProfileHovered(true)} 
                     onMouseLeave={() => setIsProfileHovered(false)}
-                    style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
+                    className="relative flex items-center"
                 >
-                    <Link to="/usuario" className="logo-texto" style={{color: '#F6A700', fontSize: '90%', padding: '10px 0'}}>Mi Perfil</Link>
+                    <Link to="/usuario" className="font-sans text-beige text-sm font-semibold py-2.5">Mi Perfil</Link>
                     <SidebarDerecha isOpen={isProfileHovered} />
                 </div>
-                <Link to="/login" className="logo-texto" style={{color: '#F6A700', fontSize: '90%'}}>Cerrar Sesión </Link>
+                <Link to="/login" className="font-sans text-beige text-sm font-semibold">Cerrar Sesión</Link>
             </nav>
         </header>
     );

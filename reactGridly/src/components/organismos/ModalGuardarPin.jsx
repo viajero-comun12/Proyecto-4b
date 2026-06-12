@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { getMisTableros, savePinToTablero } from '../../services/api';
 import { FaRegFolderOpen } from "react-icons/fa6";
 
-
-
 const ModalGuardarPin = ({ isOpen, onClose, pubId }) => {
     const [tableros, setTableros] = useState([]);
     const [cargando, setCargando] = useState(true);
@@ -44,23 +42,23 @@ const ModalGuardarPin = ({ isOpen, onClose, pubId }) => {
 
     return (
         <>
-            <div style={{ position: 'fixed', inset: 0, zIndex: 999 }} onClick={(e) => { e.stopPropagation(); onClose(); }}></div>
-            <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: '10px', backgroundColor: 'white', borderRadius: '10px', boxShadow: '0 4px 15px rgba(0,0,0,0.2)', width: '250px', zIndex: 1000, padding: '15px', textAlign: 'left' }}>
-                <h3 style={{ fontSize: '1rem', marginBottom: '10px', color: 'var(--color-azul)' }}>Guardar en tablero</h3>
+            <div className="fixed inset-0 z-[999]" onClick={(e) => { e.stopPropagation(); onClose(); }}></div>
+            <div className="absolute top-full right-0 mt-2.5 bg-white rounded-xl shadow-xl w-[250px] z-[1000] p-4 text-left border border-beige">
+                <h3 className="text-base mb-2.5 text-gray-dark font-bold">Guardar en tablero</h3>
                 
-                <div id="lista-tableros-modal" style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                    {cargando && <p style={{ color: '#8892a0', fontSize: '0.9rem' }}>Cargando tableros...</p>}
+                <div className="max-h-[300px] overflow-y-auto">
+                    {cargando && <p className="text-gray-muted text-sm">Cargando tableros...</p>}
                     
                     {!cargando && tableros.length === 0 && (
-                        <p style={{ color: '#8892a0', fontSize: '0.9rem' }}>No tienes tableros aún.</p>
+                        <p className="text-gray-muted text-sm">No tienes tableros aún.</p>
                     )}
 
                     {!cargando && tableros.map(t => (
-                        <div key={t.id} className="tablero-option" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px', borderRadius: '8px', cursor: 'pointer', transition: 'background-color 0.2s ease' }} onClick={() => handleGuardar(t.id, t.nombre)} onMouseOver={e => e.currentTarget.style.backgroundColor = '#f4f3ec'} onMouseOut={e => e.currentTarget.style.backgroundColor = 'transparent'}>
-                            <div className="t-icono"><FaRegFolderOpen /></div>
+                        <div key={t.id} className="flex items-center gap-2.5 p-2.5 rounded-lg cursor-pointer transition-colors duration-200 hover:bg-beige-light" onClick={() => handleGuardar(t.id, t.nombre)}>
+                            <div className="text-accent"><FaRegFolderOpen /></div>
                             <div>
-                                <strong style={{ color: 'var(--color-azul)' }}>{t.nombre}</strong><br/>
-                                <small style={{ color: '#8892a0' }}>
+                                <strong className="text-gray-dark text-sm">{t.nombre}</strong><br/>
+                                <small className="text-gray-muted">
                                     {t.publicaciones ? t.publicaciones.length : 0} pines
                                 </small>
                             </div>
@@ -68,10 +66,7 @@ const ModalGuardarPin = ({ isOpen, onClose, pubId }) => {
                     ))}
                 </div>
 
-                <div id="estado-guardado" style={{ 
-                    color: mensaje.tipo === 'error' ? 'red' : mensaje.tipo === 'exito' ? 'green' : '#8892a0',
-                    marginTop: '10px', textAlign: 'center', minHeight: '20px', fontSize: '0.85rem'
-                }}>
+                <div className={`mt-2.5 text-center min-h-[20px] text-sm ${mensaje.tipo === 'error' ? 'text-danger' : mensaje.tipo === 'exito' ? 'text-success' : 'text-gray-muted'}`}>
                     {mensaje.texto}
                 </div>
             </div>

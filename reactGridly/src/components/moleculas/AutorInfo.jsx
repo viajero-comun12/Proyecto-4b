@@ -6,13 +6,13 @@ const AutorInfo = ({ autor, usuarioId, fechaCreacion }) => {
     });
 
     return (
-        <div className="autor" style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '50px', height: '50px', borderRadius: '50%', backgroundColor: 'var(--color-morado)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '20px' }}>
+        <div className="mt-5 flex items-center gap-3 pb-6 border-b border-beige">
+            <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-white text-xl font-bold shrink-0">
                 {inicial}
             </div>
-            <div className="autor-info">
-                <strong>@{username}</strong>
-                <span style={{ display: 'block', color: '#8892a0', fontSize: '0.85rem' }}>Subido el {fechaFormat}</span>
+            <div className="flex flex-col">
+                <strong className="text-gray-dark text-base">@{username}</strong>
+                <span className="text-gray-muted text-sm">Subido el {fechaFormat}</span>
             </div>
         </div>
     );

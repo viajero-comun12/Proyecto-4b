@@ -5,15 +5,15 @@ const UserCard = ({ user }) => {
     const avatar = user.profile_pic || 'https://via.placeholder.com/50';
 
     return (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px', background: 'white', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <img src={avatar} style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover' }} alt={user.username} />
+        <div className="flex items-center justify-between p-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
+            <div className="flex items-center gap-4">
+                <img src={avatar} className="w-12 h-12 rounded-full object-cover" alt={user.username} />
                 <div>
-                    <strong style={{ fontSize: '1.1rem', color: 'var(--color-azul)' }}>@{user.username}</strong>
-                    {!user.es_publico && <span style={{ fontSize: '0.8rem', color: 'gray', marginLeft: '5px' }}>🔒 Privado</span>}
+                    <strong className="text-base text-gray-dark">@{user.username}</strong>
+                    {!user.es_publico && <span className="text-xs text-gray-muted ml-2">🔒 Privado</span>}
                 </div>
             </div>
-            <Link to={`/usuario/${user.id}`} className="btn-primario" style={{ padding: '8px 16px' }}>
+            <Link to={`/usuario/${user.id}`} className="bg-gradient-to-br from-accent to-accent-light text-white px-4 py-2 rounded-full font-bold text-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 Ver Perfil
             </Link>
         </div>

@@ -4,13 +4,13 @@ const ComentarioItem = ({ comentario }) => {
     const username = autor ? autor.username : `usuario_${usuario_id}`;
 
     return (
-        <div className="comentario" style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'var(--color-morado)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0 }}>
+        <div className="flex gap-3 mb-4">
+            <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-white shrink-0 text-sm font-bold">
                 {inicial}
             </div>
-            <div className="comentario-texto">
-                <strong>@{username}</strong>
-                <span style={{ marginLeft: '8px' }}>{texto}</span>
+            <div className="bg-beige-light/60 px-4 py-2.5 rounded-tr-2xl rounded-br-2xl rounded-bl-2xl text-sm">
+                <strong className="block mb-0.5 text-gray-dark">@{username}</strong>
+                <span className="text-gray-mid">{texto}</span>
             </div>
         </div>
     );

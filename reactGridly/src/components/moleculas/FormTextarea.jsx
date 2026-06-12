@@ -1,7 +1,7 @@
 const FormTextarea = ({ label, id, placeholder, value, onChange, required, maxLength }) => {
     return (
-        <div className="grupo-input" style={{ width: '100%', marginBottom: '15px' }}>
-            {label && <label htmlFor={id} style={{ display: 'block', marginBottom: '5px' }}>{label}</label>}
+        <div className="flex flex-col gap-2 w-full mb-4">
+            {label && <label htmlFor={id} className="text-sm font-semibold text-gray-dark">{label}</label>}
             <textarea
                 id={id}
                 placeholder={placeholder}
@@ -9,11 +9,10 @@ const FormTextarea = ({ label, id, placeholder, value, onChange, required, maxLe
                 onChange={onChange}
                 required={required}
                 maxLength={maxLength}
-                className="input-form"
-                style={{ width: '100%', minHeight: '100px', resize: 'vertical' }}
+                className="w-full min-h-[100px] resize-y px-4 py-3 border-2 border-beige rounded-2xl text-base bg-beige-light/50 text-gray-dark transition-all duration-300 focus:outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10 placeholder:text-gray-muted"
             />
             {maxLength && (
-                <span style={{ display: 'block', textAlign: 'right', fontSize: '0.75rem', color: value && value.length > maxLength * 0.9 ? '#e65100' : '#8892a0', marginTop: '2px' }}>
+                <span className={`block text-right text-xs mt-0.5 ${value && value.length > maxLength * 0.9 ? 'text-danger' : 'text-gray-muted'}`}>
                     {value ? value.length : 0}/{maxLength}
                 </span>
             )}

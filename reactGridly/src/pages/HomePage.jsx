@@ -26,30 +26,30 @@ const HomePage = () => {
     const pubsFiltradas = filtroCat ? publicaciones.filter(p => p.tags && p.tags.toLowerCase().includes(filtroCat)) : publicaciones;
 
     return (
-        <>
-            <section className="seccion-app sec-inicio" style={{ display: 'block' }}>
-                <nav className="barra-categorias" style={{ display: 'flex', gap: '10px', overflowX: 'auto', padding: '10px 0' }}>
-                    <Button className={`btn-categoria ${!filtroCat ? 'activo' : ''}`} onClick={() => setFiltroCat(null)}>Para ti</Button>
-                    {categorias.map(cat => (
-                        <Button key={cat.nombre} className={`btn-categoria ${filtroCat === cat.nombre ? 'activo' : ''}`} onClick={() => setFiltroCat(cat.nombre)}>
-                            {cat.nombre}
-                        </Button>
-                    ))}
-                </nav>
-                <section className="feed-mosaico" id="feed-inicio">
-                    {pubsFiltradas.map(pub => (
-                        <article key={pub.id} className="tarjeta-pin">
-                            <PinCard pub={pub} />
-                        </article>
-                    ))}
-                </section>
+        <section className="block animate-fade-in">
+            <nav className="flex gap-3 overflow-x-auto py-4 px-6 md:px-10 scrollbar-hide">
+                <Button 
+                    className={`whitespace-nowrap px-5 py-2.5 rounded-full font-bold cursor-pointer transition-all duration-300 shadow-sm border border-beige hover:-translate-y-0.5 ${!filtroCat ? 'bg-gray-dark text-white border-gray-dark' : 'bg-white text-gray-dark hover:bg-beige-light/50'}`} 
+                    onClick={() => setFiltroCat(null)}
+                >
+                    Para ti
+                </Button>
+                {categorias.map(cat => (
+                    <Button 
+                        key={cat.nombre} 
+                        className={`whitespace-nowrap px-5 py-2.5 rounded-full font-bold cursor-pointer transition-all duration-300 shadow-sm border border-beige hover:-translate-y-0.5 ${filtroCat === cat.nombre ? 'bg-gray-dark text-white border-gray-dark' : 'bg-white text-gray-dark hover:bg-beige-light/50'}`} 
+                        onClick={() => setFiltroCat(cat.nombre)}
+                    >
+                        {cat.nombre}
+                    </Button>
+                ))}
+            </nav>
+            <section className="feed-mosaico pt-5">
+                {pubsFiltradas.map(pub => (
+                    <PinCard key={pub.id} pub={pub} />
+                ))}
             </section>
-        </>
+        </section>
     );
-
-    
-
 };
 export default HomePage;
-
-
