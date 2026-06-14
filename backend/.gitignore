@@ -21,6 +21,8 @@ env/
 # Logs
 *.log
 
+#base de datos
+*.db 
 # Dependencias instaladas localmente
 *.egg-info/
 dist/
