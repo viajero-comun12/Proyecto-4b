@@ -21,17 +21,20 @@ export const loginUser = async (username, password) => {
     // Guardamos en localStorage directamente desde el servicio
     localStorage.setItem('usuario_id', data.usuario_id);
     localStorage.setItem('username', data.username);
+    if (data.fecha_nacimiento) {
+        localStorage.setItem('fecha_nacimiento', data.fecha_nacimiento);
+    }
     
     return data;
 };
 
-export const registerUser = async (username, email, password) => {
+export const registerUser = async (username, email, password, fecha_nacimiento) => {
     const response = await fetch(`${API_URL}/usuarios/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, email, password })
+        body: JSON.stringify({ username, email, password, fecha_nacimiento })
     });
 
     if (!response.ok) {
@@ -44,6 +47,9 @@ export const registerUser = async (username, email, password) => {
     // Autologin al registrarse
     localStorage.setItem('usuario_id', data.id);
     localStorage.setItem('username', data.username);
+    if (data.fecha_nacimiento) {
+        localStorage.setItem('fecha_nacimiento', data.fecha_nacimiento);
+    }
     
     return data;
 };
@@ -51,5 +57,6 @@ export const registerUser = async (username, email, password) => {
 export const logoutUser = () => {
     localStorage.removeItem('usuario_id');
     localStorage.removeItem('username');
+    localStorage.removeItem('fecha_nacimiento');
     // En React, luego de llamar a esta función, usarás React Router para redirigir al login
 };

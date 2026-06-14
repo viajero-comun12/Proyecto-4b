@@ -11,6 +11,20 @@ export const getPublicaciones = async () => {
     return await response.json();
 };
 
+export const getCategorias = async () => {
+    const response = await fetch(`${API_URL}/categorias/`);
+    if (!response.ok) throw new Error('Error al obtener categorias');
+    return await response.json();
+};
+
+export const deletePublicacion = async (pubId, usuarioId) => {
+    const response = await fetch(`${API_URL}/publicaciones/${pubId}?usuario_id=${usuarioId}`, {
+        method: 'DELETE'
+    });
+    if (!response.ok) throw new Error('Error al eliminar publicación');
+    return await response.json();
+};
+
 export const createPublicacion = async (formData) => {
     const response = await fetch(`${API_URL}/publicaciones/`, {
         method: 'POST',
@@ -185,6 +199,17 @@ export const savePinToTablero = async (tableroId, pubId) => {
     if (!response.ok) {
         const error = await response.json();
         throw new Error(error.detail || 'Error al guardar en el tablero');
+    }
+    return await response.json();
+};
+
+export const removePinFromTablero = async (tableroId, pubId) => {
+    const response = await fetch(`${API_URL}/tableros/${tableroId}/publicaciones/${pubId}`, {
+        method: 'DELETE'
+    });
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || 'Error al eliminar del tablero');
     }
     return await response.json();
 };

@@ -38,6 +38,7 @@ class Usuario(Base):
     biografia = Column(Text, nullable=True)
     fecha_registro = Column(DateTime, default=datetime.utcnow)
     es_publico = Column(Boolean, default=True)
+    fecha_nacimiento = Column(DateTime, nullable=True)
 
     publicaciones = relationship("Publicacion", back_populates="autor")
     comentarios = relationship("Comentario", back_populates="autor")
@@ -62,6 +63,7 @@ class Publicacion(Base):
     categoria_id = Column(Integer)
     url_multimedia = Column(String(1000))
     fecha_creacion = Column(DateTime, default=datetime.utcnow)
+    is_nsfw = Column(Boolean, default=False)
     
     usuario_id = Column(Integer, ForeignKey("usuarios.id"))
     autor = relationship("Usuario", back_populates="publicaciones")

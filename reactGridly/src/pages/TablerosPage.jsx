@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import MainLayout from '../components/templates/MainLayout';
+import { useEffect, useState } from 'react';
 import TableroForm from '../components/organismos/TableroForm';
+import TableroCard from '../components/moleculas/TableroCard';
 import { getMisTableros } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const TablerosPage = () => {
+    const navigate = useNavigate();
     const [tableros, setTableros] = useState([]);
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState(null);
@@ -16,7 +17,6 @@ const TablerosPage = () => {
             setCargando(false);
             return;
         }
-
         try {
             setCargando(true);
             const data = await getMisTableros(usuarioId);
@@ -31,59 +31,35 @@ const TablerosPage = () => {
     };
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         cargar();
     }, []);
 
     return (
-        <MainLayout>
-            {/* AQUÍ ESTABA EL ERROR: Faltaba el style={{ display: 'block' }} */}
-            <section className="seccion-app sec-crear-tablero" style={{ display: 'block' }}>
-                <TableroForm onCreated={cargar} />
-                
-                <h2 style={{ marginTop: '30px' }}>Mis Tableros</h2>
-                
-                {cargando && <p style={{ color: '#8892a0' }}>Cargando tableros...</p>}
-                
-                {error && <p style={{ color: 'red', fontWeight: 'bold' }}>⚠️ {error}</p>}
-                
-                {!cargando && !error && tableros.length === 0 && (
-                    <p style={{ color: '#8892a0' }}>No tienes tableros aún. ¡Crea el primero arriba!</p>
-                )}
-                
-                {!cargando && !error && tableros.length > 0 && (
-                    <div className="feed-mosaico" style={{ marginTop: '20px' }}>
-                        {tableros.map(t => {
-                            // Verificamos si tiene portada, si no, usamos el color morado
-                            const tienePortada = t.publicaciones && t.publicaciones.length > 0;
-                            const fondo = tienePortada ? `url(${t.publicaciones[0].url_multimedia})` : 'var(--color-morado)';
-                            
-                            return (
-                                <Link to={`/pines?tablero=${t.id}`} key={t.id} className="tarjeta-pin">
-                                    <div 
-                                        className="imagen-wrapper" 
-                                        style={{ 
-                                            display: 'block',
-                                            width: '100%',
-                                            height: '200px', 
-                                            background: fondo,
-                                            backgroundSize: 'cover',
-                                            backgroundPosition: 'center',
-                                            borderRadius: '12px'
-                                        }}
-                                    ></div>
-                                    <div className="info-basica">
-                                        <strong>{t.nombre}</strong>
-                                        <p style={{ color: '#8892a0', fontSize: '0.85rem' }}>
-                                            {t.publicaciones ? t.publicaciones.length : 0} pines
-                                        </p>
-                                    </div>
-                                </Link>
-                            );
-                        })}
-                    </div>
-                )}
-            </section>
-        </MainLayout>
+        <section className="block animate-fade-in p-5 max-w-[1200px] mx-auto">
+            <TableroForm onCreated={cargar} />
+
+            <h2 className="mt-12 mb-6 text-3xl text-gray-dark border-b border-beige pb-4">Mis Tableros</h2>
+
+            {cargando && <p className="text-gray-muted py-5">Cargando tableros...</p>}
+            {error && <p className="text-danger font-bold py-5">⚠️ {error}</p>}
+
+            {!cargando && !error && tableros.length === 0 && (
+                <p className="text-gray-muted py-5">No tienes tableros aún. ¡Crea el primero arriba!</p>
+            )}
+
+            {!cargando && !error && tableros.length > 0 && (
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-5 mt-5">
+                    {tableros.map(t => (
+                        <TableroCard
+                            key={t.id}
+                            tablero={t}
+                            onClick={() => navigate(`/pines?tablero=${t.id}`)}
+                        />
+                    ))}
+                </div>
+            )}
+        </section>
     );
 };
 

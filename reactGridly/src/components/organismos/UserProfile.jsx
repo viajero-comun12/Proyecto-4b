@@ -1,7 +1,27 @@
-import React from 'react';
-import { togglePrivacidad, uploadAvatar, toggleFollowUser } from '../../services/api';
+import {useRef, useState, useEffect } from 'react';
+import { togglePrivacidad, uploadAvatar, toggleFollowUser, getSeguidos } from '../../services/api';
+import Button from '../atomos/Button'; 
+import UserInfoCard from '../moleculas/UserInfoCard';
 
 const UserProfile = ({ usuario, isOwnProfile, onUpdate }) => {
+    
+    const fileInputRef = useRef(null);
+    const [isFollowing, setIsFollowing] = useState(false);
+
+    useEffect(() => {
+        const miId = localStorage.getItem('usuario_id');
+        if (!isOwnProfile && miId && usuario) {
+            getSeguidos(miId).then(seguidos => {
+                setIsFollowing(seguidos.some(s => s.id === usuario.id));
+            });
+        }
+    }, [usuario, isOwnProfile]);
+
+    const handleFollow = async () => {
+        await toggleFollowUser(localStorage.getItem('usuario_id'), usuario.id);
+        setIsFollowing(!isFollowing);
+        onUpdate();
+    };
     
     const handleAvatarChange = async (e) => {
         const file = e.target.files[0];
@@ -9,34 +29,45 @@ const UserProfile = ({ usuario, isOwnProfile, onUpdate }) => {
         const formData = new FormData();
         formData.append('file', file);
         await uploadAvatar(usuario.id, formData);
-        onUpdate(); // Recarga los datos del padre
+        onUpdate(); 
     };
 
     return (
-        <section className="info-usuario">
-            <img src={usuario.profile_pic || 'img/avatar.png'} alt="Avatar" className="avatar-grande" />
-            <h1>{usuario.username}</h1>
-            <p className="username">@{usuario.username}</p>
-            
-            {!usuario.es_publico && !isOwnProfile && <p>🔒 Perfil Privado</p>}
+        <section className="text-center mb-12 animate-fade-in">
+            <UserInfoCard 
+                profilePic={usuario.profile_pic} 
+                username={usuario.username} 
+                esPublico={usuario.es_publico} 
+                isOwnProfile={isOwnProfile} 
+            />
 
             {isOwnProfile ? (
-                <div className="acciones-perfil">
-                    <label>
-                        <input type="checkbox" checked={usuario.es_publico} onChange={(e) => togglePrivacidad(usuario.id, e.target.checked).then(onUpdate)} />
+                <div className="flex justify-center gap-4 mt-4">
+                    <label className="flex items-center gap-2 text-gray-dark cursor-pointer">
+                        <input 
+                            type="checkbox" 
+                            checked={usuario.es_publico} 
+                            onChange={(e) => togglePrivacidad(usuario.id, e.target.checked).then(onUpdate)}
+                            className="w-4 h-4 accent-accent"
+                        />
                         Perfil Público
                     </label>
-                    <input type="file" id="avatar-upload" hidden onChange={handleAvatarChange} />
-                    <button className="btn-primario" onClick={() => document.getElementById('avatar-upload').click()}>Cambiar Foto</button>
+                    
+                    <input type="file" ref={fileInputRef} hidden onChange={handleAvatarChange} />
+                    
+                    <Button className="bg-gradient-to-br from-accent to-accent-light text-white px-6 py-2.5 rounded-full border-none cursor-pointer font-bold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg" onClick={() => fileInputRef.current.click()}>
+                        Cambiar Foto
+                    </Button>
                 </div>
             ) : (
-                <div className="acciones-perfil">
-                    <button className="btn-primario" onClick={() => toggleFollowUser(localStorage.getItem('usuario_id'), usuario.id).then(onUpdate)}>
-                        Seguir/Dejar de seguir
-                    </button>
+                <div className="flex justify-center gap-4 mt-4">
+                    <Button className="bg-gradient-to-br from-accent to-accent-light text-white px-6 py-2.5 rounded-full border-none cursor-pointer font-bold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg" onClick={handleFollow}>
+                        {isFollowing ? 'Dejar de seguir' : 'Seguir'}
+                    </Button>
                 </div>
             )}
         </section>
     );
 };
+
 export default UserProfile;
