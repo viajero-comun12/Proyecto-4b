@@ -57,21 +57,25 @@ const UsuarioPage = () => {
                     <h2 className="text-center text-3xl mb-8 relative inline-block left-1/2 -translate-x-1/2 text-gray-dark after:content-[''] after:block after:w-1/2 after:h-1 after:bg-accent after:mx-auto after:mt-2 after:rounded-full">
                         {usuario.id == miUsuarioId ? "Mis Pines" : "Publicaciones"}
                     </h2>
-                    <div className="feed-mosaico">
-                        {publicaciones.map(pub => (
-                            <div key={pub.id} className="relative group">
-                                <PinCard pub={pub} />
-                                {usuario.id == miUsuarioId && (
-                                    <Button 
-                                        onClick={() => handleDelete(pub.id)} 
-                                        className="absolute bottom-5 right-4 z-10 bg-danger/90 text-white border-none rounded-lg px-3 py-1.5 text-xs cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-danger"
-                                    >
-                                        Eliminar
-                                    </Button>
-                                )}
-                            </div>
-                        ))}
-                    </div>
+                    {publicaciones.length === 0 ? (
+                        <p className="text-center text-gray-muted py-10 text-lg">No hay publicaciones</p>
+                    ) : (
+                        <div className="feed-mosaico">
+                            {publicaciones.map(pub => (
+                                <div key={pub.id} className="relative group">
+                                    <PinCard pub={pub} />
+                                    {usuario.id == miUsuarioId && (
+                                        <Button 
+                                            onClick={() => handleDelete(pub.id)} 
+                                            className="absolute bottom-5 right-4 z-10 bg-danger/90 text-white border-none rounded-lg px-3 py-1.5 text-xs cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-danger"
+                                        >
+                                            Eliminar
+                                        </Button>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </section>
             </div>
         </main>

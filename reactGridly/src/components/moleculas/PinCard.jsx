@@ -38,11 +38,11 @@ const PinCard = ({ pub, label = "Ver detalle" }) => {
             className="break-inside-avoid mb-5 bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative cursor-pointer group hover:-translate-y-1"
             onClick={handleClick}
         >
-            <div className="relative w-full pb-[100%] bg-beige-light overflow-hidden">
+            <div className="relative w-full bg-beige-light overflow-hidden">
                 <img 
                     src={pub.url_multimedia} 
                     alt={pub.titulo} 
-                    className="absolute w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full block object-cover transition-transform duration-500 group-hover:scale-105"
                     style={{ 
                         filter: isBlur ? 'blur(15px)' : 'none',
                         viewTransitionName: `pub-image-${pub.id}`

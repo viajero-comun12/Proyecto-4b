@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
+import { FaUser } from 'react-icons/fa';
 import { IoMdNotifications } from "react-icons/io";
 import { LuMessageSquareHeart } from "react-icons/lu";
 import { RiUserFollowFill } from "react-icons/ri";
@@ -8,11 +9,12 @@ import Button from '../atomos/Button';
 import SidebarMenuItem from '../moleculas/SidebarMenuItem';
 import { getSeguidos } from '../../services/api';
 
-const SidebarDerecha = ({ isOpen }) => {
+const SidebarDerecha = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
     const [isSeguidosHovered, setIsSeguidosHovered] = useState(false);
     const [seguidos, setSeguidos] = useState([]);
     const seguidosRef = useRef(null);
+    const asideRef = useRef(null);
     const [panelPos, setPanelPos] = useState({ top: 0, right: 0 });
 
     useEffect(() => {
@@ -20,7 +22,7 @@ const SidebarDerecha = ({ isOpen }) => {
         if (miId) {
             getSeguidos(miId).then(setSeguidos);
         }
-    }, [isOpen]); 
+    }, [isOpen]);
 
     useEffect(() => {
         if (isSeguidosHovered && seguidosRef.current) {
@@ -32,22 +34,37 @@ const SidebarDerecha = ({ isOpen }) => {
         }
     }, [isSeguidosHovered]);
 
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleClickOutside = (e) => {
+            if (asideRef.current && !asideRef.current.contains(e.target)) {
+                onClose?.();
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isOpen, onClose]);
+
     return (
-        <aside className={`absolute top-full right-0 bg-beige w-20 flex flex-col items-center gap-7 rounded-b-xl z-[1000] overflow-visible transition-all duration-300 ease-in-out ${isOpen ? 'opacity-100 translate-y-0 h-[250px] py-5 pointer-events-auto' : 'opacity-0 -translate-y-2.5 h-0 py-0 pointer-events-none'}`}>
+        <aside
+            ref={asideRef}
+            className={`absolute top-full right-0 mt-7 bg-beige w-20 flex flex-col items-center gap-7 rounded-b-xl z-[900] overflow-visible transition-all duration-300 ease-in-out ${isOpen ? 'opacity-100 translate-y-0 py-5 pointer-events-auto' : 'opacity-0 -translate-y-2.5 h-0 py-0 pointer-events-none overflow-hidden'}`}
+        >
+            <SidebarMenuItem icon={FaUser} label="Mi Perfil" to="/usuario" tooltipDir="right" />
             <SidebarMenuItem icon={IoMdNotifications} label="Notificaciones" to="/notificaciones" tooltipDir="right" />
             <SidebarMenuItem icon={LuMessageSquareHeart} label="Mensajes" to="/mensajes" tooltipDir="right" />
-            <div 
+            <div
                 ref={seguidosRef}
                 className="relative"
-                onMouseEnter={() => setIsSeguidosHovered(true)} 
+                onMouseEnter={() => setIsSeguidosHovered(true)}
                 onMouseLeave={() => setIsSeguidosHovered(false)}
             >
                 <Button onClick={() => navigate('/seguidos')} className="bg-transparent p-2.5 rounded-full flex border-none cursor-pointer transition-transform duration-200 hover:scale-125 w-fit">
                     <RiUserFollowFill className="text-gray-dark scale-[2]" />
                 </Button>
-                
+
                 {isSeguidosHovered && createPortal(
-                    <div 
+                    <div
                         className="fixed z-[99999] pointer-events-auto"
                         style={{ top: panelPos.top, right: panelPos.right }}
                         onMouseEnter={() => setIsSeguidosHovered(true)}
@@ -56,13 +73,13 @@ const SidebarDerecha = ({ isOpen }) => {
                         <div className="bg-white rounded-xl shadow-xl w-[220px] max-h-[300px] overflow-y-auto p-2.5 flex flex-col gap-2.5 border border-beige">
                             <h4 className="mx-0 my-1 text-sm text-gray-dark text-center font-bold">Mis Seguidos</h4>
                             <hr className="border-none border-t border-beige m-0 mb-1" />
-                            
+
                             {seguidos.length === 0 ? (
                                 <p className="text-xs text-gray-muted text-center my-2.5">No sigues a nadie aún.</p>
                             ) : (
                                 seguidos.map(s => (
-                                    <div 
-                                        key={s.id} 
+                                    <div
+                                        key={s.id}
                                         onClick={() => navigate(`/usuario/${s.id}`)}
                                         className="flex items-center gap-2.5 cursor-pointer p-2 rounded-lg transition-colors duration-200 hover:bg-beige-light"
                                     >

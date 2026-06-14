@@ -33,7 +33,7 @@ const DetalleCard = ({
 
     return (
         <main className="max-w-[1000px] mx-auto px-5 my-5 block">
-            <article className="bg-white rounded-2xl shadow-xl flex overflow-hidden min-h-[600px] animate-slide-up" id="tarjeta-detalle">
+            <article className="bg-white rounded-2xl shadow-xl flex overflow-hidden animate-slide-up" id="tarjeta-detalle">
                 {/* Image column */}
                 <div className="flex-1 bg-beige-light flex items-center justify-center relative">
                     <Button
@@ -46,7 +46,7 @@ const DetalleCard = ({
                             id="img-publicacion"
                             src={pub.url_multimedia}
                             alt={pub.titulo}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                             style={{
                                 filter: isBlur ? 'blur(20px)' : 'none',
                                 viewTransitionName: `pub-image-${pub.id}`
@@ -105,17 +105,24 @@ const DetalleCard = ({
                             }
                         </div>
 
-                        <div className="flex gap-2.5 items-center mt-auto">
-                            <input
-                                type="text"
-                                placeholder={usuarioId ? 'Añadir un comentario...' : 'Inicia sesión para comentar'}
-                                value={comentarioTexto}
-                                onChange={onComentarioChange}
-                                onKeyDown={(e) => e.key === 'Enter' && onComentar()}
-                                disabled={!usuarioId || enviandoComentario}
-                                maxLength={300}
-                                className="flex-1 px-5 py-3 rounded-full border border-beige-dark/30 text-sm transition-all duration-300 focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10"
-                            />
+                        <div className="flex gap-2.5 items-end mt-auto">
+                            <div className="flex-1 flex flex-col gap-1">
+                                <input
+                                    type="text"
+                                    placeholder={usuarioId ? 'Añadir un comentario...' : 'Inicia sesión para comentar'}
+                                    value={comentarioTexto}
+                                    onChange={onComentarioChange}
+                                    onKeyDown={(e) => e.key === 'Enter' && onComentar()}
+                                    disabled={!usuarioId || enviandoComentario}
+                                    maxLength={50}
+                                    className="w-full px-5 py-3 rounded-full border border-beige-dark/30 text-sm transition-all duration-300 focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10"
+                                />
+                                {usuarioId && (
+                                    <span className="text-xs text-gray-muted text-right pr-2">
+                                        {comentarioTexto.length}/50
+                                    </span>
+                                )}
+                            </div>
                             <Button
                                 className="bg-gradient-to-br from-accent to-accent-light text-white px-5 py-2.5 rounded-full border-none font-bold cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                 onClick={onComentar}

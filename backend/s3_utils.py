@@ -8,8 +8,8 @@ import uuid
 # ==========================================
 
 
-AWS_ACCESS_KEY_ID = "Aas"
-AWS_SECRET_ACCESS_KEY = "Xdeed"
+AWS_ACCESS_KEY_ID = "kia"
+AWS_SECRET_ACCESS_KEY = "movementthatinspires"
 AWS_REGION = "us-east-1" 
 S3_BUCKET_NAME = "proyecto-multimedia-gridly"
 
